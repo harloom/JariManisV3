@@ -1,11 +1,30 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/primaryLightColor</item>
+        <item name="android:fontFamily"> @font/roboto_regular</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="colorControlNormal">@color/primaryDarkColor</item>
+        <item name="boxBackgroundColor">@color/secondaryColor</item>
+
+        <item name="android:textSize">12sp</item>
     </style>
 
+
+    <style name="textHeader" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle"> bold</item>
+        <item name="android:fontFamily"> @font/roboto_bold</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+        <item name="android:windowContentOverlay">@null</item>
+        <!--below line used to change the color of home(back) button color-->
+        <item name="colorControlNormal">@color/primaryDarkColor</item>
+    </style>
 </resources>
