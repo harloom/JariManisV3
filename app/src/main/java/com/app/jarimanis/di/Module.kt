@@ -1,5 +1,9 @@
 package com.app.jarimanis.di
 
+import com.app.jarimanis.ui.home.HomeViewModel
+import com.app.jarimanis.ui.home.KategoriRepository
+
+import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule  = module{
@@ -9,8 +13,8 @@ val appModule  = module{
 //    factory { MenuRepositroyImp(get()) }
 //    factory { UserRepositoryImp(get()) }
 //    single { productRepositroyImp(get()) }
-//
-//    // MyViewModel ViewModel
-//    viewModel { RegisterViewModel(get()) }
-//    viewModel { HomeViewModel(get()) }
+
+    single <KategoriRepository>{ KategoriRepository(get()) }
+
+    viewModel { HomeViewModel(get()) }
 }

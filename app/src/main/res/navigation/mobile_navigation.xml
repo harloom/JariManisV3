@@ -8,8 +8,14 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.app.jarimanis.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_thread_navigation"
+            app:destination="@id/thread_navigation"
+            app:launchSingleTop="false"
+            app:popUpTo="@+id/navigation_home"
+            app:popUpToInclusive="false" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -34,4 +40,5 @@
         android:name="com.app.jarimanis.ui.more.MoreFragment"
         android:label="@string/title_more"
         tools:layout="@layout/fragment_mores" />
+    <include app:graph="@navigation/thread_navigation" />
 </navigation>
