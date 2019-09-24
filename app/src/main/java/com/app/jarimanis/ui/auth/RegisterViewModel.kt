@@ -69,6 +69,9 @@ class RegisterViewModel(private val repo: UserRepositoryImp) : ViewModel() {
 
 
     }
+    fun logOut(){
+        auth.signOut()
+    }
 
 
 }

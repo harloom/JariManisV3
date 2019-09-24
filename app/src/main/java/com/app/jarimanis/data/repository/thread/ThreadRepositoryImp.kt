@@ -7,13 +7,17 @@ import com.app.jarimanis.data.datasource.models.thread.Threads
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import retrofit2.Response
 import java.net.SocketTimeoutException
 
 
 class ThreadRepositoryImp (private  val api : JariManisAPI)  : ThreadRepository {
+    override suspend fun getPaging(subId: String, page: String): Response<Threads> {
+        return  api.getThreads(subId,page)
+    }
 
     var job: CompletableJob? = null
-    override fun getProductPaging(subId: String, page: String): LiveData<Threads> {
+    override fun getLivepaging(subId: String, page: String): LiveData<Threads> {
         job = Job()
         return object: LiveData<Threads>(){
             override fun onActive() {
@@ -46,7 +50,7 @@ class ThreadRepositoryImp (private  val api : JariManisAPI)  : ThreadRepository 
     }
 
 
-    fun cancelJobs(){
+    override fun cancelJobs(){
         job?.cancel()
     }
 

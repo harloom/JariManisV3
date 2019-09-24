@@ -82,9 +82,9 @@ class RegisterFragment : Fragment(), View.OnClickListener {
     }
 
     private fun goToMain(){
-        startActivity(
-            Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        vm.logOut()
+        findNavController().navigateUp()
+
     }
 
     private fun snackbar(s : String){
