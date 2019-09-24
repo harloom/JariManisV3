@@ -1,5 +1,7 @@
 package com.app.jarimanis.di
 
+import com.app.jarimanis.data.repository.firebase.UserRepositoryImp
+import com.app.jarimanis.ui.auth.RegisterViewModel
 import com.app.jarimanis.ui.home.HomeViewModel
 import com.app.jarimanis.ui.home.KategoriRepository
 
@@ -11,10 +13,11 @@ val appModule  = module{
     // single<HelloRepository> { HelloRepositoryImpl() }
 
 //    factory { MenuRepositroyImp(get()) }
-//    factory { UserRepositoryImp(get()) }
+    single { UserRepositoryImp(get()) }
 //    single { productRepositroyImp(get()) }
 
     single <KategoriRepository>{ KategoriRepository(get()) }
 
     viewModel { HomeViewModel(get()) }
+    viewModel { RegisterViewModel(get()) }
 }

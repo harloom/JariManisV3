@@ -1,11 +1,8 @@
 package com.app.jarimanis.data.datasource.models.thread
 
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 data class Doc(
     @SerializedName("category")
     val category: String?, // 5d838945114e12216ce87e12
@@ -28,5 +25,5 @@ data class Doc(
     @SerializedName("videos")
     val videos: List<Video?>?,
     @SerializedName("views")
-    val views: List<View?>?
-) : Parcelable
+    val views: List<Any?>?
+)

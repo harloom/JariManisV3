@@ -1,21 +1,44 @@
 package com.app.jarimanis.ui.auth
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.app.jarimanis.MainActivity
 
 import com.app.jarimanis.R
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.register_fragment.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class RegisterFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.iv_back_arrow->{
                 findNavController().navigateUp()
+            }
+            R.id.register->{
+                jobRegister?.cancel()
+                jobRegister = CoroutineScope(Main).launch {
+                    delay(300)
+                    vm.registerProcess(email = etEmail.text.toString(),
+                        pass = etpassword.text.toString() ,
+                        rePass =  etRepassword.text.toString())
+                }
+
             }
         }
     }
@@ -24,7 +47,8 @@ class RegisterFragment : Fragment(), View.OnClickListener {
         fun newInstance() = RegisterFragment()
     }
 
-    private lateinit var viewModel: RegisterViewModel
+    private val  vm: RegisterViewModel by viewModel()
+    private var jobRegister : Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,14 +59,53 @@ class RegisterFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        initViewModel()
         iv_back_arrow.setOnClickListener(this@RegisterFragment)
+        register.setOnClickListener(this@RegisterFragment)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
-        // TODO: Use the ViewModel
+    private fun initViewModel(){
+        vm.regResult.observe(this@RegisterFragment, Observer {
+            if (it.onSuccess == false and !it.onError.isNullOrBlank()){
+                if(it.onEmailEror){
+                    etEmail.error = it.onError.toString()
+                }else if(it.onPasswordErr){
+                    etpassword.error = it.onError.toString()
+                }else if(it.onRePasswordErr){
+                    etRepassword.error = it.onError.toString()
+                }
+            }else{
+                snackbar("Register success..")
+                goToMain()
+            }
+        })
+    }
+
+    private fun goToMain(){
+        startActivity(
+            Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+    }
+
+    private fun snackbar(s : String){
+        Snackbar.make(view!!,s , Snackbar.LENGTH_LONG)
+            .show()
+        activity?.hideKeyboard()
+    }
+
+    fun Activity.hideKeyboard() {
+        hideKeyboard(if (currentFocus == null) View(this) else currentFocus)
+    }
+
+    fun Context.hideKeyboard(view: View?) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view?.windowToken, 0)
+    }
+
+
+
+    fun onRegister(view: View) {
+        vm.registerProcess(email = etEmail.text.toString(),pass = etpassword.text.toString() ,rePass =  etRepassword.text.toString())
     }
 
 }

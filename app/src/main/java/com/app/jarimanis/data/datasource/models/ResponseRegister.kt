@@ -7,11 +7,11 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class ResponseRegister (
-    @Expose
-    @SerializedName("messege")
-    val messege : String? = null,
-    @Expose
-    @SerializedName("results")
-    val results  : UserRegister? = null
+  @Expose
+  @SerializedName("messege")
+  val messege : String? = null,
+  @Expose
+  @SerializedName("results")
+  val results  : UserRegister? = null
 
 ) : Parcelable

@@ -1,4 +1,4 @@
-package com.app.jarimanis.data.repository.webservice
+package com.app.jarimanis.data.datasource.api
 
 import com.app.jarimanis.data.datasource.models.ResponseRegister
 import com.app.jarimanis.data.datasource.models.UserRegister
@@ -6,7 +6,6 @@ import com.app.jarimanis.data.datasource.models.token.get_token
 import com.app.jarimanis.data.datasource.models.token.sent_token
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface UserAPI {

@@ -1,8 +1,8 @@
 package com.app.jarimanis.di
 
 import android.util.Log
-import com.app.jarimanis.data.repository.webservice.JariManisAPI
-import com.app.jarimanis.data.repository.webservice.UserAPI
+import com.app.jarimanis.data.datasource.api.JariManisAPI
+import com.app.jarimanis.data.datasource.api.UserAPI
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

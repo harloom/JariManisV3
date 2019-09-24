@@ -2,7 +2,7 @@ package com.app.jarimanis.data.repository.firebase
 
 import com.app.jarimanis.data.datasource.models.ResponseRegister
 import com.app.jarimanis.data.datasource.models.UserRegister
-import com.app.jarimanis.data.repository.webservice.UserAPI
+import com.app.jarimanis.data.datasource.api.UserAPI
 import retrofit2.Response
 
 class UserRepositoryImp(private val userAPI: UserAPI)  : UserRepository {

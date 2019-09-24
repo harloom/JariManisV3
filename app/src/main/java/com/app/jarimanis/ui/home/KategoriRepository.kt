@@ -4,12 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.app.jarimanis.data.datasource.models.kategori.Category
 import com.app.jarimanis.data.datasource.models.kategori.ResultKategori
-import com.app.jarimanis.data.repository.webservice.JariManisAPI
+import com.app.jarimanis.data.datasource.api.JariManisAPI
 import com.app.jarimanis.utils.DebugKey
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import org.koin.core.context.GlobalContext.get
 
 class KategoriRepository (private val api: JariManisAPI) {
     var job : CompletableJob? = null

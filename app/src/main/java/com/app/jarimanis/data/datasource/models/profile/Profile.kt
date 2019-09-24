@@ -7,8 +7,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Profile(
-    @SerializedName("message")
-    val message: String?, // Ok
-    @SerializedName("result")
-    val result: Result?
+  @SerializedName("message")
+  val message: String?, // Ok
+  @SerializedName("result")
+  val result: Result?
 ) : Parcelable

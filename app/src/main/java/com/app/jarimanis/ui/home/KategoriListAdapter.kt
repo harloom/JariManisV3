@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.models.kategori.ResultKategori
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.item_kategori.view.*
+
 
 class KategoriListAdapter(private val interaction: Interaction? = null) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
