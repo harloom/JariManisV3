@@ -108,4 +108,9 @@ class RegisterFragment : Fragment(), View.OnClickListener {
         vm.registerProcess(email = etEmail.text.toString(),pass = etpassword.text.toString() ,rePass =  etRepassword.text.toString())
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+    }
+
 }

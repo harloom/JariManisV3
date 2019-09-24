@@ -17,5 +17,7 @@
     <string name="title_more">Lainnya</string>
     <string name="action_search">Search</string>
     <string name="title_chat">Chat</string>
+    <string name="default_notification_channel_id">100</string>
+    <string name="buat_thread">Buat thread</string>
 
 </resources>
