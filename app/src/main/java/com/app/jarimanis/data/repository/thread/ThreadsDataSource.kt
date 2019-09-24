@@ -16,7 +16,7 @@ class ThreadsDataSource ( private val category :String,
         private val repo :   ThreadRepository,
         private val uiScope: CoroutineScope
     ): DataSource.Factory<String, Doc>() {
-        override fun create(): DataSource<String, Docs> {
+        override fun create(): DataSource<String, Doc> {
             return  ThreadsDataSource(category =subId, repo = repo,uiScope = uiScope)
         }
 
@@ -28,14 +28,14 @@ class ThreadsDataSource ( private val category :String,
         params: LoadInitialParams<String>,
         callback: LoadInitialCallback<String, Doc>
     ) {
-        uiScope.launch {
+//        uiScope.launch {
 //            val items = repo.getPaging( subId,"1")
-            Log.d("MenuDataSource" , "list size  : ${items.results.docs.size}")
-            val pagging = items.results
-            callback.onResult(items.results.docs,0,pagging.totalDocs
-                , pagging.prevPage, pagging.nextPage
-            )
-        }
+//            Log.d("MenuDataSource" , "list size  : ${items.results.docs.size}")
+//            val pagging = items.results
+//            callback.onResult(items.results.docs,0,pagging.totalDocs
+//                , pagging.prevPage, pagging.nextPage
+//            )
+//        }
     }
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, Doc>) {

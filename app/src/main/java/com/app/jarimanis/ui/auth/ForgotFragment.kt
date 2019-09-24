@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-
 import com.app.jarimanis.R
 import kotlinx.android.synthetic.main.forgot_fragment.*
+
 
 class ForgotFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
