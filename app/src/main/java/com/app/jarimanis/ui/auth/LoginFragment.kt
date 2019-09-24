@@ -41,7 +41,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
             R.id.login->{
                 loginJob?.cancel()
                 loginJob = CoroutineScope(Main).launch {
-                    delay(400)
+                    delay(500)
                     actionLogin(etEmail.text.toString(),etPassword.text.toString())
                 }
             }
@@ -88,8 +88,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
         if (isEmailValid and isPasswordValid) {
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnSuccessListener {
-
-
                 activity?.hideKeyboard()
                 Snackbar.make(viewId,"Login Success..",Snackbar.LENGTH_LONG).show()
                 CoroutineScope(Main).launch{
