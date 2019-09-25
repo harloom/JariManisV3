@@ -1,8 +1,11 @@
 package com.app.jarimanis.data.datasource.models.thread
 
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Video(
     @SerializedName("createAt")
     val createAt: String?, // 2019-09-21T14:12:40.312Z
@@ -12,4 +15,4 @@ data class Video(
     val updateAt: String?, // 2019-09-21T14:12:40.312Z
     @SerializedName("_url")
     val url: String? // https://s3.zerochan.net/Fate.Grand.Order.240.2104974.jpg
-)
+) : Parcelable

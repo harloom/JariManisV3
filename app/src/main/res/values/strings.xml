@@ -19,5 +19,14 @@
     <string name="title_chat">Chat</string>
     <string name="default_notification_channel_id">100</string>
     <string name="buat_thread">Buat thread</string>
+    <string name="tulis_balasan">Komentar..</string>
+    <string name="komentar">Komentar</string>
+
+    <string name="rating">Rating..</string>
+    <string name="privasi">Privacy</string>
+    <string name="Terms">Terms and Conditions</string>
+    <string name="Help">Assistance</string>
+    <string name="Copyrigth">2019 copyright. all rights reserved</string>
+    <string name="LogOut">LogOut</string>
 
 </resources>

@@ -13,5 +13,20 @@
         <argument
             android:name="argsKategori"
             app:argType="com.app.jarimanis.data.datasource.models.kategori.ResultKategori" />
+        <action
+            android:id="@+id/action_threadListFragment_to_threadDetailFragment"
+            app:destination="@id/threadDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/threadDetailFragment"
+        android:name="com.app.jarimanis.ui.thread.detail.ThreadDetailFragment"
+        tools:layout="@layout/thread_detail_fragment"
+        >
+        <argument
+            android:name="secret-thread"
+            app:argType="com.app.jarimanis.data.datasource.models.thread.Doc" />
+        <argument
+            android:name="id-thread"
+            app:argType="string" />
     </fragment>
 </navigation>

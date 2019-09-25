@@ -1,8 +1,11 @@
 package com.app.jarimanis.data.datasource.models.thread
 
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Result(
     @SerializedName("docs")
     val docs: MutableList<Doc?>?,
@@ -24,4 +27,4 @@ data class Result(
     val totalDocs: Int?, // 1
     @SerializedName("totalPages")
     val totalPages: Int? // 1
-)
+) : Parcelable
