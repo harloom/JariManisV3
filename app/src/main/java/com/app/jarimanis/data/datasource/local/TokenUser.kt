@@ -26,7 +26,7 @@ object TokenUser {
     editor.apply()
   }
 
-  var server_token: String?
+  var jwt: String?
     // custom getter to get a preference of a desired type, with a predefined default value
     get() = preferences.getString(Key.TOKEN,"")
 

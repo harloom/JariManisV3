@@ -3,6 +3,7 @@ package com.app.jarimanis.di
 import android.util.Log
 import com.app.jarimanis.data.datasource.api.JariManisAPI
 import com.app.jarimanis.data.datasource.api.UserAPI
+import com.app.jarimanis.data.service.ServiceInterceptor
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -19,6 +20,7 @@ val NetworkModule = module {
 
     factory {OkHttpClient.Builder()
         .addInterceptor(get())
+        .addInterceptor(ServiceInterceptor())
         .connectTimeout(240, TimeUnit.SECONDS)
         .readTimeout(120, TimeUnit.SECONDS)
         .writeTimeout(90, TimeUnit.SECONDS)

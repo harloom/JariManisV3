@@ -10,12 +10,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.app.jarimanis.MainActivity
 
 import com.app.jarimanis.R
+import com.app.jarimanis.data.datasource.local.TokenUser
+import com.app.jarimanis.data.datasource.models.token.get_token
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.wajahatkarim3.easyvalidation.core.Validator
@@ -26,8 +29,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jcodec.common.dct.SparseIDCT.finish
+import org.koin.android.viewmodel.ext.android.viewModel
+import retrofit2.Response
+
 
 class LoginFragment : Fragment(), View.OnClickListener {
+
 
     private var loginJob  : Job? = null
     override fun onClick(v: View?) {
@@ -52,8 +59,13 @@ class LoginFragment : Fragment(), View.OnClickListener {
         fun newInstance() = LoginFragment()
     }
 
-    private lateinit var viewModel: LoginViewModel
+    private  val vm : LoginViewModel by viewModel()
     private lateinit var navigation : NavController
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,12 +82,26 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
 
     }
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+    private val subcribeToken = Observer<Response<get_token>>{
+      if(it.isSuccessful){
+          try {
+              val getToken : get_token? = it.body()
+              TokenUser.jwt =getToken!!.results
+              if(!TokenUser.jwt.isNullOrBlank()){
+                  println(TokenUser.jwt)
+                  goToMain()
+              }
 
+          }catch (e : Exception){
+              Snackbar.make(viewId,"Terjadi Kesalahan silahkan login kembali",Snackbar.LENGTH_LONG).show()
+          }
+
+
+      }
+        if(it.code() == 400){
+            Snackbar.make(viewId,"Terjadi Kesalahan silahkan login kembali",Snackbar.LENGTH_LONG).show()
+        }
     }
-
 
 
     private fun actionLogin(email : String , password : String){
@@ -90,10 +116,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnSuccessListener {
                 activity?.hideKeyboard()
                 Snackbar.make(viewId,"Login Success..",Snackbar.LENGTH_LONG).show()
-                CoroutineScope(Main).launch{
-                    delay(200)
-                    goToMain()
-                }
+                vm.token(it.user!!.uid).observe(this@LoginFragment,subcribeToken)
 
             }.addOnFailureListener {
                 activity?.hideKeyboard()

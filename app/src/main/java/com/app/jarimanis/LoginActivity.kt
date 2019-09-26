@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.findNavController
+import com.app.jarimanis.data.datasource.local.TokenUser
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
@@ -13,8 +14,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         val navController = findNavController(R.id.nav_auth)
 
-
-        if(FirebaseAuth.getInstance().currentUser != null){
+        if(FirebaseAuth.getInstance().currentUser != null && !TokenUser.jwt.isNullOrBlank()){
             goToMain()
         }else{
 
