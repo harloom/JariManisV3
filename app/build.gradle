@@ -141,6 +141,8 @@ dependencies {
     //slide image
     implementation 'com.github.smarteist:autoimageslider:1.3.2'
 
+    //file mattise lib
+    implementation 'com.zhihu.android:matisse:0.5.2-beta3'
 
     //justify
     implementation 'me.biubiubiu.justifytext:library:1.1'

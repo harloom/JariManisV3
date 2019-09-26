@@ -27,7 +27,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         destination: NavDestination,
         arguments: Bundle?
     ) {
-        if(destination.id == R.id.threadDetailFragment || destination.id ==R.id.threadListFragment){
+        if(destination.id == R.id.threadDetailFragment || destination.id ==R.id.threadListFragment ||
+                destination.id == R.id.createThreadFragment){
             navView.visibility = View.GONE
         }else{
             navView.visibility = View.VISIBLE

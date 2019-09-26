@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.di.NetworkModule
 import com.app.jarimanis.di.appModule
+import com.app.jarimanis.di.vnModule
 
 import com.app.jarimanis.utils.NotificationID.createChannel
 import org.koin.android.ext.koin.androidContext
@@ -27,7 +28,7 @@ class App : Application(){
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(listOf(NetworkModule, appModule))
+            modules(listOf(NetworkModule, appModule, vnModule))
         }
     }
 

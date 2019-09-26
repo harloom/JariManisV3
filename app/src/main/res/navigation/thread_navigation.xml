@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_threadListFragment_to_threadDetailFragment"
             app:destination="@id/threadDetailFragment" />
+        <action
+            android:id="@+id/action_threadListFragment_to_createThreadFragment"
+            app:destination="@id/createThreadFragment" />
     </fragment>
     <fragment
         android:id="@+id/threadDetailFragment"
@@ -28,5 +31,13 @@
         <argument
             android:name="id-thread"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/createThreadFragment"
+        android:name="com.app.jarimanis.ui.thread.post.CreateThreadFragment"
+        tools:layout="@layout/create_thread_fragment">
+        <argument
+            android:name="argsKategori"
+            app:argType="com.app.jarimanis.data.datasource.models.kategori.ResultKategori" />
     </fragment>
 </navigation>

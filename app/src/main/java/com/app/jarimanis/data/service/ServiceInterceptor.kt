@@ -16,7 +16,7 @@ class ServiceInterceptor : Interceptor {
 
         if(request.header("No-Authentication")==null){
             val token = TokenUser.jwt;
-            println("intercept : $token")
+//            println("intercept : $token")
             if(!token.isNullOrBlank())
             {
                 val finalToken = "Bearer $token"

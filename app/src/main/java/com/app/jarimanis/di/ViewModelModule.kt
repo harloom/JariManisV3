@@ -11,21 +11,15 @@ import com.app.jarimanis.ui.dashboard.DashboardViewModel
 import com.app.jarimanis.ui.home.HomeViewModel
 import com.app.jarimanis.ui.home.KategoriRepository
 import com.app.jarimanis.ui.thread.post.CreateThreadViewModel
-
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val appModule  = module{
-    // single instance of HelloRepository
-    // single<HelloRepository> { HelloRepositoryImpl() }
-
-//    factory { MenuRepositroyImp(get()) }
-    single { UserRepositoryImp(get()) }
-    single { ProfileRepository(get()) }
-    single { TokenRepository(get()) }
-
-    single <KategoriRepository>{ KategoriRepository(get()) }
-    single<ThreadRepository>{ThreadRepositoryImp(get())}
+val vnModule  = module{
 
 
+    viewModel { HomeViewModel(get()) }
+    viewModel { DashboardViewModel(get()) }
+    viewModel { RegisterViewModel(get()) }
+    viewModel { LoginViewModel(get()) }
+    viewModel { CreateThreadViewModel(get(),get()) }
 }

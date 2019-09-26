@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -28,7 +27,7 @@ import org.koin.android.ext.android.get
 
 class ThreadListFragment : Fragment(), ThreadAdapter.Interaction {
     private  var jobDetail : Job?= null
-
+    private var jobOnclick : Job?=null
     override fun onItemSelected(position: Int, item: Doc) {
         jobDetail?.cancel()
         jobDetail = CoroutineScope(Main).launch {
@@ -58,8 +57,17 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction {
         super.onViewCreated(view, savedInstanceState)
         val result  = arguments?.getParcelable<ResultKategori>(Key.argCategory)
         activity!!.title = result?.category
-        result?.id?.let {_id->
+        btn_create.setOnClickListener {
+            jobOnclick?.cancel()
+            CoroutineScope(Main).launch {
+                delay(300)
+                val bundled = bundleOf(Key.argCategory to result)
+                findNavController().navigate(R.id.action_threadListFragment_to_createThreadFragment,bundled)
+            }
+        }
 
+
+        result?.id?.let {_id->
             adapterT = ThreadAdapter(this@ThreadListFragment)
             factory = ThreadModelFactory(_id,get())
             viewModel = ViewModelProviders.of(this@ThreadListFragment,factory).get(ThreadListViewModel::class.java)

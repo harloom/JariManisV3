@@ -28,5 +28,16 @@
     <string name="Help">Assistance</string>
     <string name="Copyrigth">2019 copyright. all rights reserved</string>
     <string name="LogOut">LogOut</string>
+    <string name="tuliskan">Tuliskan sesuatu..</string>
+    <string name="action_send">Kirim</string>
+    <string name="image">image</string>
+    <string name="title">Judul</string>
 
+    <string name="toast_cannot_retrieve_selected_video">Cannot retrieve selected video</string>
+    <string name="video_saved_at">Video saves at : $%1s</string>
+    <string name="pick_a_video">Select or record a a video below to try it out:</string>
+    <string name="short_seconds">sec</string>
+    <string name="title_activity_discussion_video_acitivity">Videos</string>
+    <string name="error_gif">x or y bound size should be at least %1$dpx and file size should be no more than %2$sM</string>
+    <string name="fromEmpty">Tidak boleh kosong</string>
 </resources>

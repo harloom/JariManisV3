@@ -3,13 +3,14 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_marginTop="8dp"
     android:elevation="2dp"
+    android:layout_marginBottom="8dp"
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/iv_img"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:maxHeight="350dp"
-        android:scaleType="centerCrop"/>
+        android:layout_height="240dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/image" />
 
 
 </androidx.cardview.widget.CardView>
