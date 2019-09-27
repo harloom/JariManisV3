@@ -9,8 +9,7 @@ import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.models.thread.UploadThread
 import com.app.jarimanis.data.repository.thread.ThreadRepository
 import com.app.jarimanis.utils.NotificationID
-
-
+import org.koin.android.ext.android.inject
 
 
 class PostIntentService() : JobIntentService() {
@@ -27,7 +26,8 @@ class PostIntentService() : JobIntentService() {
         val data = intent.getParcelableExtra<UploadThread>("upload")
         println(data)
         data?.let {
-
+            val repo : ThreadRepository by inject()
+            repo.postThread(it)
             displayNotification(it.title.toString(),it.content.toString())
 
 

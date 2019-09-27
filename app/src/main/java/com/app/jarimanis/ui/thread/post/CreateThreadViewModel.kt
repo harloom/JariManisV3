@@ -23,7 +23,7 @@ class CreateThreadViewModel(private  val context : Context , private val repo: T
     fun post(post:UploadThread ) {
         val intentService  = Intent(context,PostIntentService::class.java)
         intentService.putExtra("upload",post)
-        PostIntentService(repo).enqueueWork(context,intentService)
+        PostIntentService().enqueueWork(context,intentService)
 //        context.startService(intentService)
         resetForm()
 
