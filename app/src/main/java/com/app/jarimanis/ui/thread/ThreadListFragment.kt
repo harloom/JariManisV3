@@ -14,6 +14,7 @@ import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.models.kategori.ResultKategori
 import com.app.jarimanis.data.datasource.models.thread.Doc
 import com.app.jarimanis.data.repository.thread.ThreadModelFactory
+import com.app.jarimanis.ui.dialogSheet.DialogProfile
 import com.app.jarimanis.utils.Key
 import com.app.jarimanis.utils.Key.THREAD
 import com.app.jarimanis.utils.Key.THREADID
@@ -26,6 +27,16 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
 class ThreadListFragment : Fragment(), ThreadAdapter.Interaction {
+
+    override fun onProfileSelected(position: Int, item: Doc) {
+        jobOnclick?.cancel()
+        jobOnclick = CoroutineScope(Main).launch {
+            delay(500)
+            val d = DialogProfile.newInstance(item.user!!)
+            d.show(childFragmentManager,"Profile")
+        }
+    }
+
     private  var jobDetail : Job?= null
     private var jobOnclick : Job?=null
     override fun onItemSelected(position: Int, item: Doc) {

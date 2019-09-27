@@ -6,4 +6,6 @@ object Key {
 
   const val THREAD ="secret-thread"
   const val THREADID = "id-thread"
+
+  const val WORKUPLOAD = "id-work-upload"
 }

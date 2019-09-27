@@ -78,6 +78,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     kapt "androidx.room:room-compiler:$roomVersion"
 
+    def work_version = "2.2.0"
+    // Kotlin + coroutines
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 
     //kotlinx-corutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"

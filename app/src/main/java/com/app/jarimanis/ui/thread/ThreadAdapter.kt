@@ -55,6 +55,7 @@ class ThreadAdapter constructor(private val interaction: ThreadAdapter.Interacti
         private val interaction: ThreadAdapter.Interaction?
     ) : RecyclerView.ViewHolder(view) {
 
+
         fun bind(item: Doc) = with(itemView) {
             itemView.setOnClickListener {
                 interaction?.onItemSelected(adapterPosition,item)
@@ -71,9 +72,14 @@ class ThreadAdapter constructor(private val interaction: ThreadAdapter.Interacti
 
             }
 
+            itemView.cv_thumbail.setOnClickListener {
+                interaction?.onProfileSelected(adapterPosition, item)
+            }
+
         }
     }
     interface Interaction {
         fun onItemSelected(position: Int, item: Doc)
+        fun onProfileSelected(position: Int , item: Doc)
     }
 }

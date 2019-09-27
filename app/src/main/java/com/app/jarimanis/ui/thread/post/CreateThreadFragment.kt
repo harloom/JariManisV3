@@ -1,7 +1,6 @@
 package com.app.jarimanis.ui.thread.post
 
 
-import android.Manifest
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -17,12 +16,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.work.*
 
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.models.kategori.ResultKategori
-import com.app.jarimanis.data.datasource.models.thread.Image
-import com.app.jarimanis.ui.thread.detail.ImageAdapter
+import com.app.jarimanis.data.datasource.models.thread.ImageX
+import com.app.jarimanis.data.datasource.models.thread.UploadThread
+import com.app.jarimanis.data.datasource.models.thread.VideoX
 import com.app.jarimanis.utils.G4Engine
 import com.app.jarimanis.utils.GifSizeFilter
 import com.app.jarimanis.utils.Key
@@ -53,14 +53,12 @@ import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.filter.Filter
 import kotlinx.android.synthetic.main.create_thread_fragment.*
-import kotlinx.android.synthetic.main.thread_detail_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.io.File
 import kotlin.properties.Delegates
 
 class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
@@ -73,7 +71,7 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
     companion object {
         fun newInstance() = CreateThreadFragment()
     }
-
+    private lateinit var category :String
     private var jobChangeText : Job? = null
 
     private  val vm: CreateThreadViewModel by viewModel()
@@ -86,7 +84,6 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
     private lateinit var volumeControl: ImageView
     private  var volumeState: VolumeState? = null
     private lateinit var requestManager: RequestManager
-
 
     private var btnSendEnable by Delegates.observable(false){
         _,old,new ->
@@ -106,20 +103,36 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
         return inflater.inflate(R.layout.create_thread_fragment, container, false)
     }
 
+    private lateinit var uploadWorkRequest: WorkRequest
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val result  = arguments?.getParcelable<ResultKategori>(Key.argCategory)
-        activity!!.title = result?.category
+        category = result?.category!!
+        activity!!.title = result.category
 
         videoSurfaceView = view.findViewById(R.id.player_view)
         requestManager = initGlide()
         adapterI = ImageStringAdapter(this@CreateThreadFragment)
         subcribeForm()
         subcribeFormState()
-
         btn_requestfile.setOnClickListener{
             chooseImageDialog()
         }
+    }
+
+    private fun subcribeWorkUpload() {
+        WorkManager.getInstance(context!!).getWorkInfoByIdLiveData(uploadWorkRequest.id).observe(
+            this@CreateThreadFragment, Observer {workInfo->
+                if (workInfo != null && workInfo.state == WorkInfo.State.SUCCEEDED) {
+                    displayMessage("Work finished!")
+                }
+            }
+        )
+    }
+
+    private fun displayMessage(a: String) {
+        Toast.makeText(context,"Work : $a" , Toast.LENGTH_LONG).show()
     }
 
     private fun subcribeForm() {
@@ -170,14 +183,38 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
 
     }
 
-
+    private var jobSent : Job? = null
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.optionMenuSend->{
-                Toast.makeText(context,"Send...",Toast.LENGTH_LONG).show()
+                jobSent?.cancel()
+                jobSent = CoroutineScope(Main).launch {
+                    delay(200)
+                    onSendUpload()
+                }
+
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+
+    private fun onSendUpload(){
+        val imageListX : MutableList<ImageX> = mutableListOf()
+        val videoListX : MutableList<VideoX> = mutableListOf()
+        videoListX.add(VideoX(videosSelected))
+        mSelected.map {
+            imageListX.add(ImageX(it))
+        }
+        val upload = UploadThread(category,post_content.text.toString(),imageListX,post_titile.text.toString(),
+            videoListX )
+
+
+//        uploadWorkRequest = OneTimeWorkRequestBuilder<UploadWork>()
+//            .setInputData(dataWorker)
+//            .build()
+        vm.post(upload)
+//        subcribeWorkUpload()
     }
 
 

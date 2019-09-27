@@ -3,7 +3,9 @@ package com.app.jarimanis.data.repository.thread
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.app.jarimanis.data.datasource.api.JariManisAPI
+import com.app.jarimanis.data.datasource.models.ResponServer
 import com.app.jarimanis.data.datasource.models.thread.Threads
+import com.app.jarimanis.data.datasource.models.thread.UploadThread
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -12,6 +14,10 @@ import java.net.SocketTimeoutException
 
 
 class ThreadRepositoryImp (private  val api : JariManisAPI)  : ThreadRepository {
+    override fun postThread(upload: UploadThread) {
+        return
+    }
+
     override suspend fun getPaging(subId: String, page: String): Response<Threads> {
         return  api.getThreads(subId,page)
     }
