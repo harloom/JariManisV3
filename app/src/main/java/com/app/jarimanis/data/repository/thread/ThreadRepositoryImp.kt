@@ -14,8 +14,8 @@ import java.net.SocketTimeoutException
 
 
 class ThreadRepositoryImp (private  val api : JariManisAPI)  : ThreadRepository {
-    override fun postThread(upload: UploadThread) {
-        return
+    override suspend fun postThread(upload: UploadThread): Response<UploadThread> {
+        return api.postThreads(upload)
     }
 
     override suspend fun getPaging(subId: String, page: String): Response<Threads> {

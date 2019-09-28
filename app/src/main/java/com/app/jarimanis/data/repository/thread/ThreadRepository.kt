@@ -9,6 +9,6 @@ import retrofit2.Response
 interface ThreadRepository {
     fun getLivepaging(subId : String ,page: String) : LiveData<Threads>
     suspend fun getPaging(subId : String, page: String) : Response<Threads>
-    fun postThread(upload : UploadThread)
+    suspend fun postThread(upload : UploadThread): Response<UploadThread>
     fun cancelJobs()
 }

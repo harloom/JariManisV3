@@ -9,17 +9,19 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.app.jarimanis.R
+import com.app.jarimanis.utils.Key.EXTRA_INPUT_URI
 
 import com.lb.video_trimmer_library.interfaces.VideoTrimmingListener
 import kotlinx.android.synthetic.main.activity_trimmer.*
 import java.io.File
 
 class TrimmerActivity : AppCompatActivity() , VideoTrimmingListener {
-    private  val EXTRA_INPUT_URI = "EXTRA_INPUT_URI"
+
 
     override fun onCreate(savedInstanceState: Bundle?)  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_trimmer)
+        println("Oncreate Trim")
         val inputVideoUri: Uri? = intent?.getParcelableExtra(EXTRA_INPUT_URI)
         if (inputVideoUri == null) {
             finish()

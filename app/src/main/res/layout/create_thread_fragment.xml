@@ -11,7 +11,7 @@
     android:fillViewport="true">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etTitle"
@@ -100,8 +100,9 @@
         <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/player_view"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:visibility="gone"
+            android:layout_margin ="8dp"
             app:controller_layout_id="@layout/layout_video"
             app:layout_constraintBottom_toTopOf="@+id/rcv_foto"
             app:layout_constraintEnd_toEndOf="parent"

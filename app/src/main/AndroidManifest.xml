@@ -27,6 +27,8 @@
             android:label="@string/app_name">
 
         </activity>
+        <activity android:name=".utils.trimVideo.TrimmerActivity"
+            android:label="TrimVideo"/>
 
         <service
             android:name=".data.service.NotifiactionService"

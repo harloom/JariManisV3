@@ -16,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.work.*
 
 import com.app.jarimanis.R
@@ -26,6 +27,7 @@ import com.app.jarimanis.data.datasource.models.thread.VideoX
 import com.app.jarimanis.utils.G4Engine
 import com.app.jarimanis.utils.GifSizeFilter
 import com.app.jarimanis.utils.Key
+import com.app.jarimanis.utils.Key.EXTRA_INPUT_URI
 import com.app.jarimanis.utils.RequestCode.REQUEST_CODE_CAMERA
 import com.app.jarimanis.utils.RequestCode.REQUEST_CODE_IMAGE
 import com.app.jarimanis.utils.RequestCode.REQUEST_CODE_RESULT_TRIM
@@ -48,7 +50,7 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.yalantis.ucrop.UCrop.EXTRA_INPUT_URI
+
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.filter.Filter
@@ -72,13 +74,14 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
         fun newInstance() = CreateThreadFragment()
     }
     private lateinit var category :String
+    private lateinit var idCategory: String
     private var jobChangeText : Job? = null
 
     private  val vm: CreateThreadViewModel by viewModel()
     private lateinit var adapterI : ImageStringAdapter
     private enum class VolumeState { ON, OFF }
     private var mSelected: MutableList<String> = mutableListOf()
-    private var videosSelected : String = ""
+    private var videosSelected : MutableList<String> = mutableListOf()
     private lateinit var videoSurfaceView: PlayerView
     private  var videoPlayer: SimpleExoPlayer? =null
     private lateinit var volumeControl: ImageView
@@ -109,6 +112,7 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
         super.onViewCreated(view, savedInstanceState)
         val result  = arguments?.getParcelable<ResultKategori>(Key.argCategory)
         category = result?.category!!
+        idCategory = result.id!!
         activity!!.title = result.category
 
         videoSurfaceView = view.findViewById(R.id.player_view)
@@ -116,19 +120,20 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
         adapterI = ImageStringAdapter(this@CreateThreadFragment)
         subcribeForm()
         subcribeFormState()
+        subcribePost()
         btn_requestfile.setOnClickListener{
             chooseImageDialog()
         }
     }
 
-    private fun subcribeWorkUpload() {
-        WorkManager.getInstance(context!!).getWorkInfoByIdLiveData(uploadWorkRequest.id).observe(
-            this@CreateThreadFragment, Observer {workInfo->
-                if (workInfo != null && workInfo.state == WorkInfo.State.SUCCEEDED) {
-                    displayMessage("Work finished!")
-                }
+
+
+    private fun subcribePost(){
+        vm._postResult.observe(this@CreateThreadFragment, Observer {
+            if(it.success=="Ok"){
+                findNavController().navigateUp()
             }
-        )
+        })
     }
 
     private fun displayMessage(a: String) {
@@ -202,11 +207,14 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
     private fun onSendUpload(){
         val imageListX : MutableList<ImageX> = mutableListOf()
         val videoListX : MutableList<VideoX> = mutableListOf()
-        videoListX.add(VideoX(videosSelected))
+
+        videosSelected.map{
+            videoListX.add(VideoX(it))
+        }
         mSelected.map {
             imageListX.add(ImageX(it))
         }
-        val upload = UploadThread(category,post_content.text.toString(),imageListX,post_titile.text.toString(),
+        val upload = UploadThread(idCategory,post_content.text.toString(),imageListX,post_titile.text.toString(),
             videoListX )
 
 
@@ -315,7 +323,7 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
 
     private fun initVideo(uri : Uri) {
         videoSurfaceView.visibility = View.VISIBLE
-        videosSelected = uri.toString()
+        videosSelected.add(uri.toString())
         val bandwidthMeter = DefaultBandwidthMeter.Builder(context)
         val videoTrackSelectionFactory = AdaptiveTrackSelection.Factory();
         val trackSelector = DefaultTrackSelector(videoTrackSelectionFactory);
@@ -340,7 +348,7 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
 
 
 
-//        videoPlayer.addListener(this)
+
 
     }
 
@@ -405,7 +413,7 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
         }
     }
     private fun destroyVideo(){
-        videosSelected = ""
+        videosSelected.clear()
         videoSurfaceView.player = null
         videoPlayer?.release()
         videoSurfaceView.visibility = View.GONE

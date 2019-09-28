@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.models.thread.Image
 import com.bumptech.glide.Glide
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.item_image.view.*
 
 class ImageAdapter(private val interaction: Interaction? = null) :
@@ -68,7 +69,15 @@ class ImageAdapter(private val interaction: Interaction? = null) :
             }
 
             try {
-                Glide.with(itemView.context).load(item.url).into(iv_img)
+                val gsReference = FirebaseStorage.getInstance()
+                    .getReferenceFromUrl(item.url.toString())
+
+                gsReference.downloadUrl.addOnSuccessListener {
+                    Glide.with(itemView.context).load(it).into(iv_img)
+                }.addOnFailureListener{
+                    print("Error Glide $it" )
+                }
+
             }catch (e : Exception){
 
             }

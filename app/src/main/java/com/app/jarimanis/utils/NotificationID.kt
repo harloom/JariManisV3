@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat.getSystemService
 
 object NotificationID {
         const val N_IDUPLOAD= 10
+        const val N_IDPROGRESSUPLOAD = 100
 
 
 
@@ -25,6 +26,7 @@ object NotificationID {
         const val CHANNEL_DESCUPLOAD : String = "Pemberitahuan Uploaded"
 
         val GROUP_MESSAGE = "com.android.jarimanis.message"
+        val GROUP_UPLOAD = "com.android.jarimanis.upload"
 
         fun createChannel(context: Context){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

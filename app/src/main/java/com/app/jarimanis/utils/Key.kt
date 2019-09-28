@@ -8,4 +8,6 @@ object Key {
   const val THREADID = "id-thread"
 
   const val WORKUPLOAD = "id-work-upload"
+
+  const val EXTRA_INPUT_URI = "EXTRA_INPUT_URI"
 }
