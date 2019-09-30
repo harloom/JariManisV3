@@ -47,7 +47,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_time">
 
             <TextView
-                android:id="@+id/tv_judul"
+                android:id="@+id/tv_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -59,7 +59,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/tv_content"
+                android:id="@+id/tv_lastChat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
