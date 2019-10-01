@@ -33,7 +33,12 @@
         android:id="@+id/navigation_chat"
         android:name="com.app.jarimanis.ui.chat.ChatFragment"
 
-        tools:layout="@layout/fragment_chats" />
+        tools:layout="@layout/fragment_chats" >
+        <action
+            android:id="@+id/action_navigation_chat_to_chat_navigation"
+            app:destination="@id/chat_navigation"
+            app:popUpTo="@+id/navigation_chat" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_more"
@@ -41,4 +46,5 @@
 
         tools:layout="@layout/fragment_mores" />
     <include app:graph="@navigation/thread_navigation" />
+    <include app:graph="@navigation/chat_navigation" />
 </navigation>

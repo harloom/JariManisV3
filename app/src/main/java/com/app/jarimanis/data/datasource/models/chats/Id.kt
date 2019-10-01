@@ -1,8 +1,10 @@
 package com.app.jarimanis.data.datasource.models.chats
 
-
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Id(
     @SerializedName("emailUser")
     val emailUser: String?, // ilham solehudin1999@gmail.com
@@ -14,4 +16,4 @@ data class Id(
     val numberPhone: String?, // 082307304530
     @SerializedName("thumbail")
     val thumbail: String? // https://s3.zerochan.net/Fate.Grand.Order.240.2104974.jpg
-)
+) : Parcelable

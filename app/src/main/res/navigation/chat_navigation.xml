@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chat_navigation"
+    app:startDestination="@id/roomFragment">
+
+    <fragment
+        android:id="@+id/roomFragment"
+        android:name="com.app.jarimanis.ui.chat.room.RoomFragment"
+        tools:layout="@layout/room_fragment" >
+        <argument
+            android:name="chat-result"
+            app:argType="com.app.jarimanis.data.datasource.models.chats.Result" />
+    </fragment>
+</navigation>

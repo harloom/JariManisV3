@@ -12,5 +12,10 @@ data class ChannelID(
     @SerializedName("userList")
     val userList: List<User?>?,
     @SerializedName("__v")
-    val v: Int? // 0
-) : Parcelable
+    val v: Int? ,// 0
+        @SerializedName("createAt")
+    val createAt: Long?, // 2019-09-30T05:27:54.292Z
+
+    @SerializedName("updateAt")
+    val updateAt: Long? // 2019-09-30T05:27:54.292Z
+    ) : Parcelable

@@ -40,4 +40,5 @@
     <string name="title_activity_discussion_video_acitivity">Videos</string>
     <string name="error_gif">x or y bound size should be at least %1$dpx and file size should be no more than %2$sM</string>
     <string name="fromEmpty">Tidak boleh kosong</string>
+    <string name="chat">Tuliskan pesan</string>
 </resources>

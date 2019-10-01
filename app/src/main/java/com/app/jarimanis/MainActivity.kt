@@ -1,5 +1,8 @@
 package com.app.jarimanis
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -9,17 +12,29 @@ import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.liveData
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.app.jarimanis.data.datasource.api.UserAPI
+import com.app.jarimanis.data.datasource.local.TokenUser
+import com.app.jarimanis.data.datasource.models.token.FirebaseToken
+import com.app.jarimanis.data.repository.profile.ProfileRepository
 import com.app.jarimanis.utils.DebugKey
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.get
+import java.lang.Exception
 
 class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
     override fun onDestinationChanged(
@@ -28,22 +43,33 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         arguments: Bundle?
     ) {
         if(destination.id == R.id.threadDetailFragment || destination.id ==R.id.threadListFragment ||
-                destination.id == R.id.createThreadFragment){
+                destination.id == R.id.createThreadFragment || destination.id == R.id.roomFragment){
             navView.visibility = View.GONE
+
         }else{
             navView.visibility = View.VISIBLE
         }
+
+    }
+    @SuppressLint("ServiceCast")
+    fun isOnline(): Boolean {
+        val cm =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = cm.activeNetworkInfo
+        return netInfo != null && netInfo.isConnectedOrConnecting
     }
 
-
     private lateinit var navView : BottomNavigationView
+    private lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         navView= findViewById(R.id.nav_view)
         setSupportActionBar(toolbar)
+        initIdProfile()
         initNotificationService()
-        val navController = findNavController(R.id.nav_host_fragment)
+
+        navController = findNavController(R.id.nav_host_fragment)
         navController.addOnDestinationChangedListener(this@MainActivity)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -61,8 +87,12 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-//        menu?.findItem(R.id.action_search)?.isVisible = navController.currentDestination?.id != R.id.searchFragment
-//        menu?.findItem(R.id.action_search)?.setOnActionExpandListener(this@MainActivity) as? SearchView
+          val curentID =  navController.currentDestination!!.id
+            menu?.findItem(R.id.action_search)?.isVisible = (curentID == R.id.navigation_home ||curentID == R.id.navigation_dashboard
+                || curentID == R.id.navigation_chat ||   curentID == R.id.navigation_notifications
+                || curentID == R.id.threadListFragment)
+
+
         return super.onPrepareOptionsMenu(menu)
 
     }
@@ -85,6 +115,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
 
     private fun initNotificationService(){
+        val api : UserAPI   = get()
         FirebaseMessaging.getInstance().isAutoInitEnabled = true
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
@@ -95,10 +126,30 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
                 // Get new Instance ID token
                 val token = task.result?.token
+                try {
+                    CoroutineScope(IO).launch {
+                      val result =   api.putTokenNotification(FirebaseToken(token))
+                        if(result.isSuccessful){
+                            println("OK Token Sent")
+                        }
+                    }
+                }catch (e : Exception){
+                    println("Debug : ${e.toString()}")
+                    initNotificationService()
+                }
+
 
                 // Log and toast
 
-//                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
             })
+    }
+
+    private fun initIdProfile(){
+        val repoProfile : ProfileRepository = get()
+        val currentUid: String = FirebaseAuth.getInstance().currentUser?.uid !!
+        val res = repoProfile.getProfile(currentUid)
+        res.observe(this@MainActivity, Observer {
+            TokenUser.idUser = it.id
+        })
     }
 }

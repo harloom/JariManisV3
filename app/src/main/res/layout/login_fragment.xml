@@ -11,10 +11,10 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/viewId"
         tools:context=".LoginActivity">
 
         <LinearLayout
+            android:id="@+id/viewId"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"

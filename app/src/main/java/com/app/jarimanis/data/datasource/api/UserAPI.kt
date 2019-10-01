@@ -3,6 +3,7 @@ package com.app.jarimanis.data.datasource.api
 import com.app.jarimanis.data.datasource.models.ResponseRegister
 import com.app.jarimanis.data.datasource.models.UserRegister
 import com.app.jarimanis.data.datasource.models.profile.Profile
+import com.app.jarimanis.data.datasource.models.token.FirebaseToken
 import com.app.jarimanis.data.datasource.models.token.get_token
 import com.app.jarimanis.data.datasource.models.token.sent_token
 import retrofit2.Response
@@ -24,5 +25,10 @@ interface UserAPI {
 
     @POST("users/token")
     suspend fun getToken(@Body uid : sent_token) : Response<get_token>
+
+    @PUT("users/notification")
+    suspend fun putTokenNotification(@Body token : FirebaseToken) : Response<*>
+
+
 
 }

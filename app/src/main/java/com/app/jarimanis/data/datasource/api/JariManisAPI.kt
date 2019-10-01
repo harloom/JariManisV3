@@ -6,10 +6,7 @@ import com.app.jarimanis.data.datasource.models.kategori.Category
 import com.app.jarimanis.data.datasource.models.thread.Threads
 import com.app.jarimanis.data.datasource.models.thread.UploadThread
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 
 interface JariManisAPI {
@@ -32,7 +29,6 @@ interface JariManisAPI {
 
 
     /*  chat api */
-
     @GET("channel-user")
     suspend fun getChannelUser(): Response<Chats>
 }

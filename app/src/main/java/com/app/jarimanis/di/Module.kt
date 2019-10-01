@@ -1,5 +1,7 @@
 package com.app.jarimanis.di
 
+import com.app.jarimanis.data.repository.chat.ChatRepository
+import com.app.jarimanis.data.repository.chat.ChatRepositoryImp
 import com.app.jarimanis.data.repository.firebase.TokenRepository
 import com.app.jarimanis.data.repository.firebase.UserRepositoryImp
 import com.app.jarimanis.data.repository.profile.ProfileRepository
@@ -23,6 +25,7 @@ val appModule  = module{
     single { UserRepositoryImp(get()) }
     single { ProfileRepository(get()) }
     single { TokenRepository(get()) }
+    single <ChatRepository> { (ChatRepositoryImp(get())) }
 
     single <KategoriRepository>{ KategoriRepository(get()) }
     single<ThreadRepository>{ThreadRepositoryImp(get())}

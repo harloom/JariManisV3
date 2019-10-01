@@ -26,9 +26,16 @@ object TokenUser {
     editor.apply()
   }
 
+  var idUser  :String?
+  get() =  preferences.getString("id-user", "")
+  set(value) = preferences.edit{
+    it.putString("id-user" , value)
+  }
+
   var jwt: String?
     // custom getter to get a preference of a desired type, with a predefined default value
     get() = preferences.getString(Key.TOKEN,"")
+
 
     // custom setter to save a preference back to preferences file
     set(value) = preferences.edit {

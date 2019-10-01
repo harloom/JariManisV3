@@ -150,4 +150,7 @@ dependencies {
 
     //justify
     implementation 'me.biubiubiu.justifytext:library:1.1'
+
+
+    implementation 'com.github.shamalka:Pretty-TimeAgo-android-library:1.0.0'
 }
