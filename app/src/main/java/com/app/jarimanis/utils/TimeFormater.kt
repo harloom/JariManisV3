@@ -14,7 +14,7 @@ import java.util.*
 object TimeFormater {
     @SuppressLint("SimpleDateFormat")
     fun parse(d : Date) : String{
-        val format = SimpleDateFormat("dd-MMMM-yyyy")
+        val format = SimpleDateFormat("HH:mm")
         return  format.format(d)
     }
 

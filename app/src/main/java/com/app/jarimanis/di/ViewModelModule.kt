@@ -8,6 +8,7 @@ import com.app.jarimanis.data.repository.thread.ThreadRepositoryImp
 import com.app.jarimanis.ui.auth.LoginViewModel
 import com.app.jarimanis.ui.auth.RegisterViewModel
 import com.app.jarimanis.ui.chat.ChatViewModel
+import com.app.jarimanis.ui.chat.room.RoomViewModel
 import com.app.jarimanis.ui.dashboard.DashboardViewModel
 import com.app.jarimanis.ui.home.HomeViewModel
 import com.app.jarimanis.ui.home.KategoriRepository
@@ -24,4 +25,5 @@ val vnModule  = module{
     viewModel { LoginViewModel(get()) }
     viewModel { CreateThreadViewModel(get(),get()) }
     viewModel { ChatViewModel(get()) }
+    viewModel { RoomViewModel(get()) }
 }

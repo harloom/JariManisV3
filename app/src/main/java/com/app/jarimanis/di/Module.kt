@@ -5,6 +5,8 @@ import com.app.jarimanis.data.repository.chat.ChatRepositoryImp
 import com.app.jarimanis.data.repository.firebase.TokenRepository
 import com.app.jarimanis.data.repository.firebase.UserRepositoryImp
 import com.app.jarimanis.data.repository.profile.ProfileRepository
+import com.app.jarimanis.data.repository.roomChat.RoomChatRepository
+import com.app.jarimanis.data.repository.roomChat.RoomChatRepositoryImp
 import com.app.jarimanis.data.repository.thread.ThreadRepository
 import com.app.jarimanis.data.repository.thread.ThreadRepositoryImp
 import com.app.jarimanis.ui.auth.LoginViewModel
@@ -25,8 +27,8 @@ val appModule  = module{
     single { UserRepositoryImp(get()) }
     single { ProfileRepository(get()) }
     single { TokenRepository(get()) }
-    single <ChatRepository> { (ChatRepositoryImp(get())) }
-
+    single <ChatRepository> { ChatRepositoryImp(get()) }
+    single <RoomChatRepository>{ RoomChatRepositoryImp() }
     single <KategoriRepository>{ KategoriRepository(get()) }
     single<ThreadRepository>{ThreadRepositoryImp(get())}
 

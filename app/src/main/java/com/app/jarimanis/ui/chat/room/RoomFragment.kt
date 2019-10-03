@@ -1,8 +1,5 @@
 package com.app.jarimanis.ui.chat.room
 
-import android.app.ActionBar
-import android.graphics.drawable.Drawable
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,20 +14,23 @@ import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.data.datasource.models.chats.ChannelID
 import com.app.jarimanis.data.datasource.models.chats.Result
+import com.app.jarimanis.data.datasource.models.chats.User
+import com.app.jarimanis.data.datasource.models.message.ReciveMessage
 import com.app.jarimanis.utils.Key
 import com.app.jarimanis.utils.afterTextChanged
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
-import kotlinx.android.synthetic.main.custom_actionbar_chat.*
 import kotlinx.android.synthetic.main.room_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class RoomFragment : Fragment() {
+class RoomFragment : Fragment(), Interaction {
+    override fun onItemSelected(position: Int, item: ReciveMessage) {
+
+    }
 
     companion object {
         fun newInstance() = RoomFragment()
@@ -40,8 +40,11 @@ class RoomFragment : Fragment() {
         Toast.makeText(context!!,"Send Pesan..", Toast.LENGTH_LONG).show()
     }
     private var jobOnclick : Job?=null
-    private lateinit var viewModel: RoomViewModel
+    private val  viewModel: RoomViewModel by viewModel()
     private var jobChangeText : Job? = null
+    private lateinit var messageListAdapter: MessageAdapter
+    private lateinit var user : User
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,9 +59,36 @@ class RoomFragment : Fragment() {
         val result  = arguments?.getParcelable<Result>(Key.CHATRESULT)
         val channel = result?.channelID
         onRoomIn()
+        getProfile(channel?.userList)
+        initReclerView()
         initPorfile(channel)
+        subcribeMessage(channel)
 
 
+    }
+
+    private fun getProfile(userList: List<User?>?) {
+        userList?.map {
+            if(it?.user?.id != TokenUser.idUser){
+                user =  it!!
+            }
+        }
+    }
+
+
+    private fun initReclerView(){
+        reyclerview_message_list.apply {
+            messageListAdapter = MessageAdapter(this@RoomFragment,user)
+            adapter = messageListAdapter
+        }
+    }
+    private fun subcribeMessage(channel  : ChannelID?) {
+            channel?.let {_channel->
+                viewModel.getMessageRecive(_channel.id!!).observe(this@RoomFragment, Observer {
+                    messageListAdapter.submitList(it.asReversed())
+                    messageListAdapter.notifyDataSetChanged()
+                })
+            }
     }
 
     private fun initPorfile(channel: ChannelID?) {
@@ -78,7 +108,6 @@ class RoomFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(RoomViewModel::class.java)
         subcribeFrom()
         subcribeButtonSend()
         title_chat.setEndIconOnClickListener(sendOnclick)

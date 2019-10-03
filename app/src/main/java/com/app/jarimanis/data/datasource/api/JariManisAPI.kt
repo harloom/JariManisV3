@@ -3,6 +3,8 @@ package com.app.jarimanis.data.datasource.api
 
 import com.app.jarimanis.data.datasource.models.chats.Chats
 import com.app.jarimanis.data.datasource.models.kategori.Category
+import com.app.jarimanis.data.datasource.models.message.ReciveMessage
+import com.app.jarimanis.data.datasource.models.message.Sender
 import com.app.jarimanis.data.datasource.models.thread.Threads
 import com.app.jarimanis.data.datasource.models.thread.UploadThread
 import retrofit2.Response
@@ -31,4 +33,9 @@ interface JariManisAPI {
     /*  chat api */
     @GET("channel-user")
     suspend fun getChannelUser(): Response<Chats>
+
+    @POST("room")
+    suspend fun postMessage(message : Sender) : Response<ReciveMessage>
+
+
 }

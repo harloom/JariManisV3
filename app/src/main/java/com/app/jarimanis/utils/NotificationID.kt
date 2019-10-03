@@ -10,8 +10,6 @@ object NotificationID {
         const val N_IDUPLOAD= 10
         const val N_IDPROGRESSUPLOAD = 100
 
-
-
         const  val CHANNEL_NAME1: String = "Channel Notif"
         const val CHANNEL_ID1: String = "JariManis C1"
         const val CHANNEL_DESC1 : String = "Pemberitahuan"
@@ -44,8 +42,6 @@ object NotificationID {
                         val channel_upload = NotificationChannel(CHANNEL_IDUPLOAD, CHANNEL_NAMEUPLOAD, importance).apply {
                                 description = CHANNEL_DESCUPLOAD
                         }
-
-
 
                         notificationManager.createNotificationChannel(channel_notif)
                         notificationManager.createNotificationChannel(channel_message)
