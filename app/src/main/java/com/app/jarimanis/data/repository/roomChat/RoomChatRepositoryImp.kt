@@ -21,9 +21,9 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import retrofit2.Response
 
-class RoomChatRepositoryImp : RoomChatRepository {
-    override fun sendMessage(sender : Sender) {
-
+class RoomChatRepositoryImp (private  val api : JariManisAPI ): RoomChatRepository {
+    override suspend fun sendMessage(sender : Sender): Response<ReciveMessage> {
+        return api.postMessage(sender)
     }
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     override fun receiveMessage(channelId  : String): Query {
