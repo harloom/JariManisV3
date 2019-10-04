@@ -37,5 +37,8 @@ interface JariManisAPI {
     @POST("room")
     suspend fun postMessage(message : Sender) : Response<ReciveMessage>
 
+    @POST("room/new")
+    suspend fun postNewChannelAndMessage()
+
 
 }
