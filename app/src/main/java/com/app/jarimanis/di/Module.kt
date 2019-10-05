@@ -28,7 +28,7 @@ val appModule  = module{
     single { ProfileRepository(get()) }
     single { TokenRepository(get()) }
     single <ChatRepository> { ChatRepositoryImp(get()) }
-    single <RoomChatRepository>{ RoomChatRepositoryImp() }
+    single <RoomChatRepository>{ RoomChatRepositoryImp(get()) }
     single <KategoriRepository>{ KategoriRepository(get()) }
     single<ThreadRepository>{ThreadRepositoryImp(get())}
 
