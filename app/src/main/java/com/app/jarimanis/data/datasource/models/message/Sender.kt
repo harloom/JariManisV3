@@ -1,8 +1,11 @@
 package com.app.jarimanis.data.datasource.models.message
 
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Sender(
     @SerializedName("ci")
     val ci: String?, // 5d9568f09daa2100c47ff9b5
@@ -12,4 +15,4 @@ data class Sender(
     val image  : String?,
     @SerializedName("video")
     val video : String?
-)
+) : Parcelable

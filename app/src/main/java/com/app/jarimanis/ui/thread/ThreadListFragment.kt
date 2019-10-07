@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.models.kategori.ResultKategori
 import com.app.jarimanis.data.datasource.models.thread.Doc
+import com.app.jarimanis.data.datasource.models.thread.UserT
 import com.app.jarimanis.data.repository.thread.ThreadModelFactory
 import com.app.jarimanis.ui.dialogSheet.DialogProfile
 import com.app.jarimanis.utils.Key
@@ -26,7 +28,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
-class ThreadListFragment : Fragment(), ThreadAdapter.Interaction {
+class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
+
 
     override fun onProfileSelected(position: Int, item: Doc) {
         jobOnclick?.cancel()
@@ -34,6 +37,7 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction {
             delay(500)
             val d = DialogProfile.newInstance(item.user!!)
             d.show(childFragmentManager,"Profile")
+
         }
     }
 

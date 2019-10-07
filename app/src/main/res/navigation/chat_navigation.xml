@@ -11,6 +11,11 @@
         tools:layout="@layout/room_fragment" >
         <argument
             android:name="chat-result"
-            app:argType="com.app.jarimanis.data.datasource.models.chats.Result" />
+            app:argType="com.app.jarimanis.data.datasource.models.chats.Result"
+            app:nullable="true" />
+        <argument
+            android:name="id-user-chat"
+            app:argType="com.app.jarimanis.data.datasource.models.chats.User"
+            app:nullable="true" />
     </fragment>
 </navigation>

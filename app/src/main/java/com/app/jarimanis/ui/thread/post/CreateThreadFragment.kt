@@ -1,6 +1,7 @@
 package com.app.jarimanis.ui.thread.post
 
 
+import android.Manifest
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -51,6 +52,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
+
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.filter.Filter
@@ -60,10 +62,19 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import net.alhazmy13.gota.Gota
+import net.alhazmy13.gota.GotaResponse
 import org.koin.android.viewmodel.ext.android.viewModel
 import kotlin.properties.Delegates
 
-class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
+class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction,
+    Gota.OnRequestPermissionsBack {
+    override fun onRequestBack(requestId: Int, gotaResponse: GotaResponse) {
+        if(gotaResponse.isAllGranted){
+            chooseImageDialog()
+        }
+    }
+
     override fun onItemSelected(position: Int, item: String) {
 
     }
@@ -94,10 +105,16 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
             activity?.invalidateOptionsMenu()
         }
     }
-
+    private fun permission(){
+        Gota.Builder(activity).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA)
+            .setListener(this@CreateThreadFragment).check()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -122,7 +139,7 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
         subcribeFormState()
         subcribePost()
         btn_requestfile.setOnClickListener{
-            chooseImageDialog()
+             permission()
         }
     }
 
@@ -227,6 +244,7 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction {
 
 
     private fun chooseImageDialog() {
+
         val dialogSheet = BottomSheetDialog(context!!)
         val layout: View = layoutInflater.inflate(R.layout.dialog_image_picker, null)
         dialogSheet.setContentView(layout)

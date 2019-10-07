@@ -4,20 +4,34 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingTop="8dp">
-
-    <TextView
-        android:id="@+id/text_message_body"
-        android:text="hello, hello!"
-        android:background="@drawable/rounded_rectangle_message_sender"
+    <LinearLayout
+        android:id="@+id/frameMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="240dp"
-        android:padding="8dp"
-        android:textSize="13sp"
-        android:textColor="@color/primaryTextColor"
         android:layout_marginEnd="8dp"
+        android:padding="6dp"
+        android:orientation="horizontal"
+        android:background="@drawable/rounded_rectangle_message"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/text_message_body"
+            android:text="hello!"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="240dp"
+            android:textSize="13sp"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/colorPutih"
+            />
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_margin="1dp"
+            android:layout_gravity="bottom"
+            android:src="@drawable/ic_done"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/text_message_time"
@@ -26,6 +40,6 @@
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:layout_marginEnd="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/text_message_body"
-        app:layout_constraintRight_toLeftOf="@+id/text_message_body" />
+        app:layout_constraintBottom_toBottomOf="@+id/frameMessage"
+        app:layout_constraintRight_toLeftOf="@+id/frameMessage" />
 </androidx.constraintlayout.widget.ConstraintLayout>

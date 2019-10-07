@@ -12,10 +12,15 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.findNavController
 
 import com.app.jarimanis.R
+import com.app.jarimanis.data.datasource.models.chats.User
+import com.app.jarimanis.data.datasource.models.chats.UserChat
 import com.app.jarimanis.data.datasource.models.thread.UserT
+import com.app.jarimanis.utils.Key.USERCHAT
 import com.bumptech.glide.Glide
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.dialog_profile_fragment.view.*
@@ -23,7 +28,9 @@ import java.lang.Exception
 
 class DialogProfile : DialogFragment(), View.OnClickListener {
     override fun onClick(v: View?) {
-
+        val user_ : User = User(UserChat("",user.id,user.nameUser,"",user.thumbail),"","")
+        val bundleof = bundleOf(USERCHAT to user_)
+        findNavController().navigate(R.id.action_threadListFragment_to_chat_navigation,bundleof)
     }
 
     companion object {
@@ -37,6 +44,7 @@ class DialogProfile : DialogFragment(), View.OnClickListener {
         }
     }
 
+    private  lateinit var user: UserT
     private lateinit var viewModel: DialogProfileViewModel
     private lateinit var cv_thumbail : CircleImageView
     private lateinit var tv_name : TextView
@@ -81,7 +89,7 @@ class DialogProfile : DialogFragment(), View.OnClickListener {
     }
 
     private fun initUI() {
-       val  user = arguments?.getParcelable<UserT>(EXTRA_ID) ?: throw IllegalStateException("No args provided")
+       user = arguments?.getParcelable<UserT>(EXTRA_ID) ?: throw IllegalStateException("No args provided")
         try {
             Glide.with(this@DialogProfile).load(user.thumbail).into(cv_thumbail)
             tv_name.text = user.nameUser

@@ -9,6 +9,8 @@ object Key {
 
   const val WORKUPLOAD = "id-work-upload"
 
+  const val USERCHAT = "id-user-chat"
+
   const val EXTRA_INPUT_URI = "EXTRA_INPUT_URI"
 
   const val CHATRESULT = "chat-result"

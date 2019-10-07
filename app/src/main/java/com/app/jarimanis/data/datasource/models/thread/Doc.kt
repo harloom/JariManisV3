@@ -14,7 +14,7 @@ data class Doc(
     @SerializedName("title")
     val title : String?,
     @SerializedName("createAt")
-    val createAt: String?, // 2019-09-23T08:21:17.330Z
+    val createAt: Long?, // 2019-09-23T08:21:17.330Z
     @SerializedName("_id")
     val id: String?, // 5d8880877118de149c0756c7
     @SerializedName("images")
@@ -22,7 +22,7 @@ data class Doc(
     @SerializedName("likes")
     val likes: List<Like?>?,
     @SerializedName("updateAt")
-    val updateAt: String?, // 2019-09-23T08:21:17.330Z
+    val updateAt: Long?, // 2019-09-23T08:21:17.330Z
     @SerializedName("user")
     val user: UserT?, // 5d838e3c4ccf792a449828fa
     @SerializedName("__v")

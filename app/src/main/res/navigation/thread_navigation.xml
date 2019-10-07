@@ -19,6 +19,10 @@
         <action
             android:id="@+id/action_threadListFragment_to_createThreadFragment"
             app:destination="@id/createThreadFragment" />
+        <action
+            android:id="@+id/action_threadListFragment_to_chat_navigation"
+            app:destination="@id/chat_navigation"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/threadDetailFragment"
@@ -31,6 +35,10 @@
         <argument
             android:name="id-thread"
             app:argType="string" />
+        <action
+            android:id="@+id/action_threadDetailFragment_to_chat_navigation"
+            app:destination="@id/chat_navigation"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/createThreadFragment"
@@ -40,4 +48,5 @@
             android:name="argsKategori"
             app:argType="com.app.jarimanis.data.datasource.models.kategori.ResultKategori" />
     </fragment>
+    <include app:graph="@navigation/chat_navigation" />
 </navigation>

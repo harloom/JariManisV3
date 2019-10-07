@@ -1,12 +1,20 @@
 package com.app.jarimanis.di
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.util.Log
+import com.app.jarimanis.LoginActivity
 import com.app.jarimanis.data.datasource.api.JariManisAPI
 import com.app.jarimanis.data.datasource.api.UserAPI
+import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.data.service.ServiceInterceptor
+import com.google.firebase.auth.FirebaseAuth
+import okhttp3.Authenticator
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -19,6 +27,21 @@ val NetworkModule = module {
     }
 
     factory {OkHttpClient.Builder()
+        .authenticator { route, response ->
+            if(response.code() ==401 ){
+                val intent = Intent(get(),LoginActivity::class.java)
+                val activity  :  Context= get()
+                TokenUser.jwt = null
+                FirebaseAuth.getInstance().signOut()
+                activity.startActivity(intent)
+
+
+
+
+
+            }
+             null
+        }
         .addInterceptor(get())
         .addInterceptor(ServiceInterceptor())
         .connectTimeout(240, TimeUnit.SECONDS)

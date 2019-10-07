@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.models.thread.Doc
 import com.bumptech.glide.Glide
+import com.snov.timeagolibrary.PrettyTimeAgo
 import kotlinx.android.synthetic.main.item_thread.view.*
 import java.lang.Exception
 
@@ -61,11 +62,12 @@ class ThreadAdapter constructor(private val interaction: ThreadAdapter.Interacti
                 interaction?.onItemSelected(adapterPosition,item)
             }
 
-            itemView.tv_time.text = item.updateAt
+
             itemView.tv_judul.text = item.title?.capitalize()
             itemView.tv_user.text = item.user?.nameUser?.capitalize()
 
             try {
+                itemView.tv_time.text = PrettyTimeAgo.getTimeAgo(item.updateAt!!)
                 Glide.with(itemView.context).load(item.user?.thumbail)
                     .into(itemView.cv_thumbail)
             }catch (e : Exception){

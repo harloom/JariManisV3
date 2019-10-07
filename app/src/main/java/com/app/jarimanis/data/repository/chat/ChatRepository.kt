@@ -1,7 +1,7 @@
 package com.app.jarimanis.data.repository.chat
 
 import androidx.lifecycle.LiveData
-import com.app.jarimanis.data.datasource.models.ResponServer
+
 import com.app.jarimanis.data.datasource.models.chats.Chats
 import com.app.jarimanis.data.datasource.models.chats.Result
 import com.app.jarimanis.data.datasource.models.thread.Threads

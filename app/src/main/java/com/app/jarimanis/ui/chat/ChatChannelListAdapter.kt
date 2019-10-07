@@ -9,11 +9,9 @@ import androidx.recyclerview.widget.DiffUtil
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.data.datasource.models.chats.Result
-import com.app.jarimanis.utils.TimeFormater
 import com.bumptech.glide.Glide
 import com.snov.timeagolibrary.PrettyTimeAgo
-import kotlinx.android.synthetic.main.item_chat.view.*
-import java.util.*
+import kotlinx.android.synthetic.main.item_chat_user.view.*
 
 class ChatChannelListAdapter(private val interaction: Interaction? = null) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -36,7 +34,7 @@ class ChatChannelListAdapter(private val interaction: Interaction? = null) :
 
         return ChannelHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.item_chat,
+                R.layout.item_chat_user,
                 parent,
                 false
             ),
@@ -56,9 +54,13 @@ class ChatChannelListAdapter(private val interaction: Interaction? = null) :
         return differ.currentList.size
     }
 
+
+
     fun submitList(list: List<Result?>) {
         differ.submitList(list)
+
     }
+
 
     class ChannelHolder
     constructor(
