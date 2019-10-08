@@ -33,7 +33,6 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
     private val subcribeKategory = Observer<List<ResultKategori?>>{
         println(it)
         categoryAdapter.submitList(it)
-
         stopAnimation()
         swp_records.isRefreshing = false
 
@@ -62,6 +61,7 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
                 startAnimation()
                 CoroutineScope(Main).launch {
                     delay(3000)
+                    println("After 3 Second Refress")
                     homeViewModel.refress()
                 }
 
@@ -85,25 +85,33 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
     }
 
     private fun stopAnimation() {
-        val s = shimmer_category
-        CoroutineScope(Main).launch {
-            s.stopShimmerAnimation()
-            s.visibility = View.GONE
-            rcv_category?.visibility = View.VISIBLE
-            delay(2000)
-            println("After 2 Second Animation STOP")
+        try {
+            CoroutineScope(Main).launch {
+                shimmer_category.stopShimmerAnimation()
+                shimmer_category.visibility = View.GONE
+                rcv_category?.visibility = View.VISIBLE
+                delay(2000)
+                println("After 2 Second Animation STOP")
+            }
+        }catch (e : Exception){
+            println("Error: $e Shimmer Stop")
         }
+
 
     }
 
     private fun startAnimation() {
-        val s = shimmer_category
         CoroutineScope(Main).launch {
-            s.visibility = View.VISIBLE
-            rcv_category?.visibility = View.GONE
-            s.startShimmerAnimation()
-            delay(2000)
-            println("After 2 Second Animation Start")
+            try {
+                shimmer_category.visibility = View.VISIBLE
+                rcv_category?.visibility = View.GONE
+                shimmer_category.startShimmerAnimation()
+                delay(2000)
+                println("After 2 Second Animation Start")
+            }catch (e :Exception){
+                println("Error: $e Shimmer start")
+            }
+
 
         }
 
