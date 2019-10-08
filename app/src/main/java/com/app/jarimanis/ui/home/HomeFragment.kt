@@ -13,6 +13,13 @@ import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.models.kategori.ResultKategori
 import com.app.jarimanis.utils.Key
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
@@ -24,24 +31,42 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
 
 
     private val subcribeKategory = Observer<List<ResultKategori?>>{
-    categoryAdapter.submitList(it)
+        println(it)
+        categoryAdapter.submitList(it)
+
+        stopAnimation()
+        swp_records.isRefreshing = false
+
     }
     private lateinit var categoryAdapter : KategoriListAdapter
     private val  homeViewModel: HomeViewModel by viewModel()
-
+    private var jobSwipe : Job? =null
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        println("On onCreateView")
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        println("On onViewCreated")
         activity?.title ="Home"
+        swipe(view)
+    }
+
+    private fun swipe(view: View) {
+        view.swp_records.setOnRefreshListener {
+            jobSwipe?.cancel()
+            jobSwipe  = CoroutineScope(Main).launch {
+                startAnimation()
+                CoroutineScope(Main).launch {
+                    delay(3000)
+                    homeViewModel.refress()
+                }
+
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -49,6 +74,7 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
         println("On onActivityCreated")
         initReclerView()
         homeViewModel.kategori.observe(this@HomeFragment,subcribeKategory)
+
     }
 
     private fun initReclerView(){
@@ -56,6 +82,31 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
             categoryAdapter = KategoriListAdapter(this@HomeFragment)
             adapter = categoryAdapter
         }
+    }
+
+    private fun stopAnimation() {
+        val s = shimmer_category
+        CoroutineScope(Main).launch {
+            s.stopShimmerAnimation()
+            s.visibility = View.GONE
+            rcv_category?.visibility = View.VISIBLE
+            delay(2000)
+            println("After 2 Second Animation STOP")
+        }
+
+    }
+
+    private fun startAnimation() {
+        val s = shimmer_category
+        CoroutineScope(Main).launch {
+            s.visibility = View.VISIBLE
+            rcv_category?.visibility = View.GONE
+            s.startShimmerAnimation()
+            delay(2000)
+            println("After 2 Second Animation Start")
+
+        }
+
     }
 
     override fun onDestroyView() {
