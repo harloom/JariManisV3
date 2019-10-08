@@ -14,5 +14,6 @@ data class Sender(
     @SerializedName("image")
     val image  : String?,
     @SerializedName("video")
-    val video : String?
+    val video : String?,
+    val status : Int?
 ) : Parcelable

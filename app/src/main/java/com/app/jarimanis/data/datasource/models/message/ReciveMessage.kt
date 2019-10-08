@@ -16,5 +16,6 @@ data class ReciveMessage(
      val _message :String?= null,
      val _user :String?=null,
      val _video : String?=null,
-     val timestamp :Timestamp? =null
+     val timestamp :Timestamp? =null,
+     var status : Int? =null
 ): Parcelable

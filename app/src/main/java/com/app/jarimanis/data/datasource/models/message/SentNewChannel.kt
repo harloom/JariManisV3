@@ -10,5 +10,10 @@ data class SentNewChannel(
     @SerializedName("message")
     val message: String?, // OKe Test
     @SerializedName("userList")
-    val userList: List<User?>?
+    val userList: List<User?>?,
+    @SerializedName("image")
+    val image  : String?,
+    @SerializedName("video")
+    val video : String?,
+    val status : Int?
 ) : Parcelable

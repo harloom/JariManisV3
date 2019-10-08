@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 
 import com.app.jarimanis.R
+import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.data.datasource.models.kategori.ResultKategori
 import com.app.jarimanis.data.datasource.models.thread.Doc
 import com.app.jarimanis.data.datasource.models.thread.UserT
@@ -35,8 +36,11 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
         jobOnclick?.cancel()
         jobOnclick = CoroutineScope(Main).launch {
             delay(500)
-            val d = DialogProfile.newInstance(item.user!!)
-            d.show(childFragmentManager,"Profile")
+            if(item.user?.id != TokenUser.idUser){
+                val d = DialogProfile.newInstance(item.user!!)
+                d.show(childFragmentManager,"Profile")
+            }
+
 
         }
     }

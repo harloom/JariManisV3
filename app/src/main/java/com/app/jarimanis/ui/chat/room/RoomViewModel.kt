@@ -9,20 +9,25 @@ import com.app.jarimanis.data.datasource.models.message.Sender
 import com.app.jarimanis.data.datasource.models.message.SentNewChannel
 import com.app.jarimanis.data.datasource.models.message.User
 import com.app.jarimanis.data.repository.roomChat.RoomChatRepository
+import com.app.jarimanis.utils.SendStatus.PENDING
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentChange
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 
 
 class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewModel() {
+
+
     private val _from : MutableLiveData<Boolean> = MutableLiveData()
     val etMassage : LiveData<Boolean> = _from
     val respon : MutableLiveData<StatusMessage> = MutableLiveData<StatusMessage>()
-
-
+    private val reciveMessage =  mutableListOf<ReciveMessage>()
+     val data  = MutableLiveData<MutableList<ReciveMessage>>()
     val responChannel : MutableLiveData<StatusChannel>  = MutableLiveData()
     val getChannel : LiveData<StatusChannel> = responChannel
 
@@ -41,11 +46,26 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
                     val FROM = User(TokenUser.idUser)
                     listUser.add(TO)
                     listUser.add(FROM)
+
+                    val rm = ReciveMessage(UUID.randomUUID().toString(),"","",massage.message,TokenUser.idUser,
+                        "",
+                        Timestamp.now(),
+                        PENDING
+                    )
+                    reciveMessage.add(rm)
+                    data.postValue(reciveMessage)
+
                     val res =
-                        roomChatRepository.sendMessageAndCreateChannel(SentNewChannel(message = massage.message,userList = listUser))
+                        roomChatRepository.sendMessageAndCreateChannel(
+                            SentNewChannel(message = massage.message, userList = listUser ,status = PENDING
+                              ,image = "",video = ""))
                     if(res.isSuccessful){
                         withContext(Main){
+                            val data = res.body()
+                            println("Data : $data")
+                            responChannel.value = StatusChannel(true, data?.channelId )
                             respon.value = StatusMessage(status = true)
+                            fillterFindAndRemove(rm)
                         }
                     }else{
                         withContext(Main){
@@ -66,7 +86,7 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
             val FROM = User(TokenUser.idUser)
             listUser.add(TO)
             listUser.add(FROM)
-            val sender  = SentNewChannel("",listUser)
+            val sender  = SentNewChannel("",listUser,"","",0)
            CoroutineScope(IO).launch {
                val res = roomChatRepository.cekChannelIsExits(sender)
                if(res.code() == 410){
@@ -77,6 +97,7 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
                    withContext(Main){
                         val data = res.body()
                         responChannel.value = StatusChannel(true, data?.channelId )
+
                    }
                }
            }
@@ -88,14 +109,21 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
     fun sentMessage(massage : Sender){
         try {
             CoroutineScope(IO).launch {
+                val rm = ReciveMessage(UUID.randomUUID().toString(),"","",massage.message,TokenUser.idUser,
+                    "",
+                    Timestamp.now(),
+                    PENDING
+                )
+                reciveMessage.add(rm)
+                data.postValue(reciveMessage)
                val res =  roomChatRepository.sendMessage(massage)
-                if(res.isSuccessful){
-                    withContext(Main){
+                withContext(Main) {
+                    if (res.isSuccessful) {
                         respon.value = StatusMessage(status = true)
-                    }
-                }else{
-                    withContext(Main){
+                        fillterFindAndRemove(rm)
+                    } else {
                         respon.value = StatusMessage(status = false)
+
                     }
                 }
 
@@ -107,10 +135,18 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
 
     }
 
+    private fun fillterFindAndRemove(rcv : ReciveMessage){
+        reciveMessage.withIndex().filter {
+            it.value.id == rcv.id
+        }.map {
+            reciveMessage.removeAt(it.index)
+            data.postValue(reciveMessage)
+        }
 
-    fun getMessageRecive(channelId : String): LiveData<MutableList<ReciveMessage>> {
-        val data  = MutableLiveData<MutableList<ReciveMessage>>()
-        val reciveMessage =  mutableListOf<ReciveMessage>()
+    }
+
+
+    fun getMessageRecive(channelId : String) {
         roomChatRepository.receiveMessage(channelId).addSnapshotListener { snapshot, exception ->
             if(exception != null){
                 return@addSnapshotListener
@@ -133,7 +169,7 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
             }
             data.postValue(reciveMessage)
         }
-        return data
+
     }
 
     private fun isEmpty(string: String): Boolean {

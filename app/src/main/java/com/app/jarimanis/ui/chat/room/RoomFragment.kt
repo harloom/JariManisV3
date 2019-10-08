@@ -18,6 +18,7 @@ import com.app.jarimanis.data.datasource.models.chats.User
 import com.app.jarimanis.data.datasource.models.message.ReciveMessage
 import com.app.jarimanis.data.datasource.models.message.Sender
 import com.app.jarimanis.utils.Key
+import com.app.jarimanis.utils.SendStatus.PENDING
 import com.app.jarimanis.utils.afterTextChanged
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.room_fragment.*
@@ -43,9 +44,9 @@ class RoomFragment : Fragment(), Interaction {
         jobOnclick = CoroutineScope(Main).launch {
             delay(200)
             if(ci !=null){
-                viewModel.sentMessage(Sender(ci,etMessage.text.toString(),"",""))
+                viewModel.sentMessage(Sender(ci,etMessage.text.toString(),"","",status = PENDING))
             }else{
-                viewModel.sentNewChannel(Sender("",etMessage.text.toString(),"",""),user.user?.id)
+                viewModel.sentNewChannel(Sender("",etMessage.text.toString(),"","",PENDING),user.user?.id)
             }
         }
 
@@ -109,8 +110,8 @@ class RoomFragment : Fragment(), Interaction {
     }
 
     private fun subcribeNewMessage(channelId: String) {
-
-            viewModel.getMessageRecive(channelId).observe(this@RoomFragment, Observer {
+            viewModel.getMessageRecive(channelId)
+            viewModel.data.observe(this@RoomFragment, Observer {
                 messageListAdapter.submitList(it.asReversed())
                 messageListAdapter.notifyDataSetChanged()
             })
@@ -141,7 +142,8 @@ class RoomFragment : Fragment(), Interaction {
 
             channel?.let {_channel->
                 ci  =  _channel.id!!
-                viewModel.getMessageRecive(_channel.id!!).observe(this@RoomFragment, Observer {
+                viewModel.getMessageRecive(_channel.id!!)
+                    viewModel.data.observe(this@RoomFragment, Observer {
                     messageListAdapter.submitList(it.asReversed())
                     messageListAdapter.notifyDataSetChanged()
                 })

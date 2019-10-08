@@ -24,12 +24,14 @@
             android:layout_marginStart="8dp"
             android:textColor="@color/colorPutih"
             />
+
         <ImageView
+            android:id="@+id/msg_status"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:layout_margin="1dp"
             android:layout_gravity="bottom"
-            android:src="@drawable/ic_done"/>
+            android:layout_margin="1dp"
+            android:src="@drawable/ic_done" />
 
     </LinearLayout>
 
