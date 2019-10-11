@@ -52,7 +52,7 @@ val NetworkModule = module {
 
     single {
         Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:3000/api/v1/")
+            .baseUrl("https://jarimanisbackend.herokuapp.com/api/v1/")
             .client(get())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
