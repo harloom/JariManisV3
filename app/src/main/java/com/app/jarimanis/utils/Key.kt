@@ -18,4 +18,14 @@ object Key {
 
 
   const val CHATEXITS = "chatExits"
+
+  const val USERSETTING = "key-setting"
+  const val DATAUSERNOW = "usernow-setting"
+
+
+
+  const val TYPE_USERNAME = 1
+  const val  TYPE_IMAGE = 2
+  const val TYPE_NUMBERPHONE = 3
+  const val TYPE_DATEUSER = 4
 }

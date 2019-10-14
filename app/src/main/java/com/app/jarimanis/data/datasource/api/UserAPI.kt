@@ -3,6 +3,7 @@ package com.app.jarimanis.data.datasource.api
 import com.app.jarimanis.data.datasource.models.ResponseRegister
 import com.app.jarimanis.data.datasource.models.UserRegister
 import com.app.jarimanis.data.datasource.models.profile.Profile
+import com.app.jarimanis.data.datasource.models.profile.Sent_change
 import com.app.jarimanis.data.datasource.models.token.FirebaseToken
 import com.app.jarimanis.data.datasource.models.token.get_token
 import com.app.jarimanis.data.datasource.models.token.sent_token
@@ -23,6 +24,8 @@ interface UserAPI {
     @GET("users/mu")
     suspend fun getProfile( @Query("mu") id : String?) : Response<Profile>
 
+    @PUT("users/")
+    suspend fun updateProfile(@Query("f") flag : String? , @Body data : Sent_change) : Response<*>
 
 
     @POST("users/token")

@@ -1,6 +1,5 @@
 package com.app.jarimanis
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -14,9 +13,7 @@ import android.view.View
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.liveData
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -27,11 +24,10 @@ import androidx.preference.PreferenceManager
 import com.app.jarimanis.data.datasource.api.UserAPI
 import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.data.datasource.models.token.FirebaseToken
-import com.app.jarimanis.data.repository.profile.ProfileRepository
+import com.app.jarimanis.data.repository.profile.ProfileRepositoryImp
 import com.app.jarimanis.utils.DebugKey
 import com.app.jarimanis.utils.Key.CHATEXITS
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.material.badge.BadgeDrawable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
@@ -190,9 +186,9 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     private fun initIdProfile(){
-        val repoProfile : ProfileRepository = get()
+        val repoProfileImp : ProfileRepositoryImp = get()
         val currentUid: String = FirebaseAuth.getInstance().currentUser?.uid !!
-        val res = repoProfile.getProfile(currentUid)
+        val res = repoProfileImp.getProfile(currentUid)
         res.observe(this@MainActivity, Observer {
             TokenUser.idUser = it.id
         })
