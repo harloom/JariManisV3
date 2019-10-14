@@ -18,10 +18,17 @@ object TimeFormater {
         return  format.format(d)
     }
 
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    @SuppressLint("SimpleDateFormat")
+    fun StringToDate(_s:String): String {
+        val parser =  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+        val formatter =  SimpleDateFormat("dd-MM-yyyy")
+        return formatter.format(parser.parse(_s))
+    }
+
     @TargetApi(Build.VERSION_CODES.O)
     fun converToLocalOreo() :String{
         val current = LocalDateTime.now()
-
         val formatter = DateTimeFormatter.ofPattern("HH:mm")
         val formatted = current.format(formatter)
         return  formatted

@@ -14,4 +14,8 @@ object Key {
   const val EXTRA_INPUT_URI = "EXTRA_INPUT_URI"
 
   const val CHATRESULT = "chat-result"
+  const val IDACCOUNT = "id-akun"
+
+
+  const val CHATEXITS = "chatExits"
 }

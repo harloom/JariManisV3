@@ -21,7 +21,11 @@
         android:id="@+id/navigation_dashboard"
         android:name="com.app.jarimanis.ui.dashboard.DashboardFragment"
 
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_navigation_dashboard_to_pengaturanAkunFragment"
+            app:destination="@id/pengaturanAkunFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -47,4 +51,10 @@
         tools:layout="@layout/fragment_mores" />
     <include app:graph="@navigation/thread_navigation" />
     <include app:graph="@navigation/chat_navigation" />
+    <fragment
+        android:id="@+id/pengaturanAkunFragment"
+        android:name="com.app.jarimanis.ui.PengaturanAkun.PengaturanAkunFragment"
+        tools:layout="@layout/pengaturan_akun_fragment">
+
+    </fragment>
 </navigation>

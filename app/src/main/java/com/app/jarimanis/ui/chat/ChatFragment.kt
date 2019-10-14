@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.app.jarimanis.R
+import com.app.jarimanis.data.datasource.local.MenuData
 import com.app.jarimanis.data.datasource.models.chats.Result
 import com.app.jarimanis.utils.Key.CHATRESULT
 import com.app.jarimanis.utils.Key.THREAD
@@ -48,8 +49,15 @@ class ChatFragment : Fragment(), ChatChannelListAdapter.Interaction {
     activity?.title ="Percakapan"
       initReclerView()
       subcribeMyChannels()
+      setOptionNotif()
 
   }
+
+    private fun setOptionNotif() {
+        if(MenuData.chatExits){
+            MenuData.chatExits = false
+        }
+    }
 
     private fun initReclerView(){
         rcv_channels.apply {

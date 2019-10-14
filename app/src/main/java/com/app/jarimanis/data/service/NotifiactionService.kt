@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.api.UserAPI
+import com.app.jarimanis.data.datasource.local.MenuData
 import com.app.jarimanis.data.datasource.models.token.FirebaseToken
 import com.app.jarimanis.utils.NotificationID
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -44,8 +45,6 @@ class NotifiactionService : FirebaseMessagingService() {
 
 
     }
-
-
      message.notification?.let {
         Log.d("MSG", "Message Notification Body: ${it.body} ${it.channelId}")
          displayNotification(it)
@@ -53,17 +52,39 @@ class NotifiactionService : FirebaseMessagingService() {
 }
 
     private fun displayNotification(it : RemoteMessage.Notification) {
+        MenuData.chatExits = true
+
         val manager =
             applicationContext.getSystemService(    Context.NOTIFICATION_SERVICE) as NotificationManager
-        val buildNotif = NotificationCompat.Builder(
+
+       val notif = NotificationCompat.Builder(
+           applicationContext,NotificationID.CHANNEL_ID2
+       )   .setContentTitle(it.title)
+           .setContentText(it.body)
+           .setSmallIcon(R.mipmap.ic_launcher)
+           .setGroup(NotificationID.GROUP_MESSAGE).build()
+
+
+        val notifSumary = NotificationCompat.Builder(
             applicationContext,NotificationID.CHANNEL_ID2
 
         )
-            .setContentTitle(it.title)
-            .setContentText(it.body)
+            .setContentTitle("Pemberitahuan")
+            .setContentText("Silahkan Di cek")
             .setSmallIcon(R.mipmap.ic_launcher)
             .setGroup(NotificationID.GROUP_MESSAGE)
-             manager.notify((100 until 1150).random(), buildNotif.build())
+            .setStyle(NotificationCompat.InboxStyle()
+                .addLine(it.body)
+                .setSummaryText("Pesan Baru"))
+            .setGroupSummary(true)
+            .build()
+
+
+
+             manager.apply {
+                 notify((100 until 1150).random(),notif)
+                 notify(200,notifSumary)
+             }
     }
     override fun onDeletedMessages() {
         super.onDeletedMessages()

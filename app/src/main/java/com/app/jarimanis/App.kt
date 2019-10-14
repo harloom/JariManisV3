@@ -8,6 +8,7 @@ import android.content.Context
 import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
+import com.app.jarimanis.data.datasource.local.MenuData
 
 import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.di.NetworkModule
@@ -23,6 +24,7 @@ class App : Application(){
     override fun onCreate() {
         super.onCreate()
         TokenUser.init(this@App)
+        MenuData.init(this@App)
         createChannel(this@App)
 
         startKoin {

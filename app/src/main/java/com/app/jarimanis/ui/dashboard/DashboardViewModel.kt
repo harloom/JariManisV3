@@ -16,4 +16,8 @@ class DashboardViewModel (val repository: ProfileRepository) : ViewModel() {
     val text: LiveData<String> = _text
      val myProfile : LiveData<Result> = repository.getProfile(mAuth.currentUser!!.uid)
 
+    override fun onCleared() {
+        super.onCleared()
+    }
+
 }

@@ -48,6 +48,8 @@ class RoomFragment : Fragment(), Interaction {
             }else{
                 viewModel.sentNewChannel(Sender("",etMessage.text.toString(),"","",PENDING),user.user?.id)
             }
+
+            etMessage.setText("")
         }
 
     }

@@ -57,6 +57,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:19.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
+    implementation "androidx.preference:preference-ktx:1.1.0"
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     //cloud message
@@ -66,7 +67,6 @@ dependencies {
     implementation 'org.koin:koin-android-viewmodel:2.0.1'
     implementation 'org.koin:koin-core:2.0.1'
     testImplementation 'org.koin:koin-test:2.0.1'
-
 
     // architecture components
     implementation "androidx.lifecycle:lifecycle-extensions:$archComponentsVersion"
@@ -78,6 +78,9 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-compiler:$archComponentsVersion"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     kapt "androidx.room:room-compiler:$roomVersion"
+
+    //live prefencess
+    implementation 'com.github.ibrahimsn98:live-preferences:1.6'
 
     def work_version = "2.2.0"
     // Kotlin + coroutines
@@ -127,7 +130,7 @@ dependencies {
 
     //cameraX
     // CameraX core library
-    def camerax_version = "1.0.0-alpha03"
+    def camerax_version = "1.0.0-alpha05"
     implementation "androidx.camera:camera-core:$camerax_version"
     // If you want to use Camera2 extensions
     implementation "androidx.camera:camera-camera2:$camerax_version"
