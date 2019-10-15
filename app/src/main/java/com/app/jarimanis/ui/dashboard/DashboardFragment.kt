@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import androidx.viewpager.widget.ViewPager
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.models.profile.Result
 import com.bumptech.glide.Glide
@@ -18,9 +19,11 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class DashboardFragment : Fragment() {
 
 
+
     private val  vm: DashboardViewModel by viewModel()
 
-
+    private lateinit var viewPager: ViewPager
+    private lateinit var adpaterPager: PagerDashboard
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -39,12 +42,53 @@ class DashboardFragment : Fragment() {
 
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initPager()
+    }
+
+
+    private fun initPager(){
+        adpaterPager = PagerDashboard(childFragmentManager)
+        viewPager = pager_detail
+        val offset = 4
+        viewPager.offscreenPageLimit  =offset
+        viewPager.adapter = adpaterPager
+        viewPager.addOnPageChangeListener(pageOnScrool)
+        val tabLayout = tab_layout
+        tabLayout.setupWithViewPager(viewPager)
+    }
+
+    private val pageOnScrool = object  : ViewPager.OnPageChangeListener{
+        override fun onPageScrollStateChanged(state: Int) {
+
+        }
+
+        override fun onPageScrolled(
+            position: Int,
+            positionOffset: Float,
+            positionOffsetPixels: Int
+        ) {
+
+        }
+
+        override fun onPageSelected(position: Int) {
+
+        }
+
+    }
+
+
+
+
+
+    /*   init Profile   */
+
     private fun buttonProfileOnclick() {
         btnPengaturanUser.setOnClickListener {
           findNavController().navigate(R.id.action_navigation_dashboard_to_pengaturanAkunFragment)
         }
     }
-
     private val subcribeProfile = Observer<Result> {
         initProfile(it)
     }
@@ -59,6 +103,10 @@ class DashboardFragment : Fragment() {
             Toast.makeText(context!!,"Something Erorr, please refress!" , Toast.LENGTH_LONG).show()
         }
     }
+
+
+
+    /*     */
 
     override fun onDestroyView() {
         super.onDestroyView()

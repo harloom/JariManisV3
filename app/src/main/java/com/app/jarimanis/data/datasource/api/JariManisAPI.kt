@@ -18,16 +18,27 @@ interface JariManisAPI {
         suspend  fun listCategory() : Response<Category>
 
 
+
+    /*  thread api */
+
     @GET("thread")
     suspend fun getThreads(
         @Query("category") subId:String?,
         @Query("page") pageId : String?
     ) : Response<Threads>
 
+    @GET("thread/u/{uid}")
+    suspend fun getUserThreads(
+        @Path("uid") uid:String?,
+        @Query("page") pageId : String?
+    ) : Response<Threads>
     @POST("thread")
     suspend fun postThreads(
         @Body thread: UploadThread
     ): Response<UploadThread>
+
+
+
 
 
 

@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_navigation_dashboard_to_pengaturanAkunFragment"
             app:destination="@id/pengaturanAkunFragment" />
+        <action
+            android:id="@+id/action_navigation_dashboard_to_threadDetailFragment2"
+            app:destination="@id/threadDetailFragment2" />
     </fragment>
 
     <fragment
@@ -55,6 +58,18 @@
         android:id="@+id/pengaturanAkunFragment"
         android:name="com.app.jarimanis.ui.PengaturanAkun.PengaturanAkunFragment"
         tools:layout="@layout/pengaturan_akun_fragment">
+
+    </fragment>
+    <fragment
+        android:id="@+id/threadDetailFragment2"
+        android:name="com.app.jarimanis.ui.thread.detail.ThreadDetailFragment"
+        tools:layout="@layout/thread_detail_fragment" >
+        <argument
+            android:name="secret-thread"
+            app:argType="com.app.jarimanis.data.datasource.models.thread.Doc" />
+        <argument
+            android:name="id-thread"
+            app:argType="string" />
 
     </fragment>
 </navigation>

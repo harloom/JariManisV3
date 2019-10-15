@@ -14,6 +14,10 @@ import java.net.SocketTimeoutException
 
 
 class ThreadRepositoryImp (private  val api : JariManisAPI)  : ThreadRepository {
+    override suspend fun getThreadUserPaging(uid: String, page: String): Response<Threads> {
+        return api.getUserThreads(uid,page)
+    }
+
     override suspend fun postThread(upload: UploadThread): Response<UploadThread> {
         return api.postThreads(upload)
     }

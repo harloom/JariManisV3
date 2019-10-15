@@ -62,7 +62,6 @@
                 android:layout_height="27dp"
                 android:paddingStart="3dp"
                 android:paddingEnd="10dp"
-                android:text="@string/app_name"
                 app:layout_constraintEnd_toEndOf="@+id/view"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_thumbail" />
@@ -74,7 +73,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="2dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
 <!--        <com.google.android.material.button.MaterialButton-->
@@ -116,7 +115,6 @@
             android:id="@+id/pager_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:nestedScrollingEnabled="false"
             android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -129,6 +127,9 @@
                 android:layout_height="wrap_content"
                 app:tabMinWidth="130dp"
                 app:tabMode="scrollable"
+                app:tabIndicatorColor="@color/colorHitam"
+                app:tabTextAppearance="@style/TextAppearance.AppCompat.Menu"
+                app:tabTextColor="@color/colorHitam"
                 app:tabRippleColor="@color/colorBgGrey" />
         </androidx.viewpager.widget.ViewPager>
     </androidx.constraintlayout.widget.ConstraintLayout>
