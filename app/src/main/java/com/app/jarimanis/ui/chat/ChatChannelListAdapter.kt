@@ -74,7 +74,7 @@ class ChatChannelListAdapter(private val interaction: Interaction? = null) :
             val userList     = channel?.userList
             userList?.map { user->
                 if(user?.user?.id != TokenUser.idUser){
-                    println("Glide Enemy")
+
                     try {
                         itemView.setOnClickListener {
                             interaction?.onItemSelected(adapterPosition, item)
@@ -85,7 +85,7 @@ class ChatChannelListAdapter(private val interaction: Interaction? = null) :
                         tv_user.text  = user?.user?.nameUser
                         Glide.with(itemView.context).load(user?.user?.thumbail).into(cv_thumbail)
                     }catch (e : Exception){
-                        println("Error Glide : ${e}")
+
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package com.app.jarimanis
 
 import android.content.Context
+import android.graphics.Point
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +24,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.app.jarimanis.data.datasource.api.UserAPI
+import com.app.jarimanis.data.datasource.local.MenuData
 import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.data.datasource.models.token.FirebaseToken
 import com.app.jarimanis.data.repository.profile.ProfileRepositoryImp
@@ -31,6 +34,11 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
+import com.takusemba.spotlight.OnSpotlightStateChangedListener
+import com.takusemba.spotlight.OnTargetStateChangedListener
+import com.takusemba.spotlight.Spotlight
+import com.takusemba.spotlight.shape.Circle
+import com.takusemba.spotlight.target.SimpleTarget
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -101,21 +109,26 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         navController = findNavController(R.id.nav_host_fragment)
         navController.addOnDestinationChangedListener(this@MainActivity)
 
-
-
         val appBarConfiguration = AppBarConfiguration(setOf(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_chat,R.id.navigation_notifications,R.id.navigation_more))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         subcribeLivePrefrences()
+
+
+
+        if(!MenuData.sportLineHome){
+            guidLineSpot()
+        }
+
     }
 
     private fun subcribeLivePrefrences() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(this@MainActivity)
         val liveSharedPreferences = LiveSharedPreferences(preferences)
-        val badgeDrawable  = navView.getOrCreateBadge(R.id.navigation_chat)
         liveSharedPreferences.getBoolean(CHATEXITS,false).observe(this@MainActivity, Observer { value->
-                badgeDrawable.isVisible = value
+            navView.getOrCreateBadge(R.id.navigation_chat).setVisible(value)
+
 
         })
     }
@@ -171,11 +184,11 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     CoroutineScope(IO).launch {
                       val result =   api.putTokenNotification(FirebaseToken(token))
                         if(result.isSuccessful){
-                            println("OK Token Sent")
+
                         }
                     }
                 }catch (e : Exception){
-                    println("Debug : ${e.toString()}")
+
                     initNotificationService()
                 }
 
@@ -193,4 +206,96 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             TokenUser.idUser = it.id
         })
     }
+
+
+    private fun guidLineSpot(){
+        val display = windowManager.defaultDisplay
+        val point = Point()
+        display.getSize(point)
+        // Display : X :  1080 , Y 1794
+        val homeTarget = SimpleTarget.Builder(this@MainActivity)
+            .setPoint((point.x / 8).toFloat(), (point.y /1).toFloat())
+            .setShape( Circle(100f)) // or RoundedRectangle()
+            .setTitle("Home")
+            .setDescription("TimeLine Kategory")
+            .setOverlayPoint(100f, 100f)
+            .setOnSpotlightStartedListener(object  : OnTargetStateChangedListener<SimpleTarget> {
+                override fun onStarted(target: SimpleTarget?) {
+                }
+                override fun onEnded(target: SimpleTarget?) {
+                }
+
+            })
+            .build()
+
+        val DasboardTarget = SimpleTarget.Builder(this@MainActivity)
+            .setPoint((point.x / 3).toFloat(), (point.y).toFloat())
+            .setShape( Circle(100f)) // or RoundedRectangle()
+            .setTitle("Dashboard")
+            .setDescription("Timeline Kamu")
+            .setOverlayPoint(100f, 100f)
+            .setOnSpotlightStartedListener(object  : OnTargetStateChangedListener<SimpleTarget> {
+                override fun onStarted(target: SimpleTarget?) {
+                }
+                override fun onEnded(target: SimpleTarget?) {
+                }
+
+            })
+            .build()
+
+        val pesanTarget = SimpleTarget.Builder(this@MainActivity)
+            .setPoint((point.x /1.9).toFloat(), (point.y).toFloat())
+            .setShape( Circle(100f)) // or RoundedRectangle()
+            .setTitle("Chat")
+            .setDescription("Kamu bisa chat disini")
+            .setOverlayPoint(100f, 100f)
+            .setOnSpotlightStartedListener(object  : OnTargetStateChangedListener<SimpleTarget> {
+                override fun onStarted(target: SimpleTarget?) {
+                }
+                override fun onEnded(target: SimpleTarget?) {
+                }
+
+            })
+            .build()
+
+        val notificationTarget = SimpleTarget.Builder(this@MainActivity)
+            .setPoint((point.x /1.4).toFloat(), (point.y).toFloat())
+            .setShape( Circle(100f)) // or RoundedRectangle()
+            .setTitle("Notifikasi")
+            .setDescription("Kamu bisa cek notifikasi disini")
+            .setOverlayPoint(100f, 100f)
+            .setOnSpotlightStartedListener(object  : OnTargetStateChangedListener<SimpleTarget> {
+                override fun onStarted(target: SimpleTarget?) {
+                }
+                override fun onEnded(target: SimpleTarget?) {
+                }
+
+            })
+            .build()
+
+
+
+
+        Spotlight.with(this)
+            .setOverlayColor(R.color.background)
+            .setDuration(1000L)
+            .setAnimation(DecelerateInterpolator(2f))
+            .setTargets(homeTarget,DasboardTarget,pesanTarget,notificationTarget)
+            .setClosedOnTouchedOutside(true)
+            .setOnSpotlightStateListener(object  : OnSpotlightStateChangedListener {
+                override fun onStarted() {
+
+                }
+
+                override fun onEnded() {
+                    MenuData.sportLineHome = true
+                }
+
+            })
+            .start()
+
+    }
+
+
+
 }

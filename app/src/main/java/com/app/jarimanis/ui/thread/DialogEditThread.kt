@@ -69,7 +69,7 @@ class DialogEditThread(
                 val dialogSimpan =
                     MaterialAlertDialogBuilder(activity).setMessage("Apakah Anda Ingin Menyimpan!")
                         .setPositiveButton("OK") { dialogInterface, i ->
-                            callback.onEditListerner(item)
+                            callback.onEditListerner(item.id!!,_title.text.toString() ,_content.text.toString())
                             this.dismiss()
                         }.setCancelable(true).setNegativeButton("Batal") { dialogInterface, i ->
                             dialogInterface.dismiss()

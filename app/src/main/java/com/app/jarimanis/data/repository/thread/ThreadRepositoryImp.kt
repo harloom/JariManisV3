@@ -3,6 +3,7 @@ package com.app.jarimanis.data.repository.thread
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.app.jarimanis.data.datasource.api.JariManisAPI
+import com.app.jarimanis.data.datasource.models.SentEditThreads
 
 import com.app.jarimanis.data.datasource.models.thread.Threads
 import com.app.jarimanis.data.datasource.models.thread.UploadThread
@@ -14,6 +15,14 @@ import java.net.SocketTimeoutException
 
 
 class ThreadRepositoryImp (private  val api : JariManisAPI)  : ThreadRepository {
+    override suspend fun deleteThread(docId: String?): Response<*> {
+        return  api.deleteThreads(docId)
+    }
+
+    override suspend fun updateThread(value: SentEditThreads): Response<*> {
+       return  api.updateThread(value)
+    }
+
     override suspend fun getThreadUserPaging(uid: String, page: String): Response<Threads> {
         return api.getUserThreads(uid,page)
     }

@@ -6,14 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.app.jarimanis.data.datasource.models.SentEditThreads
 import com.app.jarimanis.data.datasource.models.thread.Doc
 import com.app.jarimanis.data.repository.thread.ThreadRepository
-import com.app.jarimanis.data.repository.thread.ThreadsDataSource
 import com.app.jarimanis.data.repository.thread.users.ThreadsUserDataSource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 
 class ThreadMeListViewModel(
     val uid : String,
@@ -21,12 +20,21 @@ class ThreadMeListViewModel(
 ) : ViewModel() {
     private val  _page: MutableLiveData<String> = MutableLiveData()
 
-
-
-
     fun cancelJobs(){
         repo.cancelJobs()
     }
+    private val _onDelete = MutableLiveData<Boolean>()
+    val onDelete : LiveData<Boolean> =  _onDelete
+
+
+    private val _message = MutableLiveData<String?>()
+    val message : LiveData<String?> = _message
+
+    init {
+        _onDelete.value = false
+    }
+
+
 
 
     private val viewModelJob = SupervisorJob()
@@ -50,8 +58,29 @@ class ThreadMeListViewModel(
     }
 
 
-    fun deleteThreadS(item: Doc){
+    fun deleteThread(item: Doc) {
+        CoroutineScope(IO).launch {
+            val respon = repo.deleteThread(item.id)
+            withContext(Main){
+                _onDelete.value = respon.isSuccessful
+                onRefress()
+            }
+        }
 
+    }
+
+    fun editThreads( editThreads: SentEditThreads){
+        CoroutineScope(IO).launch {
+            val respon = repo.updateThread(editThreads)
+            withContext(Main){
+                if(respon.isSuccessful){
+                    println("respon edut : $respon")
+                    onRefress()
+                }else{
+                    //handle err
+                }
+            }
+        }
     }
 
     fun onRefress(){

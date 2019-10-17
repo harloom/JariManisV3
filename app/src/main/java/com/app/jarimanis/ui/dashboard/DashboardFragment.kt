@@ -1,9 +1,11 @@
 package com.app.jarimanis.ui.dashboard
 
+import android.graphics.Point
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -11,8 +13,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.viewpager.widget.ViewPager
 import com.app.jarimanis.R
+import com.app.jarimanis.data.datasource.local.MenuData
 import com.app.jarimanis.data.datasource.models.profile.Result
 import com.bumptech.glide.Glide
+import com.takusemba.spotlight.OnSpotlightStateChangedListener
+import com.takusemba.spotlight.OnTargetStateChangedListener
+import com.takusemba.spotlight.Spotlight
+import com.takusemba.spotlight.shape.Circle
+import com.takusemba.spotlight.shape.RoundedRectangle
+import com.takusemba.spotlight.target.SimpleTarget
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -21,9 +30,17 @@ class DashboardFragment : Fragment() {
 
 
     private val  vm: DashboardViewModel by viewModel()
-
     private lateinit var viewPager: ViewPager
     private lateinit var adpaterPager: PagerDashboard
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if(!MenuData.sportLineDashboard){
+            guidLineSpot()
+        }
+
+    }
+
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -95,7 +112,7 @@ class DashboardFragment : Fragment() {
 
     private  fun initProfile(items : Result){
         try {
-            tv_user.text = items.nameUser
+            tv_user.text = items.nameUser!!.capitalize()
             Glide.with(this@DashboardFragment).load(items.thumbail).into(iv_thumbail)
 
 
@@ -104,6 +121,49 @@ class DashboardFragment : Fragment() {
         }
     }
 
+    private fun guidLineSpot(){
+        val display = activity!!.windowManager.defaultDisplay
+        val point = Point()
+        display.getSize(point)
+        // Display : X :  1080 , Y 1794
+        val homeTarget = SimpleTarget.Builder(activity!!)
+            .setPoint((point.x /2).toFloat(), (point.y /2).toFloat())
+            .setShape(  RoundedRectangle(400f,(point.x /1.1).toFloat(), 5.0F)) // or RoundedRectangle()
+            .setTitle("Info")
+            .setDescription("Tahan Click untuk mengedit atau menghapus")
+            .setOverlayPoint(100f, 100f)
+            .setOnSpotlightStartedListener(object  : OnTargetStateChangedListener<SimpleTarget> {
+                override fun onStarted(target: SimpleTarget?) {
+                }
+                override fun onEnded(target: SimpleTarget?) {
+                }
+
+            })
+            .build()
+
+
+
+
+
+        Spotlight.with(activity!!)
+            .setOverlayColor(R.color.background)
+            .setDuration(1000L)
+            .setAnimation(DecelerateInterpolator(2f))
+            .setTargets(homeTarget)
+            .setClosedOnTouchedOutside(true)
+            .setOnSpotlightStateListener(object  : OnSpotlightStateChangedListener {
+                override fun onStarted() {
+                    Toast.makeText(context, "spotlight is started", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onEnded() {
+                    MenuData.sportLineDashboard = true
+                }
+
+            })
+            .start()
+
+    }
 
 
     /*     */

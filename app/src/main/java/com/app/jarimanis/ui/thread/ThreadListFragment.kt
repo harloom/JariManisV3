@@ -94,9 +94,21 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
         }
 
 
-
+        onRefress()
     }
 
+
+    private var jobRefress : Job? =null
+    private fun onRefress() {
+        refress.setOnRefreshListener {
+            jobRefress?.cancel()
+            jobRefress = CoroutineScope(Main).launch{
+                    delay(500)
+                    viewModel.onRefress()
+                    refress.isRefreshing = false
+            }
+        }
+    }
 
 
     private fun subcribeList() {

@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.local.TokenUser
+import com.app.jarimanis.data.datasource.models.SentEditThreads
 import com.app.jarimanis.data.datasource.models.thread.Doc
 import com.app.jarimanis.data.repository.thread.ThreadModelFactory
 import com.app.jarimanis.data.repository.thread.users.ThreaduserModelFactory
@@ -48,11 +49,12 @@ class ThreadMeFragment : Fragment(), ThreadUserAdapter.Interaction {
 
     private val onThreadCallback: InteractionEditClick = object  : InteractionEditClick {
         override fun onDeleteListener(item: Doc) {
-       Toast.makeText(context , "OnDelete " ,Toast.LENGTH_LONG).show()
+                viewModel.deleteThread(item)
         }
 
-        override fun onEditListerner(item: Doc) {
-            Toast.makeText(context , "onEditListerner " ,Toast.LENGTH_LONG).show()
+        override fun onEditListerner(id: String, title: String?, content: String?) {
+            val editThreads : SentEditThreads = SentEditThreads(id = id ,content = content,title = title)
+            viewModel.editThreads(editThreads)
         }
 
         override fun onLaporListener(item: Doc) {
@@ -107,6 +109,21 @@ class ThreadMeFragment : Fragment(), ThreadUserAdapter.Interaction {
         factory = ThreaduserModelFactory(uid,get())
         viewModel = ViewModelProviders.of(this@ThreadMeFragment,factory).get(ThreadMeListViewModel::class.java)
         subcribeList()
+        subcribeStatus()
+    }
+
+    private fun subcribeStatus() {
+        viewModel.message.observe(this@ThreadMeFragment, Observer {
+            if(!it.isNullOrBlank()){
+                Toast.makeText(context,"Pesan :  $it",Toast.LENGTH_LONG).show()
+            }
+        })
+
+        viewModel.onDelete.observe(this@ThreadMeFragment, Observer {
+            if(it){
+                Toast.makeText(context,"Threads Berhasil di Hapus",Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     private fun subcribeList() {

@@ -2,6 +2,7 @@
 package com.app.jarimanis.data.datasource.api
 
 import com.app.jarimanis.data.datasource.models.ChannelRespon
+import com.app.jarimanis.data.datasource.models.SentEditThreads
 import com.app.jarimanis.data.datasource.models.chats.Chats
 import com.app.jarimanis.data.datasource.models.kategori.Category
 import com.app.jarimanis.data.datasource.models.message.ReciveMessage
@@ -36,6 +37,17 @@ interface JariManisAPI {
     suspend fun postThreads(
         @Body thread: UploadThread
     ): Response<UploadThread>
+
+
+    @DELETE("thread/{id}")
+    suspend fun  deleteThreads(
+        @Path("id") idDoc :  String?
+    ): Response<*>
+
+    @PUT("thread")
+    suspend fun updateThread(
+        @Body editThread  : SentEditThreads
+    ) : Response<*>
 
 
 

@@ -88,7 +88,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
               val getToken : get_token? = it.body()
               TokenUser.jwt =getToken!!.results
               if(!TokenUser.jwt.isNullOrBlank()){
-                  println(TokenUser.jwt)
+
                   goToMain()
               }
 
@@ -116,7 +116,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnSuccessListener {
                 activity?.hideKeyboard()
                 Snackbar.make(viewId,"Login Success..",Snackbar.LENGTH_LONG).show()
-                println("uid : ${it.user!!.uid}")
+
                 vm.token(it.user!!.uid).observe(this@LoginFragment,subcribeToken)
 
             }.addOnFailureListener {

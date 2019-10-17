@@ -31,7 +31,7 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
 
 
     private val subcribeKategory = Observer<List<ResultKategori?>>{
-        println(it)
+
         categoryAdapter.submitList(it)
         stopAnimation()
         swp_records.isRefreshing = false
@@ -61,7 +61,7 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
                 startAnimation()
                 CoroutineScope(Main).launch {
                     delay(3000)
-                    println("After 3 Second Refress")
+
                     homeViewModel.refress()
                 }
 
@@ -71,7 +71,7 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        println("On onActivityCreated")
+
         initReclerView()
         homeViewModel.kategori.observe(this@HomeFragment,subcribeKategory)
 
@@ -91,7 +91,7 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
                 shimmer_category.visibility = View.GONE
                 rcv_category?.visibility = View.VISIBLE
                 delay(2000)
-                println("After 2 Second Animation STOP")
+
             }
         }catch (e : Exception){
             println("Error: $e Shimmer Stop")
@@ -107,9 +107,9 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
                 rcv_category?.visibility = View.GONE
                 shimmer_category.startShimmerAnimation()
                 delay(2000)
-                println("After 2 Second Animation Start")
+
             }catch (e :Exception){
-                println("Error: $e Shimmer start")
+
             }
 
 

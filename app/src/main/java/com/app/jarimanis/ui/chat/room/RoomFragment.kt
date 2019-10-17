@@ -122,7 +122,7 @@ class RoomFragment : Fragment(), Interaction {
     private fun getProfile(user_ : User?){
         if(user_?.user?.id != TokenUser.idUser){
             user  = user_!!
-            println(user)
+
         }
     }
     private fun getProfile(userList: List<User?>?) {
@@ -164,12 +164,12 @@ class RoomFragment : Fragment(), Interaction {
     private fun initProfile(channel: ChannelID?) {
         channel?.userList?.map { user->
             if(user?.user?.id != TokenUser.idUser){
-                println("Glide Enemy")
+
                 try {
                     mView.findViewById<TextView>(R.id.title_text).text = user?.user?.nameUser
                     Glide.with(this@RoomFragment).load(user?.user?.thumbail).into(mView.findViewById(R.id.cv_userImage))
                 }catch (e : Exception){
-                    println("Error Glide : ${e}")
+
                 }
             }
         }

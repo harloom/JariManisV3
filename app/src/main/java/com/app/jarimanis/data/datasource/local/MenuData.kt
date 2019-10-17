@@ -30,8 +30,21 @@ object MenuData {
   get() =  preferences.getBoolean(Key.CHATEXITS, false)
   set(value : Boolean) = preferences.edit{
     it.putBoolean(Key.CHATEXITS , value)
-    Log.d("flag Menu Data", value.toString())
+
   }
+
+
+  var sportLineHome : Boolean
+  get() = preferences.getBoolean("spotLiteHome" , false)
+  set(value : Boolean) = preferences.edit {
+    it.putBoolean("spotLiteHome",value)
+  }
+
+  var sportLineDashboard : Boolean
+    get() = preferences.getBoolean("spotLiteDashboard" , false)
+    set(value : Boolean) = preferences.edit {
+      it.putBoolean("spotLiteDashboard",value)
+    }
 
 
 

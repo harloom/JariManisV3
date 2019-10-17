@@ -32,7 +32,6 @@ class ThreadsUserDataSource (private val uid :String,
     ) {
         uiScope.launch {
             val respon = repo.getThreadUserPaging( uid,"1")
-            println("List : $respon")
             if(respon.isSuccessful){
                 val items = respon.body()
                 val result = items?.result !!

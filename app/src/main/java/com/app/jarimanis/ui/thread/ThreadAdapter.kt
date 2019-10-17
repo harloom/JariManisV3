@@ -39,7 +39,7 @@ class ThreadAdapter constructor(private val interaction: ThreadAdapter.Interacti
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
-        println(position)
+
         when(holder){
             is ThreadHolder ->{
                 item?.let {
