@@ -2,6 +2,8 @@ package com.app.jarimanis.di
 
 import com.app.jarimanis.data.repository.chat.ChatRepository
 import com.app.jarimanis.data.repository.chat.ChatRepositoryImp
+import com.app.jarimanis.data.repository.commentar.ComentarRepositoryImp
+import com.app.jarimanis.data.repository.commentar.DiskusiRepository
 import com.app.jarimanis.data.repository.firebase.TokenRepository
 import com.app.jarimanis.data.repository.firebase.UserRepositoryImp
 import com.app.jarimanis.data.repository.profile.ProfileRepositoryImp
@@ -25,6 +27,7 @@ val appModule  = module{
     single <RoomChatRepository>{ RoomChatRepositoryImp(get()) }
     single <KategoriRepository>{ KategoriRepository(get()) }
     single<ThreadRepository>{ThreadRepositoryImp(get())}
+    single<DiskusiRepository> {ComentarRepositoryImp(get())  }
 
 
 }

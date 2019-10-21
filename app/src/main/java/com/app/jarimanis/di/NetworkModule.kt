@@ -30,6 +30,7 @@ val NetworkModule = module {
         .authenticator { route, response ->
             if(response.code() ==401 ){
                 val intent = Intent(get(),LoginActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 val activity  :  Context= get()
                 TokenUser.jwt = null
                 FirebaseAuth.getInstance().signOut()

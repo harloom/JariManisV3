@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.core.content.ContextCompat.getSystemService
 
 object NotificationID {
+
         const val N_IDUPLOAD= 10
         const val N_IDPROGRESSUPLOAD = 100
 
@@ -25,7 +26,7 @@ object NotificationID {
 
         val GROUP_MESSAGE = "com.android.jarimanis.message"
         val GROUP_UPLOAD = "com.android.jarimanis.upload"
-
+        val GROUP_PEMBERITAHUAN =  "com.android.jarimanis.Pemberitahuan"
         fun createChannel(context: Context){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         val importance = NotificationManager.IMPORTANCE_HIGH

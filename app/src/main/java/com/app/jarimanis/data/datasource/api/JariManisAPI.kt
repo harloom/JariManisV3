@@ -4,6 +4,10 @@ package com.app.jarimanis.data.datasource.api
 import com.app.jarimanis.data.datasource.models.ChannelRespon
 import com.app.jarimanis.data.datasource.models.SentEditThreads
 import com.app.jarimanis.data.datasource.models.chats.Chats
+import com.app.jarimanis.data.datasource.models.diskusi.ResponDiskusi
+import com.app.jarimanis.data.datasource.models.diskusi.ResponPostComentar
+import com.app.jarimanis.data.datasource.models.diskusi.SaveCommentar
+import com.app.jarimanis.data.datasource.models.diskusi.paging.ResponComentarPaging
 import com.app.jarimanis.data.datasource.models.kategori.Category
 import com.app.jarimanis.data.datasource.models.message.ReciveMessage
 import com.app.jarimanis.data.datasource.models.message.Sender
@@ -49,6 +53,24 @@ interface JariManisAPI {
         @Body editThread  : SentEditThreads
     ) : Response<*>
 
+    /* commentary*/
+
+
+    @GET("diskusi")
+    suspend fun getDiskusi(
+        @Query("tid") id : String ,@Query("page") pageId : String?
+    ) : Response<ResponComentarPaging>
+
+    @POST("diskusi/{id}")
+    suspend fun postComentar(
+        @Path("id") id:String?,
+        @Body saveCommentar: SaveCommentar
+    ) :Response<ResponPostComentar>
+
+    @DELETE("diskusi")
+    suspend fun deleteComentar(
+        @Field("id") id : String
+    ):Response<ResponDiskusi>
 
 
 

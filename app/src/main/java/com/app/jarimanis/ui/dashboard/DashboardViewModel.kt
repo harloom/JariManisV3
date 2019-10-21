@@ -15,6 +15,8 @@ class DashboardViewModel (val repositoryImp: ProfileRepositoryImp) : ViewModel()
     }
      val text: LiveData<String> = _text
      private val reloadTrigger = MutableLiveData<Boolean>()
+
+
      val myProfile : LiveData<Result>  = Transformations.switchMap(reloadTrigger){
          repositoryImp.getProfile(mAuth.currentUser!!.uid)
      }

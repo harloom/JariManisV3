@@ -47,16 +47,53 @@ class NotifiactionService : FirebaseMessagingService() {
     }
      message.notification?.let {
         Log.d("MSG", "Message Notification Body: ${it.body} ${it.channelId}")
-         displayNotification(it)
+
+         if(it.channelId == NotificationID.CHANNEL_ID2){
+             displayNotificationPesan(it)
+         }
+         if(it.channelId == NotificationID.CHANNEL_ID1){
+             displayNotif(it)
+         }
+
     }
 }
 
-    private fun displayNotification(it : RemoteMessage.Notification) {
-        MenuData.chatExits = true
-
+    private fun displayNotif(it: RemoteMessage.Notification) {
         val manager =
             applicationContext.getSystemService(    Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notif = NotificationCompat.Builder(
+            applicationContext,NotificationID.CHANNEL_ID2
+        )   .setContentTitle(it.title)
+            .setContentText(it.body)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setGroup(NotificationID.GROUP_PEMBERITAHUAN).build()
 
+        val notifSumary = NotificationCompat.Builder(
+            applicationContext,NotificationID.CHANNEL_ID2
+
+        )
+            .setContentTitle("Pemberitahuan")
+            .setContentText("")
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setGroup(NotificationID.GROUP_PEMBERITAHUAN)
+            .setStyle(NotificationCompat.InboxStyle()
+                .addLine(it.body)
+                .setSummaryText("Pemberitahuan"))
+            .setGroupSummary(true)
+            .build()
+
+
+
+        manager.apply {
+            notify((1200 until 1220).random(),notif)
+            notify(201,notifSumary)
+        }
+    }
+
+    private fun displayNotificationPesan(it : RemoteMessage.Notification) {
+        MenuData.chatExits = true
+        val manager =
+            applicationContext.getSystemService(    Context.NOTIFICATION_SERVICE) as NotificationManager
        val notif = NotificationCompat.Builder(
            applicationContext,NotificationID.CHANNEL_ID2
        )   .setContentTitle(it.title)
