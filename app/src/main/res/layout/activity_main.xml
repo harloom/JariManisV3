@@ -7,6 +7,19 @@
     android:layout_height="match_parent"
     android:background="@color/colorBgGrey"
     >
+    <FrameLayout
+        android:id="@+id/frame_splash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="10dp"
+        android:visibility="visible"
+        android:background="@color/colorPutih">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_launcher_round"/>
+    </FrameLayout>
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:animateLayoutChanges="true"

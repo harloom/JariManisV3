@@ -7,7 +7,6 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_videos"
-        android:layout_margin="2dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:itemCount="3"

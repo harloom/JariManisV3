@@ -34,6 +34,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/komentar"
             android:inputType="text"
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp"
             android:textColor="#454545"
             android:textSize="12sp" />
     </com.google.android.material.textfield.TextInputLayout>

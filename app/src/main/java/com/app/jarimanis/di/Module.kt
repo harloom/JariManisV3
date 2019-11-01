@@ -6,6 +6,8 @@ import com.app.jarimanis.data.repository.commentar.ComentarRepositoryImp
 import com.app.jarimanis.data.repository.commentar.DiskusiRepository
 import com.app.jarimanis.data.repository.firebase.TokenRepository
 import com.app.jarimanis.data.repository.firebase.UserRepositoryImp
+import com.app.jarimanis.data.repository.pemberitahuan.PemberitahuanRepository
+import com.app.jarimanis.data.repository.pemberitahuan.PemberitahuanRepositoryImp
 import com.app.jarimanis.data.repository.profile.ProfileRepositoryImp
 import com.app.jarimanis.data.repository.roomChat.RoomChatRepository
 import com.app.jarimanis.data.repository.roomChat.RoomChatRepositoryImp
@@ -28,6 +30,7 @@ val appModule  = module{
     single <KategoriRepository>{ KategoriRepository(get()) }
     single<ThreadRepository>{ThreadRepositoryImp(get())}
     single<DiskusiRepository> {ComentarRepositoryImp(get())  }
+    single <PemberitahuanRepository> {PemberitahuanRepositoryImp(get())}
 
 
 }

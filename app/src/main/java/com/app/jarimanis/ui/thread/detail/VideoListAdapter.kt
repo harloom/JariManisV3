@@ -220,7 +220,7 @@ class VideoListAdapter(private val interaction: Interaction? = null) :
         }
 
           fun  stopPlayer(){
-            videoPlayer!!.release()
+            videoPlayer?.release()
 
         }
 

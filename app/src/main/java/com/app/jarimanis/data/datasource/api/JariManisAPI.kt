@@ -12,6 +12,7 @@ import com.app.jarimanis.data.datasource.models.kategori.Category
 import com.app.jarimanis.data.datasource.models.message.ReciveMessage
 import com.app.jarimanis.data.datasource.models.message.Sender
 import com.app.jarimanis.data.datasource.models.message.SentNewChannel
+import com.app.jarimanis.data.datasource.models.pemberitahuan.Pemberitahuan
 import com.app.jarimanis.data.datasource.models.thread.Threads
 import com.app.jarimanis.data.datasource.models.thread.UploadThread
 import retrofit2.Response
@@ -74,7 +75,11 @@ interface JariManisAPI {
 
 
 
-
+    /* pemberitahuan */
+    @GET("pemberitahuan")
+    suspend fun  getPemberitahuan (
+      @Query("page") pageId : String?
+    ) : Response<Pemberitahuan>
 
 
     /*  chat api */

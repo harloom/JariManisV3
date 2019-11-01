@@ -6,6 +6,7 @@ import com.app.jarimanis.ui.chat.ChatViewModel
 import com.app.jarimanis.ui.chat.room.RoomViewModel
 import com.app.jarimanis.ui.dashboard.DashboardViewModel
 import com.app.jarimanis.ui.home.HomeViewModel
+import com.app.jarimanis.ui.notifications.PemberitahuanViewModel
 import com.app.jarimanis.ui.thread.post.CreateThreadViewModel
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -20,4 +21,5 @@ val vnModule  = module{
     viewModel { CreateThreadViewModel(get(),get()) }
     viewModel { ChatViewModel(get()) }
     viewModel { RoomViewModel(get()) }
+    viewModel { PemberitahuanViewModel(get()) }
 }

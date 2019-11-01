@@ -15,13 +15,25 @@
             app:argType="com.app.jarimanis.data.datasource.models.kategori.ResultKategori" />
         <action
             android:id="@+id/action_threadListFragment_to_threadDetailFragment"
-            app:destination="@id/threadDetailFragment" />
+            app:destination="@id/threadDetailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_threadListFragment_to_createThreadFragment"
-            app:destination="@id/createThreadFragment" />
+            app:destination="@id/createThreadFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_threadListFragment_to_chat_navigation"
             app:destination="@id/chat_navigation"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -38,6 +50,10 @@
         <action
             android:id="@+id/action_threadDetailFragment_to_chat_navigation"
             app:destination="@id/chat_navigation"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment

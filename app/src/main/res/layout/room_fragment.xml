@@ -56,11 +56,13 @@
             android:textSize="18sp"
             android:hint="@string/chat"
             android:gravity="start"
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp"
             android:textColorHint="#454545"
             android:textColor="#454545"
             android:textColorHighlight="#454545"
             android:textColorLink="#454545"
-            android:maxLength="50"
+            android:maxLength="300"
             android:background="@drawable/edit_text_rounded_grey"
             />
         </com.google.android.material.textfield.TextInputLayout>

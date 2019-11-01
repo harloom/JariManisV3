@@ -5,41 +5,46 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.app.jarimanis.data.datasource.models.diskusi.ResponPostComentar
+import com.app.jarimanis.data.datasource.models.diskusi.SaveCommentar
 import com.app.jarimanis.data.datasource.models.diskusi.paging.Doc
 import com.app.jarimanis.data.repository.commentar.DiskusiDataSource
 import com.app.jarimanis.data.repository.commentar.DiskusiRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import retrofit2.Response
 
 class KomentarViewModel(
     private val categori: String,
     private val repo: DiskusiRepository
 ) : ViewModel(){
-    private val  _page: MutableLiveData<String> = MutableLiveData()
-    private val idDoc : MutableLiveData<String>  = MutableLiveData()
+    private val _from : MutableLiveData<Boolean> = MutableLiveData()
+    val etKomentar : LiveData<Boolean> = _from
+    private val  _respon: MutableLiveData<Response<ResponPostComentar>> = MutableLiveData()
+     val  respon : LiveData<Response<ResponPostComentar>?> = _respon
     private val reloadTrigger = MutableLiveData<Boolean>()
 
 
-//    init {
-//        refress()
-//    }
-//
+    init {
+        refress()
+    }
+    fun fromMassageChange(message : String?) {
+        message?.let {
+            _from.value = it.isNotEmpty()
+        }
+    }
 
 
-//    fun init(subId :String ,page: String){
-//        val pageUpdate = page
-//        val subIdUpdate = subId
-//        if (_page.value == pageUpdate) {
-//            return
-//        }
-//
-//        if(idDoc.value == subIdUpdate){
-//            return
-//        }
-//        idDoc.value = subIdUpdate
-//        _page.value = pageUpdate
-//    }
+
+    suspend fun postCommentar(id : String , comentar : SaveCommentar){
+        val res = repo.postDiskusi(id,comentar)
+        if(res.isSuccessful){
+            onRefress()
+        }else{
+            _respon.value = res
+        }
+    }
 
     fun cancelJobs(){
         repo.cancelJobs()
@@ -67,11 +72,13 @@ class KomentarViewModel(
     }
 
 
-//    fun refress() {
-//        reloadTrigger.value = true
-//    }
+    fun refress() {
+        reloadTrigger.value = true
+    }
 
      fun onRefress(){
         records.value!!.dataSource.invalidate()
     }
+
+
 }

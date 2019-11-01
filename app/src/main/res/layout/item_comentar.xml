@@ -29,15 +29,15 @@
     <TextView
         android:id="@+id/text_commentar_body"
         android:layout_width="0dp"
-        android:layout_height="34dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/rounded_rectangle_message"
+        android:background="@drawable/rounded_rectangle_commentar"
         android:maxWidth="240dp"
-        android:padding="8dp"
+        android:padding="16dp"
         android:text="hi man, how are you?"
-        android:textColor="#ffffff"
+        android:textColor="@color/hitam"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_commentar_profile"
@@ -69,10 +69,12 @@
             android:text="Like"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            app:iconTint="@color/primaryColor"
+            app:iconTint="@color/colorBgGrey"
             app:iconGravity="textStart"
+            android:textAllCaps="false"
             app:icon="@drawable/ic_thumb_up"
-            android:textColor="@color/primaryColor"/>
+            app:iconSize="18dp"
+            android:textColor="@color/hitam"/>
         <com.google.android.material.button.MaterialButton
             android:layout_weight="1"
             android:layout_marginStart="8dp"
@@ -81,6 +83,11 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/secondaryColor"
             android:text="Commentar"
-            android:textColor="@color/primaryColor"/>
+            android:textAllCaps="false"
+            app:iconTint="@color/colorBgGrey"
+            app:iconGravity="textStart"
+            app:iconSize="18dp"
+            app:icon="@drawable/ic_forum"
+            android:textColor="@color/hitam"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

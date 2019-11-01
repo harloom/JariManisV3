@@ -42,7 +42,10 @@ import com.takusemba.spotlight.target.SimpleTarget
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.ibrahimsn.library.LiveSharedPreferences
 import org.koin.android.ext.android.get
 import java.lang.Exception
@@ -184,7 +187,9 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                     CoroutineScope(IO).launch {
                       val result =   api.putTokenNotification(FirebaseToken(token))
                         if(result.isSuccessful){
-
+                            withContext(Main){
+                                loadingSplash()
+                            }
                         }
                     }
                 }catch (e : Exception){
@@ -296,6 +301,9 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
     }
 
-
+    private suspend fun loadingSplash(){
+        delay(3000)
+        frame_splash.visibility = View.GONE
+    }
 
 }

@@ -1,22 +1,20 @@
-package com.app.jarimanis.data.repository.commentar
+package com.app.jarimanis.data.repository.pemberitahuan
 
 import androidx.lifecycle.LiveData
 import com.app.jarimanis.data.datasource.models.diskusi.ResponPostComentar
 import com.app.jarimanis.data.datasource.models.diskusi.SaveCommentar
 import com.app.jarimanis.data.datasource.models.diskusi.paging.ResponComentarPaging
+import com.app.jarimanis.data.datasource.models.pemberitahuan.Pemberitahuan
 
 import retrofit2.Response
 
-interface DiskusiRepository {
+interface PemberitahuanRepository {
 
     /* not use*/
 //    fun getLivepaging(subId : String ,page: String) : LiveData<ResponComentarPaging>
-    suspend fun getPaging(subId : String, page: String) : Response<ResponComentarPaging>
-    suspend fun postDiskusi(id : String,commentar : SaveCommentar): Response<ResponPostComentar>
+    suspend fun getPaging(page: String) : Response<Pemberitahuan>
+    suspend fun deletePemberitahuan(docId: String) : Response<*>
 
-
-    suspend fun deleteDiskusi(docId: String) : Response<*>
-//    suspend fun updateDiskusi(value : SentEditDiskusis) : Response<*>
 
     fun cancelJobs()
 }
