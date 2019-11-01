@@ -45,11 +45,11 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
         }
     }
 
-    private  var jobDetail : Job?= null
+
     private var jobOnclick : Job?=null
     override fun onItemSelected(position: Int, item: Doc) {
-        jobDetail?.cancel()
-        jobDetail = CoroutineScope(Main).launch {
+        jobOnclick?.cancel()
+        jobOnclick = CoroutineScope(Main).launch {
             delay(500)
             val bundleof = bundleOf(THREADID to item.id ,
                 THREAD to item)
@@ -78,7 +78,7 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
         activity!!.title = result?.category
         btn_create.setOnClickListener {
             jobOnclick?.cancel()
-            CoroutineScope(Main).launch {
+            jobOnclick = CoroutineScope(Main).launch {
                 delay(300)
                 val bundled = bundleOf(Key.argCategory to result)
                 findNavController().navigate(R.id.action_threadListFragment_to_createThreadFragment,bundled)
