@@ -118,13 +118,22 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         navView.setupWithNavController(navController)
         subcribeLivePrefrences()
 
-
+        if (!MenuData.firstSetup){
+                setupProfile()
+                MenuData.firstSetup = true
+        }
 
         if(!MenuData.sportLineHome){
-            guidLineSpot()
+            offloading()
+
+            if(navController.currentDestination?.id == R.id.navigation_home){
+                guidLineSpot()
+            }
+
         }
 
     }
+
 
     private fun subcribeLivePrefrences() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(this@MainActivity)
@@ -222,7 +231,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             .setPoint((point.x / 8).toFloat(), (point.y /1).toFloat())
             .setShape( Circle(100f)) // or RoundedRectangle()
             .setTitle("Home")
-            .setDescription("TimeLine Kategory")
+            .setDescription("Memilih Kategory")
             .setOverlayPoint(100f, 100f)
             .setOnSpotlightStartedListener(object  : OnTargetStateChangedListener<SimpleTarget> {
                 override fun onStarted(target: SimpleTarget?) {
@@ -237,7 +246,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             .setPoint((point.x / 3).toFloat(), (point.y).toFloat())
             .setShape( Circle(100f)) // or RoundedRectangle()
             .setTitle("Dashboard")
-            .setDescription("Timeline Kamu")
+            .setDescription("Timeline kamu")
             .setOverlayPoint(100f, 100f)
             .setOnSpotlightStartedListener(object  : OnTargetStateChangedListener<SimpleTarget> {
                 override fun onStarted(target: SimpleTarget?) {
@@ -305,5 +314,14 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         delay(3000)
         frame_splash.visibility = View.GONE
     }
+
+    private fun offloading(){
+        frame_splash.visibility = View.GONE
+    }
+
+    private fun setupProfile() {
+        navController.navigate(R.id.pengaturanAkunFragment)
+    }
+
 
 }

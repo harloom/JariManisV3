@@ -113,9 +113,7 @@ class DashboardFragment : Fragment() {
     private  fun initProfile(items : Result){
         try {
             tv_user.text = items.nameUser!!.capitalize()
-            Glide.with(this@DashboardFragment).load(items.thumbail).into(iv_thumbail)
-
-
+            Glide.with(this@DashboardFragment).load(items.thumbail).placeholder(R.drawable.rounded_shimmer).into(iv_thumbail)
         }catch (e: Exception){
             Toast.makeText(context!!,"Something Erorr, please refress!" , Toast.LENGTH_LONG).show()
         }

@@ -1,4 +1,4 @@
-package com.app.jarimanis.ui.dialogSheet
+package com.app.jarimanis.ui.dialog
 
 import androidx.lifecycle.ViewModel
 

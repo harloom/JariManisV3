@@ -1,4 +1,4 @@
-package com.app.jarimanis.ui.thread.detail
+package com.app.jarimanis.ui.thread.detail.comentar
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,9 +13,6 @@ import com.app.jarimanis.data.datasource.models.diskusi.SaveCommentar
 import com.app.jarimanis.data.datasource.models.thread.Doc
 
 import com.app.jarimanis.data.repository.commentar.DiskusiModelFactory
-import com.app.jarimanis.data.repository.thread.ThreadModelFactory
-import com.app.jarimanis.ui.thread.comentar.ComentarAdapter
-import com.app.jarimanis.ui.thread.comentar.KomentarViewModel
 import com.app.jarimanis.utils.Key
 import com.app.jarimanis.utils.afterTextChanged
 import kotlinx.android.synthetic.main.detail_thread_komentar_fragment.*
@@ -35,7 +32,7 @@ class KomentarFragment : Fragment(), ComentarAdapter.Interaction, View.OnClickLi
         jobOnclick?.cancel()
         doc?.let {d->
             jobOnclick = CoroutineScope(IO).launch {
-                delay(200)
+                delay(400)
                 viewModel.postCommentar(d.id!!, SaveCommentar(content = etKomentar.text.toString()))
                 withContext(Main){
                     etKomentar.setText("")
@@ -99,6 +96,8 @@ class KomentarFragment : Fragment(), ComentarAdapter.Interaction, View.OnClickLi
                 if(it.isSuccessful){
                     Toast.makeText(context,"Komentar Berhasil" , Toast.LENGTH_SHORT).show()
                 }else if(it.code() == 400){
+                    println(it.body())
+                    viewModel.onRefress()
                     Toast.makeText(context,"Terjadi Kesalahan, Coba Kembali" , Toast.LENGTH_SHORT).show()
                 }
             }

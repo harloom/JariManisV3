@@ -22,6 +22,7 @@ import com.app.jarimanis.ui.thread.ThreadInfo
 import com.app.jarimanis.utils.Key
 import com.app.jarimanis.utils.Key.THREAD
 import com.app.jarimanis.utils.Key.THREADID
+import com.app.jarimanis.utils.NetworkState
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.thread_me_list_fragment.*
 import kotlinx.coroutines.CoroutineScope
@@ -91,6 +92,7 @@ class ThreadMeFragment : Fragment(), ThreadUserAdapter.Interaction {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        startAnimation()
     }
 
 
@@ -127,11 +129,44 @@ class ThreadMeFragment : Fragment(), ThreadUserAdapter.Interaction {
     }
 
     private fun subcribeList() {
+
+
+
         rcv_thread.apply {
             adapter = adapterT
         }
         viewModel.records.observe(this@ThreadMeFragment, Observer {
             adapterT.submitList(it)
         })
+        viewModel.initialLoad.observe(this@ThreadMeFragment, Observer {
+            if (it == NetworkState.LOADING) {
+                // Show loading
+
+            } else {
+                    stopAnimation()
+                if (it.status == NetworkState.Status.SUCCESS_EMPTY) {
+                    // Show empty state for initial load
+                }
+            }
+        })
+    }
+
+    private fun stopAnimation() {
+        val s = shimmer_animation
+        CoroutineScope(Main).launch {
+            s.stopShimmerAnimation()
+            s.visibility = View.GONE
+            delay(500)
+        }
+
+    }
+
+    private fun startAnimation() {
+        CoroutineScope(Main).launch {
+            shimmer_animation.visibility = View.VISIBLE
+            shimmer_animation.startShimmerAnimation()
+            delay(500)
+        }
+
     }
 }

@@ -10,11 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.afollestad.materialdialogs.MaterialDialog
 import com.app.jarimanis.MainActivity
 
 import com.app.jarimanis.R
+import com.github.loadingview.LoadingDialog
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.register_fragment.*
 import kotlinx.coroutines.CoroutineScope
@@ -33,6 +36,7 @@ class RegisterFragment : Fragment(), View.OnClickListener {
             R.id.register->{
                 jobRegister?.cancel()
                 jobRegister = CoroutineScope(Main).launch {
+                    loadingDialog.show()
                     delay(300)
                     vm.registerProcess(email = etEmail.text.toString(),
                         pass = etpassword.text.toString() ,
@@ -47,9 +51,13 @@ class RegisterFragment : Fragment(), View.OnClickListener {
         fun newInstance() = RegisterFragment()
     }
 
+    private lateinit var loadingDialog: LoadingDialog
     private val  vm: RegisterViewModel by viewModel()
     private var jobRegister : Job? = null
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loadingDialog = LoadingDialog.get(activity!!)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -67,6 +75,7 @@ class RegisterFragment : Fragment(), View.OnClickListener {
     private fun initViewModel(){
         vm.regResult.observe(this@RegisterFragment, Observer {
             if (it.onSuccess == false and !it.onError.isNullOrBlank()){
+                loadingDialog.hide()
                 if(it.onEmailEror){
                     etEmail.error = it.onError.toString()
                 }else if(it.onPasswordErr){
@@ -75,8 +84,18 @@ class RegisterFragment : Fragment(), View.OnClickListener {
                     etRepassword.error = it.onError.toString()
                 }
             }else{
-                snackbar("Register success..")
-                goToMain()
+                loadingDialog.hide()
+                MaterialDialog(context!!).show {
+                    title(R.string.pemberitahuan)
+                    message(R.string.pendaftaranBerhasil)
+                    icon(drawable = ContextCompat.getDrawable(context,R.mipmap.ic_launcher))
+                    cornerRadius(16f)
+                    positiveButton(text = "Ok"){
+                        goToMain()
+                    }
+
+                }
+
             }
         })
     }
@@ -110,7 +129,8 @@ class RegisterFragment : Fragment(), View.OnClickListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
     }
+
+
 
 }

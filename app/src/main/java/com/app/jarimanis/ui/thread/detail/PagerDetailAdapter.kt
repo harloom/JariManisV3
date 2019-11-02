@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.app.jarimanis.data.datasource.models.thread.Doc
+import com.app.jarimanis.ui.thread.detail.comentar.KomentarFragment
 import com.app.jarimanis.utils.Key
 import com.app.jarimanis.utils.Key.THREADID
 

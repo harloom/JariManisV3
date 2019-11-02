@@ -21,6 +21,7 @@ import com.app.jarimanis.utils.Key
 import com.app.jarimanis.utils.SendStatus.PENDING
 import com.app.jarimanis.utils.afterTextChanged
 import com.bumptech.glide.Glide
+import com.github.loadingview.LoadingDialog
 import kotlinx.android.synthetic.main.room_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -28,6 +29,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.util.*
+import kotlin.random.Random
 
 class RoomFragment : Fragment(), Interaction {
     override fun onItemSelected(position: Int, item: ReciveMessage) {
@@ -38,15 +41,19 @@ class RoomFragment : Fragment(), Interaction {
         fun newInstance() = RoomFragment()
     }
 
+
     private val sendOnclick: View.OnClickListener = View.OnClickListener {
-        Toast.makeText(context!!,"Send Pesan..", Toast.LENGTH_LONG).show()
         jobOnclick?.cancel()
         jobOnclick = CoroutineScope(Main).launch {
-            delay(200)
-            if(ci !=null){
-                viewModel.sentMessage(Sender(ci,etMessage.text.toString(),"","",status = PENDING))
+            Toast.makeText(context!!,"Send Pesan..", Toast.LENGTH_SHORT).show()
+            loadingDialog.show()
+            delay(400)
+            if(ci !=null && !etMessage.text.isNullOrBlank()){
+                viewModel.sentMessage(Sender(ci=ci,message = etMessage.text.toString(),_id=UUID.randomUUID().toString(),status = PENDING))
+                loadingDialog.hide()
             }else{
-                viewModel.sentNewChannel(Sender("",etMessage.text.toString(),"","",PENDING),user.user?.id)
+                viewModel.sentNewChannel(Sender(ci="",message =etMessage.text.toString(),_id=UUID.randomUUID().toString(),status=PENDING),user.user?.id)
+                loadingDialog.hide()
             }
 
             etMessage.setText("")
@@ -56,7 +63,7 @@ class RoomFragment : Fragment(), Interaction {
 
     private  var ci: String? =null
 
-
+    private lateinit var loadingDialog: LoadingDialog
     private var jobOnclick : Job?=null
     private val  viewModel: RoomViewModel by viewModel()
     private var jobChangeText : Job? = null
@@ -67,10 +74,13 @@ class RoomFragment : Fragment(), Interaction {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.room_fragment, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loadingDialog = LoadingDialog.get(activity!!)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

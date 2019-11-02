@@ -3,6 +3,7 @@ package com.app.jarimanis.data.datasource.local
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import com.app.jarimanis.utils.DebugKey.key
 import com.app.jarimanis.utils.Key
 
 object MenuData {
@@ -33,6 +34,11 @@ object MenuData {
 
   }
 
+  var firstSetup : Boolean
+  get() = preferences.getBoolean(Key.SETUP , false)
+  set(value) = preferences.edit{
+    it.putBoolean(Key.SETUP,value)
+  }
 
   var sportLineHome : Boolean
   get() = preferences.getBoolean("spotLiteHome" , false)

@@ -1,12 +1,14 @@
 package com.app.jarimanis.data.repository.pemberitahuan
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource
 import com.app.jarimanis.data.datasource.models.pemberitahuan.Doc
 
 
 import com.app.jarimanis.utils.DebugKey
+import com.app.jarimanis.utils.NetworkState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -31,11 +33,12 @@ class PemberitahuanDataSource (
         callback: LoadInitialCallback<String, Doc>
     ) {
         uiScope.launch {
+
             val respon = repo.getPaging( "1")
             if(respon.isSuccessful){
                 val items = respon.body()
-                println(items)
                 val result = items?.result !!
+
                 callback.onResult(result.docs!!,0,result.totalDocs!!
                     , result.prevPage, result.nextPage
                 )

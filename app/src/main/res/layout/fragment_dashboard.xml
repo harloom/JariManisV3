@@ -15,7 +15,6 @@
             android:padding="10dp"
             app:layout_scrollFlags="scroll">
 
-
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_thumbail"
                 android:layout_width="120dp"

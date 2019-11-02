@@ -1,4 +1,4 @@
-package com.app.jarimanis.ui.thread.comentar
+package com.app.jarimanis.ui.thread.detail.comentar
 
 import android.view.LayoutInflater
 import android.view.View

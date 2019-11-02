@@ -15,6 +15,7 @@ import com.app.jarimanis.data.datasource.models.pemberitahuan.Doc
 import com.app.jarimanis.data.repository.pemberitahuan.PemberitahuanModelFactory
 import com.app.jarimanis.utils.Key.THREAD
 import com.app.jarimanis.utils.Key.THREADID
+import com.app.jarimanis.utils.NetworkState
 import kotlinx.android.synthetic.main.fragment_notifications.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -54,6 +55,8 @@ class NotificationsFragment : Fragment(), PemberitahuanListAdapter.Interaction {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.title ="Pemberitahuan"
+
+
         subcribeList()
     }
 
@@ -64,6 +67,22 @@ class NotificationsFragment : Fragment(), PemberitahuanListAdapter.Interaction {
     }
 
     private fun subcribeList() {
+        //animation
+
+
+        notificationsViewModel.initialLoad.observe(this@NotificationsFragment, Observer {
+            if (it == NetworkState.LOADING) {
+                // Show loading
+
+            } else {
+                // Hide loading
+
+                if (it.status == NetworkState.Status.SUCCESS_EMPTY) {
+                    // Show empty state for initial load
+                }
+            }
+        })
+
         mAdapter = PemberitahuanListAdapter(this@NotificationsFragment)
         rcv_pemberitahuan.apply {
             adapter = mAdapter
@@ -73,4 +92,5 @@ class NotificationsFragment : Fragment(), PemberitahuanListAdapter.Interaction {
             mAdapter.submitList(it)
         })
     }
+
 }

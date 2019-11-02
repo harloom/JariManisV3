@@ -10,6 +10,7 @@ import com.app.jarimanis.data.datasource.models.SentEditThreads
 import com.app.jarimanis.data.datasource.models.thread.Doc
 import com.app.jarimanis.data.repository.thread.ThreadRepository
 import com.app.jarimanis.data.repository.thread.users.ThreadsUserDataSource
+import com.app.jarimanis.utils.NetworkState
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -29,10 +30,13 @@ class ThreadMeListViewModel(
 
     private val _message = MutableLiveData<String?>()
     val message : LiveData<String?> = _message
-
+    val initialLoad: MutableLiveData<NetworkState> = MutableLiveData()
     init {
         _onDelete.value = false
+        initialLoad.postValue(NetworkState.LOADING)
     }
+
+
 
 
 
@@ -49,7 +53,21 @@ class ThreadMeListViewModel(
         LivePagedListBuilder<String, Doc>(
             ThreadsUserDataSource.Factory (uid,repo, uiScope),
             config
-        ).build()
+        ).setBoundaryCallback(object : PagedList.BoundaryCallback<Doc>(){
+            override fun onZeroItemsLoaded() {
+                super.onZeroItemsLoaded()
+                initialLoad.postValue(NetworkState.EMPTY)
+            }
+
+            override fun onItemAtEndLoaded(itemAtEnd: Doc) {
+                super.onItemAtEndLoaded(itemAtEnd)
+            }
+
+            override fun onItemAtFrontLoaded(itemAtFront: Doc) {
+                super.onItemAtFrontLoaded(itemAtFront)
+                initialLoad.postValue(NetworkState.LOADED)
+            }
+        }).build()
 
     override fun onCleared() {
         super.onCleared()

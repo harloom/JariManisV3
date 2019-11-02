@@ -1,5 +1,6 @@
 package com.app.jarimanis.ui.PengaturanAkun
 
+import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -37,12 +38,21 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import net.alhazmy13.gota.Gota
+import net.alhazmy13.gota.GotaResponse
 import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.File
 
 
-class PengaturanAkunFragment : Fragment(), CallbackSuccessListener {
+class PengaturanAkunFragment : Fragment(), CallbackSuccessListener, Gota.OnRequestPermissionsBack {
+    override fun onRequestBack(requestId: Int, gotaResponse: GotaResponse) {
+        if(gotaResponse.isAllGranted){
+            loadImageFromGallery()
+        }
+
+    }
+
     override fun onSuccess() {
         vm.refress()
     }
@@ -101,7 +111,7 @@ class PengaturanAkunFragment : Fragment(), CallbackSuccessListener {
             bts.show(childFragmentManager,"ChangeUserProfile")
         }
         ivProfPict.setOnClickListener {
-            loadImageFromGallery()
+           permission()
         }
 
 
@@ -118,7 +128,13 @@ class PengaturanAkunFragment : Fragment(), CallbackSuccessListener {
         }
     }
 
-
+    private fun permission(){
+        Gota.Builder(activity).withPermissions(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA)
+            .setListener(this@PengaturanAkunFragment).check()
+    }
     private fun loadImageFromGallery() {
         Matisse.from(this@PengaturanAkunFragment)
             .choose(MimeType.ofImage())

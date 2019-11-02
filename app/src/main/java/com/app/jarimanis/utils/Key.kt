@@ -22,6 +22,7 @@ object Key {
   const val USERSETTING = "key-setting"
   const val DATAUSERNOW = "usernow-setting"
 
+  const val SETUP = "firstSetup"
 
 
   const val TYPE_USERNAME = 1

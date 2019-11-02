@@ -8,6 +8,7 @@ import androidx.paging.PagedList
 import com.app.jarimanis.data.datasource.models.pemberitahuan.Doc
 import com.app.jarimanis.data.repository.pemberitahuan.PemberitahuanDataSource
 import com.app.jarimanis.data.repository.pemberitahuan.PemberitahuanRepository
+import com.app.jarimanis.utils.NetworkState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -19,9 +20,10 @@ class PemberitahuanViewModel(private val repo: PemberitahuanRepository) : ViewMo
     }
 
     private val reloadTrigger = MutableLiveData<Boolean>()
-
+    val initialLoad: MutableLiveData<NetworkState> = MutableLiveData()
 
     init {
+        initialLoad.postValue(NetworkState.LOADING)
         refress()
     }
     private val viewModelJob = SupervisorJob()
@@ -38,7 +40,21 @@ class PemberitahuanViewModel(private val repo: PemberitahuanRepository) : ViewMo
                 uiScope
             ),
             config
-        ).build()
+        ).setBoundaryCallback(object : PagedList.BoundaryCallback<Doc>(){
+            override fun onZeroItemsLoaded() {
+                super.onZeroItemsLoaded()
+                initialLoad.postValue(NetworkState.EMPTY)
+            }
+
+            override fun onItemAtEndLoaded(itemAtEnd: Doc) {
+                super.onItemAtEndLoaded(itemAtEnd)
+            }
+
+            override fun onItemAtFrontLoaded(itemAtFront: Doc) {
+                super.onItemAtFrontLoaded(itemAtFront)
+                initialLoad.postValue(NetworkState.LOADED)
+            }
+        }).build()
 
     override fun onCleared() {
         viewModelJob.cancel()

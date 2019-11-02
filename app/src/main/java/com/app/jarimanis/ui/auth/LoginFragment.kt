@@ -19,6 +19,7 @@ import com.app.jarimanis.MainActivity
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.data.datasource.models.token.get_token
+import com.github.loadingview.LoadingDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.wajahatkarim3.easyvalidation.core.Validator
@@ -35,7 +36,7 @@ import retrofit2.Response
 
 class LoginFragment : Fragment(), View.OnClickListener {
 
-
+    private lateinit var loadingDialog :   LoadingDialog
     private var loginJob  : Job? = null
     override fun onClick(v: View?) {
         when(v?.id){
@@ -48,6 +49,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
             R.id.login->{
                 loginJob?.cancel()
                 loginJob = CoroutineScope(Main).launch {
+                    loadingDialog.show()
                     delay(500)
                     actionLogin(etEmail.text.toString(),etPassword.text.toString())
                 }
@@ -64,6 +66,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        loadingDialog = LoadingDialog.get(activity!!)
 
     }
     override fun onCreateView(
@@ -86,19 +89,21 @@ class LoginFragment : Fragment(), View.OnClickListener {
       if(it.isSuccessful){
           try {
               val getToken : get_token? = it.body()
+              loadingDialog.hide()
               TokenUser.jwt =getToken!!.results
               if(!TokenUser.jwt.isNullOrBlank()){
-
                   goToMain()
               }
 
           }catch (e : Exception){
+              loadingDialog.hide()
               Snackbar.make(viewId,"Terjadi Kesalahan silahkan login kembali",Snackbar.LENGTH_LONG).show()
           }
 
 
       }
         if(it.code() == 400){
+            loadingDialog.hide()
             Snackbar.make(viewId,"Terjadi Kesalahan silahkan login kembali",Snackbar.LENGTH_LONG).show()
         }
     }
@@ -116,10 +121,10 @@ class LoginFragment : Fragment(), View.OnClickListener {
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnSuccessListener {
                 activity?.hideKeyboard()
                 Snackbar.make(viewId,"Login Success..",Snackbar.LENGTH_LONG).show()
-
                 vm.token(it.user!!.uid).observe(this@LoginFragment,subcribeToken)
 
             }.addOnFailureListener {
+                loadingDialog.hide()
                 activity?.hideKeyboard()
                 Snackbar.make(viewId,"${it.message} , Please Try Again..",Snackbar.LENGTH_LONG).show()
             }

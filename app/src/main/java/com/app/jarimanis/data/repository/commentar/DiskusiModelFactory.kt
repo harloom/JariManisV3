@@ -2,7 +2,7 @@ package com.app.jarimanis.data.repository.commentar
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.app.jarimanis.ui.thread.comentar.KomentarViewModel
+import com.app.jarimanis.ui.thread.detail.comentar.KomentarViewModel
 
 class DiskusiModelFactory constructor(private  val categori : String, private val repo  : DiskusiRepository) : ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")

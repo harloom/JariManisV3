@@ -1,4 +1,4 @@
-package com.app.jarimanis.ui.thread.comentar
+package com.app.jarimanis.ui.thread.detail.comentar
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -42,7 +42,7 @@ class KomentarViewModel(
         if(res.isSuccessful){
             onRefress()
         }else{
-            _respon.value = res
+            _respon.postValue(res)
         }
     }
 
