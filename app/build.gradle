@@ -28,7 +28,6 @@ android {
     }
 
 
-
     androidExtensions {
         experimental = true
     }
@@ -107,8 +106,8 @@ dependencies {
     implementation 'com.github.florent37:inline-activity-result-kotlin:1.0.1'
     implementation 'com.github.jkwiecien:EasyImage:3.0.3'
     implementation 'com.github.nikartm:image-support:1.0.5'
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
-    
     /* animation library*/
 
     //shimmer
@@ -165,7 +164,6 @@ dependencies {
     implementation 'com.github.shamalka:Pretty-TimeAgo-android-library:1.0.0'
     implementation 'com.samigehi:loadingview:1.1'
     implementation 'com.github.takusemba:spotlight:1.8.0'
-
 
 
     //custom libary

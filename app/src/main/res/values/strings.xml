@@ -45,4 +45,7 @@
     <string name="pendaftaranBerhasil">Pendaftaran Berhasil</string>
     <string name="newFoto">Tambahkan Foto</string>
     <string name="newVideo">Tambahkan video</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

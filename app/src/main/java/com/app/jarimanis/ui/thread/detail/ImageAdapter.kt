@@ -1,5 +1,6 @@
 package com.app.jarimanis.ui.thread.detail
 
+import android.net.Uri
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -64,17 +65,18 @@ class ImageAdapter(private val interaction: Interaction? = null) :
     ) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(item: Image) = with(itemView) {
-            itemView.setOnClickListener {
-                interaction?.onItemSelected(adapterPosition, item)
-            }
+
 
             try {
                 itemView.iv_clear.visibility = View.GONE
                 val gsReference = FirebaseStorage.getInstance()
                     .getReferenceFromUrl(item.url.toString())
 
-                gsReference.downloadUrl.addOnSuccessListener {
-                    Glide.with(itemView.context).load(it).into(iv_img)
+                gsReference.downloadUrl.addOnSuccessListener {uri->
+                    Glide.with(itemView.context).load(uri).into(iv_img)
+                    itemView.setOnClickListener {
+                        interaction?.onItemSelected(adapterPosition, item , uri.toString())
+                    }
                 }.addOnFailureListener{
                     print("Error Glide $it" )
                 }
@@ -86,6 +88,6 @@ class ImageAdapter(private val interaction: Interaction? = null) :
     }
 
     interface Interaction {
-        fun onItemSelected(position: Int, item: Image)
+        fun onItemSelected(position: Int, item: Image , uri : String)
     }
 }
