@@ -6,12 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.local.TokenUser
+import com.app.jarimanis.data.datasource.models.SentEditThreads
 import com.app.jarimanis.data.datasource.models.kategori.ResultKategori
 import com.app.jarimanis.data.datasource.models.thread.Doc
 import com.app.jarimanis.data.repository.thread.ThreadModelFactory
@@ -28,6 +30,13 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
 class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
+    override fun onItemLongSelected(position: Int, item: Doc) {
+        if(item.user?.id == TokenUser.idUser){
+            goToMoreThread(item)
+        }
+
+
+    }
 
 
     override fun onProfileSelected(position: Int, item: Doc) {
@@ -48,10 +57,15 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
     override fun onItemSelected(position: Int, item: Doc) {
         jobOnclick?.cancel()
         jobOnclick = CoroutineScope(Main).launch {
-            delay(500)
+            delay(400)
             val bundleof = bundleOf(THREADID to item.id ,
                 THREAD to item)
-            findNavController().navigate(R.id.action_threadListFragment_to_threadDetailFragment,bundleof)
+            try {
+                findNavController().navigate(R.id.action_threadListFragment_to_threadDetailFragment,bundleof)
+            }catch (e  : Exception){
+
+            }
+
         }
 
     }
@@ -89,6 +103,7 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
             factory = ThreadModelFactory(_id,get())
             viewModel = ViewModelProviders.of(this@ThreadListFragment,factory).get(ThreadListViewModel::class.java)
             subcribeList()
+            subcribeStatus()
         }
 
 
@@ -122,9 +137,47 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
         super.onActivityCreated(savedInstanceState)
 
     }
+    private fun goToMoreThread(item : Doc){
+        val newFragment = ThreadInfo(item,onThreadCallback)
+
+        // The device is using a large layout, so show the fragment as a dialog
+        if (fragmentManager != null) {
+            newFragment.show(childFragmentManager, "morePost")
+        }
 
 
+    }
 
 
+    private val onThreadCallback: InteractionEditClick = object  : InteractionEditClick {
+        override fun onDeleteListener(item: Doc) {
+            viewModel.deleteThread(item)
+        }
+
+        override fun onEditListerner(id: String, title: String?, content: String?) {
+            val editThreads : SentEditThreads = SentEditThreads(id = id ,content = content,title = title)
+            viewModel.editThreads(editThreads)
+        }
+
+        override fun onLaporListener(item: Doc) {
+            Toast.makeText(context , "onLaporListener " ,Toast.LENGTH_LONG).show()
+        }
+
+    }
+
+
+    private fun subcribeStatus() {
+        viewModel.message.observe(this@ThreadListFragment, Observer {
+            if(!it.isNullOrBlank()){
+                Toast.makeText(context,"Pesan :  $it",Toast.LENGTH_LONG).show()
+            }
+        })
+
+        viewModel.onDelete.observe(this@ThreadListFragment, Observer {
+            if(it){
+                Toast.makeText(context,"Threads Berhasil di Hapus",Toast.LENGTH_LONG).show()
+            }
+        })
+    }
 
 }

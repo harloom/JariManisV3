@@ -62,6 +62,9 @@ class ThreadAdapter constructor(private val interaction: ThreadAdapter.Interacti
                 interaction?.onItemSelected(adapterPosition,item)
             }
 
+            itemView.iv_more.setOnClickListener {
+                interaction?.onItemLongSelected(adapterPosition,item)
+            }
 
             itemView.tv_judul.text = item.title?.capitalize()
             itemView.tv_user.text = item.user?.nameUser?.capitalize()
@@ -83,5 +86,6 @@ class ThreadAdapter constructor(private val interaction: ThreadAdapter.Interacti
     interface Interaction {
         fun onItemSelected(position: Int, item: Doc)
         fun onProfileSelected(position: Int , item: Doc)
+        fun onItemLongSelected(position: Int,item: Doc)
     }
 }

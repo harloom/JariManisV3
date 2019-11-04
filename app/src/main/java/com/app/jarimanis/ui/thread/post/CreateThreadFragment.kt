@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -22,6 +23,7 @@ import androidx.work.*
 
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.models.kategori.ResultKategori
+import com.app.jarimanis.data.datasource.models.thread.Image
 import com.app.jarimanis.data.datasource.models.thread.ImageX
 import com.app.jarimanis.data.datasource.models.thread.UploadThread
 import com.app.jarimanis.data.datasource.models.thread.VideoX
@@ -65,10 +67,14 @@ import kotlinx.coroutines.launch
 import net.alhazmy13.gota.Gota
 import net.alhazmy13.gota.GotaResponse
 import org.koin.android.viewmodel.ext.android.viewModel
+import pl.aprilapps.easyphotopicker.DefaultCallback
+import pl.aprilapps.easyphotopicker.EasyImage
+import pl.aprilapps.easyphotopicker.MediaFile
 import kotlin.properties.Delegates
 
 class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction,
     Gota.OnRequestPermissionsBack {
+
     override fun onRequestBack(requestId: Int, gotaResponse: GotaResponse) {
         if(gotaResponse.isAllGranted){
             chooseImageDialog()
@@ -76,6 +82,14 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction,
     }
 
     override fun onItemSelected(position: Int, item: String) {
+
+    }
+
+    override fun onItemCancel(position: Int, item: String) {
+        if(mSelected.get(position ).equals(item)){
+            mSelected.removeAt(position)
+            adapterI.notifyDataSetChanged()
+        }
 
     }
 
@@ -99,6 +113,9 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction,
     private  var volumeState: VolumeState? = null
     private lateinit var requestManager: RequestManager
 
+    private lateinit var easyImage: EasyImage
+
+
     private var btnSendEnable by Delegates.observable(false){
         _,old,new ->
         if(new != old){
@@ -114,6 +131,8 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        easyImage = EasyImage.Builder(context!!).setCopyImagesToPublicGalleryFolder(true)
+            .setFolderName(getString(R.string.app_name)).allowMultiple(false).build()
 
     }
     override fun onCreateView(
@@ -273,11 +292,12 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction,
 
     }
     private fun loadImageFromCammera(){
-        ImagePicker.with(this@CreateThreadFragment)
-            .cameraOnly()    //User can only select image from Gallery
-            .cropSquare()
-            .compress(1024)
-            .start(REQUEST_CODE_CAMERA)
+//        ImagePicker.with(this@CreateThreadFragment)
+//            .cameraOnly()    //User can only select image from Gallery
+//            .cropSquare()
+//            .compress(1024)
+//            .start(REQUEST_CODE_CAMERA)
+        easyImage.openCameraForImage(this@CreateThreadFragment)
     }
     private fun loadImageFromGallery() {
         Matisse.from(this@CreateThreadFragment)
@@ -325,12 +345,27 @@ class CreateThreadFragment : Fragment(), ImageStringAdapter.Interaction,
             Log.d("TriMVideo", "Uri: " + data?.extras!!["returnUri"])
             val uri  = data.extras!!["returnUri"] as Uri
             initVideo(uri)
-        }else if ( requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK){
-            val filePath:String = ImagePicker.getFilePath(data).toString()
-            mSelected.add(filePath)
-            adapterI.submitList(mSelected)
-            rcv_foto.adapter = adapterI
         }
+            easyImage.handleActivityResult(requestCode,resultCode,data,activity!!,object  :
+                DefaultCallback() {
+                override fun onMediaFilesPicked(
+                    imageFiles: Array<MediaFile>,
+                    source: pl.aprilapps.easyphotopicker.MediaSource
+                ) {
+
+                    val filePath  = imageFiles[0].file.path
+                    mSelected.add(filePath)
+                    adapterI.submitList(mSelected)
+                    rcv_foto.adapter = adapterI
+                }
+
+            })
+//        else if ( requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK){
+//            val filePath:String = ImagePicker.getFilePath(data).toString()
+//            mSelected.add(filePath)
+//            adapterI.submitList(mSelected)
+//            rcv_foto.adapter = adapterI
+//        }
     }
     private fun startTrimActivity(uri: Uri) {
         val intent = Intent(context, TrimmerActivity::class.java)

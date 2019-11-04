@@ -51,6 +51,7 @@ import com.google.android.exoplayer2.util.Util
 import com.google.firebase.storage.FirebaseStorage
 
 /* progress BUILDING */
+
 class VideoPlayerRecyclerView : RecyclerView {
 
     // ui

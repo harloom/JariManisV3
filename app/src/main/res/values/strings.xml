@@ -43,4 +43,6 @@
     <string name="chat">Tuliskan pesan</string>
     <string name="pemberitahuan">Pemberitahuan</string>
     <string name="pendaftaranBerhasil">Pendaftaran Berhasil</string>
+    <string name="newFoto">Tambahkan Foto</string>
+    <string name="newVideo">Tambahkan video</string>
 </resources>

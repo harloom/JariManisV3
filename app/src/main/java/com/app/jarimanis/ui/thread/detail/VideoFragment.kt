@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.app.jarimanis.R
+import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.data.datasource.models.thread.Doc
 import com.app.jarimanis.data.datasource.models.thread.Video
 import com.app.jarimanis.utils.Key
@@ -33,6 +34,7 @@ class VideoFragment : Fragment(), VideoListAdapter.Interaction {
         initRcv()
         doc?.let {
             initUi(it)
+            cekPremission(it)
         }
     }
 
@@ -51,7 +53,11 @@ class VideoFragment : Fragment(), VideoListAdapter.Interaction {
 
     }
 
-
+    private fun cekPremission(item : Doc){
+        if(item.user?.id != TokenUser.idUser){
+            btn_newVideo.visibility = View.GONE
+        }
+    }
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

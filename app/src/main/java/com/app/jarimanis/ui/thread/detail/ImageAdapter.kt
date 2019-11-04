@@ -69,6 +69,7 @@ class ImageAdapter(private val interaction: Interaction? = null) :
             }
 
             try {
+                itemView.iv_clear.visibility = View.GONE
                 val gsReference = FirebaseStorage.getInstance()
                     .getReferenceFromUrl(item.url.toString())
 

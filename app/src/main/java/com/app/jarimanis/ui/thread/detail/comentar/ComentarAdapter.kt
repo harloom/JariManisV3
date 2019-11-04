@@ -63,6 +63,10 @@ class ComentarAdapter constructor(private val interaction: ComentarAdapter.Inter
                 interaction?.onItemSelected(adapterPosition,item)
             }
 
+            itemView.iv_more.setOnClickListener {
+                interaction?.onItemLongSelected(adapterPosition, item)
+            }
+
 
 
             itemView.text_commentar_name.text = item.user?.nameUser?.capitalize()
@@ -84,6 +88,7 @@ class ComentarAdapter constructor(private val interaction: ComentarAdapter.Inter
     }
     interface Interaction {
         fun onItemSelected(position: Int, item: Doc)
+        fun onItemLongSelected(position: Int , item: Doc)
 
     }
 }

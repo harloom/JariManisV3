@@ -68,9 +68,10 @@ interface JariManisAPI {
         @Body saveCommentar: SaveCommentar
     ) :Response<ResponPostComentar>
 
-    @DELETE("diskusi")
+
+    @DELETE("diskusi/{id}")
     suspend fun deleteComentar(
-        @Field("id") id : String
+        @Path("id") id : String
     ):Response<ResponDiskusi>
 
 

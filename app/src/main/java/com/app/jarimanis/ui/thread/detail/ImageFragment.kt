@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.app.jarimanis.R
+import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.data.datasource.models.thread.Doc
 import com.app.jarimanis.data.datasource.models.thread.Image
 import com.app.jarimanis.utils.Key
 import kotlinx.android.synthetic.main.detail_thread_image_fragment.*
+import kotlinx.android.synthetic.main.detail_thread_video_fragment.*
 
 class ImageFragment : Fragment(), ImageAdapter.Interaction {
     override fun onItemSelected(position: Int, item: Image) {
@@ -36,6 +38,7 @@ class ImageFragment : Fragment(), ImageAdapter.Interaction {
 
         doc?.let {
             initUi(it)
+            cekPremission(it)
         }
     }
 
@@ -50,6 +53,11 @@ class ImageFragment : Fragment(), ImageAdapter.Interaction {
     }
 
 
+    private fun cekPremission(item : Doc){
+        if(item.user?.id != TokenUser.idUser){
+            btn_newFoto.visibility = View.GONE
+        }
+    }
 
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

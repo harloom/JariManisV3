@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.app.jarimanis.R
+import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.data.datasource.models.diskusi.SaveCommentar
 import com.app.jarimanis.data.datasource.models.thread.Doc
 
@@ -22,6 +23,7 @@ import kotlinx.coroutines.Dispatchers.Main
 import org.koin.android.ext.android.get
 
 class KomentarFragment : Fragment(), ComentarAdapter.Interaction, View.OnClickListener {
+
 
 
     private var doc: Doc? = null
@@ -39,6 +41,37 @@ class KomentarFragment : Fragment(), ComentarAdapter.Interaction, View.OnClickLi
                 }
 
             }
+        }
+
+
+
+    }
+
+    override fun onItemLongSelected(
+        position: Int,
+        item: com.app.jarimanis.data.datasource.models.diskusi.paging.Doc
+    ) {
+        if(item.user?.id == TokenUser.idUser){
+            goToMoreThread(item , position)
+        }
+
+    }
+    private val onMoredCallback: InteractionEditClick = object  : InteractionEditClick{
+        override fun onEditListerner(id: String, content: String?) {
+
+        }
+
+        override fun onDeleteListener(
+            item: com.app.jarimanis.data.datasource.models.diskusi.paging.Doc,
+            position: Int
+        ) {
+            viewModel.deleteCommentar(item ,position)
+        }
+
+
+
+        override fun onLaporListener(item: com.app.jarimanis.data.datasource.models.diskusi.paging.Doc) {
+
         }
 
     }
@@ -88,6 +121,7 @@ class KomentarFragment : Fragment(), ComentarAdapter.Interaction, View.OnClickLi
         subcribeFrom()
         subcribeButtonSend()
         subcribeRespon()
+        subcribeStatus()
     }
 
     private fun subcribeRespon() {
@@ -129,4 +163,37 @@ class KomentarFragment : Fragment(), ComentarAdapter.Interaction, View.OnClickLi
         })
     }
 
+    private fun subcribeStatus() {
+//        viewModel.message.observe(this@ThreadListFragment, Observer {
+//            if(!it.isNullOrBlank()){
+//                Toast.makeText(context,"Pesan :  $it",Toast.LENGTH_LONG).show()
+//            }
+//        })
+
+        viewModel.onDelete.observe(this@KomentarFragment, Observer {
+            if(it.onDelete!!){
+                mAdapter.notifyItemRemoved(it.adapterPosition!!)
+                Toast.makeText(context,"Commentar Berhasil di Hapus",Toast.LENGTH_LONG).show()
+                viewModel.onRefress()
+            }
+            if(!it.onDelete){
+                Toast.makeText(context,"Something is Error please Try Again!",Toast.LENGTH_LONG).show()
+                viewModel.onRefress()
+            }
+        })
+    }
+
+    private fun goToMoreThread(
+        item: com.app.jarimanis.data.datasource.models.diskusi.paging.Doc,
+        position: Int
+    ){
+        val newFragment = ComentarInfo(item,position,onMoredCallback)
+
+        // The device is using a large layout, so show the fragment as a dialog
+        if (fragmentManager != null) {
+            newFragment.show(childFragmentManager, "morePost")
+        }
+
+
+    }
 }

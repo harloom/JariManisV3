@@ -71,6 +71,10 @@ class ThreadUserAdapter constructor(private val interaction: ThreadUserAdapter.I
                 true
             }
 
+            itemView.iv_more.setOnClickListener {
+                interaction?.onItemLongSelected(adapterPosition,item)
+            }
+
 
             itemView.tv_judul.text = item.title?.capitalize()
             itemView.tv_user.text = item.user?.nameUser?.capitalize()

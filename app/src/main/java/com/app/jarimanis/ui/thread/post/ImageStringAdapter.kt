@@ -66,6 +66,10 @@ class ImageStringAdapter(private val interaction: Interaction? = null) :
                 interaction?.onItemSelected(adapterPosition, item)
             }
 
+            itemView.iv_clear.setOnClickListener {
+                interaction?.onItemCancel(adapterPosition,item)
+            }
+
             try {
                 Glide.with(itemView.context).load(item).into(iv_img)
             }catch (e : Exception){
@@ -76,6 +80,6 @@ class ImageStringAdapter(private val interaction: Interaction? = null) :
 
     interface Interaction {
         fun onItemSelected(position: Int, item: String)
-
+        fun onItemCancel(position: Int,item: String)
     }
 }

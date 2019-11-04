@@ -1,14 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcv_videos"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refress"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:itemCount="3"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:background="#F2F2F2"
+        android:layout_height="wrap_content"
+
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            xmlns:tools="http://schemas.android.com/tools">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv_videos"
+                android:layout_margin="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:itemCount="3"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/btn_newVideo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        app:backgroundTint="@color/secondaryColor"
+        app:elevation="4dp"
+        app:icon="@drawable/ic_video_call_black_24dp"
+        app:tint="@color/primaryDarkColor"
+        android:text="@string/newVideo"
+        android:textAllCaps="false"
+        android:layout_gravity="top|end"
+        />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
