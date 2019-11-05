@@ -15,6 +15,10 @@ import java.net.SocketTimeoutException
 
 
 class ThreadRepositoryImp (private  val api : JariManisAPI)  : ThreadRepository {
+    override suspend fun likeThread(docId: String?): Response<*> {
+        return  api.likeThread(idDoc = docId)
+    }
+
     override suspend fun deleteThread(docId: String?): Response<*> {
         return  api.deleteThreads(docId)
     }

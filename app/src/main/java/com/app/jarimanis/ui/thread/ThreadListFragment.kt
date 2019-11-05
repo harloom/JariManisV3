@@ -30,6 +30,25 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
 class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
+    override fun onLike(position: Int, item: Doc) {
+        jobOnclick?.cancel()
+        jobOnclick = CoroutineScope(Main).launch {
+            delay(500)
+            viewModel.likeThread(item,position)
+
+        }
+    }
+
+    override fun onUnlike(position: Int, item: Doc) {
+        jobOnclick?.cancel()
+        jobOnclick = CoroutineScope(Main).launch {
+            delay(500)
+            viewModel.likeThread(item,position)
+
+        }
+
+    }
+
     override fun onItemLongSelected(position: Int, item: Doc) {
         if(item.user?.id == TokenUser.idUser){
             goToMoreThread(item)
@@ -177,6 +196,12 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
             if(it){
                 Toast.makeText(context,"Threads Berhasil di Hapus",Toast.LENGTH_LONG).show()
             }
+        })
+
+        viewModel.onLike.observe(this@ThreadListFragment, Observer {
+                if(it.item !=null && it.position !=null){
+                    adapterT.notifyItemChanged(it.position)
+                }
         })
     }
 

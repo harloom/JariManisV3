@@ -54,6 +54,12 @@ interface JariManisAPI {
         @Body editThread  : SentEditThreads
     ) : Response<*>
 
+
+    @PUT("thread/like/{id}")
+    suspend fun likeThread(
+        @Path("id") idDoc: String?
+    ): Response<*>
+
     /* commentary*/
 
 

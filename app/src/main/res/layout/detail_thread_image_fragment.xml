@@ -18,7 +18,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_newFoto"
         style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/newFoto"
         android:textAllCaps="false"
@@ -27,7 +27,8 @@
         app:icon="@drawable/ic_photo_camera_black_48dp"
         app:iconSize="12sp"
         app:iconTint="@color/hitam"
-
+        app:iconGravity="textStart"
+        app:elevation="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

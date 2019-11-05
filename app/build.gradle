@@ -169,4 +169,5 @@ dependencies {
     //custom libary
     implementation 'com.afollestad.material-dialogs:core:3.1.1'
     implementation 'io.supercharge:shimmerlayout:2.1.0'
+    implementation 'com.github.jd-alexander:LikeButton:0.2.3'
 }

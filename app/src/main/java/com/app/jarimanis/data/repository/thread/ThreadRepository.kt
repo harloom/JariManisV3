@@ -14,9 +14,9 @@ interface ThreadRepository {
     suspend fun getPaging(subId : String, page: String) : Response<Threads>
     suspend fun postThread(upload : UploadThread): Response<UploadThread>
 
-
     suspend fun deleteThread(docId: String?) : Response<*>
     suspend fun updateThread(value : SentEditThreads) : Response<*>
+    suspend fun likeThread(docId: String?) : Response<*>
 
     suspend fun getThreadUserPaging(uid : String , page : String) : Response<Threads>
     fun cancelJobs()

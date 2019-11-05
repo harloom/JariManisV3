@@ -10,7 +10,10 @@ import com.app.jarimanis.data.datasource.models.SentEditThreads
 import com.app.jarimanis.data.datasource.models.thread.Doc
 import com.app.jarimanis.data.repository.thread.ThreadRepository
 import com.app.jarimanis.data.repository.thread.ThreadsDataSource
+import com.squareup.okhttp.Dispatcher
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 
 class ThreadListViewModel(
     val  categori: String,
@@ -19,6 +22,15 @@ class ThreadListViewModel(
     private val  _page: MutableLiveData<String> = MutableLiveData()
     private val _category : MutableLiveData<String>  = MutableLiveData()
     private val _onDelete = MutableLiveData<Boolean>()
+    private val _onLike = MutableLiveData<OnLike>()
+
+    data class OnLike (
+         val item: Doc? =null,
+         val position: Int? =null
+    )
+
+
+    val onLike : LiveData<OnLike> = _onLike
     val onDelete : LiveData<Boolean> =  _onDelete
     private val _message = MutableLiveData<String?>()
     val message : LiveData<String?> = _message
@@ -63,6 +75,22 @@ class ThreadListViewModel(
 
     fun onRefress(){
         records.value!!.dataSource.invalidate()
+    }
+
+    fun likeThread(item: Doc, position : Int){
+        CoroutineScope(IO).launch {
+            val respon = repo.likeThread(item.id)
+            withContext(Main){
+                if(respon.isSuccessful){
+                    val mLike = records.value?.snapshot()?.get(position)?.isLikes
+                    if(mLike !=null ){
+                        records.value?.snapshot()?.get(position)?.isLikes = !mLike
+                        _onLike.value = OnLike(item,position)
+                    }
+
+                }
+            }
+        }
     }
 
     fun deleteThread(item: Doc) {

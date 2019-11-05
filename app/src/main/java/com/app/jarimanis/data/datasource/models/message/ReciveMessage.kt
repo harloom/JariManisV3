@@ -11,11 +11,11 @@ import kotlinx.android.parcel.Parcelize
 data class ReciveMessage(
     @DocumentId
      val id : String?=null,
-     val _id : String?=null,
-     val _image :String?= null,
-     val _message :String?= null,
-     val _user :String?=null,
-     val _video : String?=null,
-     val timestamp :Timestamp? =null,
-     var status : Int? =null
+    val _id : String?=null,
+    val _image :String?= null,
+    var _message :String?= null,
+    val _user :String?=null,
+    val _video : String?=null,
+    val timestamp :Timestamp? =null,
+    var status : Int? =null
 ): Parcelable

@@ -71,7 +71,6 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         initReclerView()
         homeViewModel.kategori.observe(this@HomeFragment,subcribeKategory)
 

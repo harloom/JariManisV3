@@ -87,4 +87,13 @@
             app:argType="string" />
 
     </fragment>
+
+    <fragment
+        android:id="@+id/photoDetail"
+        android:name="com.app.jarimanis.ui.photoView.PhotoDetail"
+        tools:layout="@layout/fragment_photo_detail" >
+        <argument
+            android:name="uri"
+            app:argType="string" />
+    </fragment>
 </navigation>

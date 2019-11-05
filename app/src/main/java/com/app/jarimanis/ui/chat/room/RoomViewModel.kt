@@ -145,15 +145,25 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
 
     }
 
-    //    private fun fillterFindAndRemove(rcv : ReciveMessage){
-//        reciveMessage.withIndex().filter {
-//            it.value.id == rcv.id
-//        }.forEach {r->
-//            r.value.status = SENT
-//            data.postValue(reciveMessage)
-//        }
-//
-//    }
+    private fun fillterFindAndAdd(rcv : ReciveMessage){
+        reciveMessage.withIndex().filter {
+            it.value.id != rcv.id
+        }.forEach {r->
+            reciveMessage.add(r.value)
+            data.postValue(reciveMessage)
+        }
+
+    }
+
+
+    private fun filterAndRemove(rcv : ReciveMessage){
+        reciveMessage.filter {
+          it._id == rcv.id
+        }.forEach {
+            it._message = "Pesan ini telah di hapus"
+            data.postValue(reciveMessage)
+        }
+    }
     private fun fillterFindAndUpdate(item: ReciveMessage) {
         println("Fillter")
         reciveMessage.withIndex().filter {
@@ -178,14 +188,13 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
 
         roomChatRepository.receiveMessage(channelId).get().addOnSuccessListener {
             val doc = it.documents
-            doc.forEach {
-                val item = it.toObject(ReciveMessage::class.java)
+            doc.forEach {dc->
+                val item = dc.toObject(ReciveMessage::class.java)
                 if (item != null) {
                     reciveMessage.add(item)
                 }
             }
             data.postValue(reciveMessage)
-
 
             roomChatRepository.receiveMessage(channelId)
                 .addSnapshotListener { snapshot, exception ->
@@ -202,7 +211,7 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
                                 if (item._user == TokenUser.idUser) {
                                     fillterFindAndUpdate(item)
                                 } else {
-                                    reciveMessage.add(item)
+                                    fillterFindAndAdd(item)
                                 }
 
 
@@ -211,7 +220,8 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
 
                             }
                             DocumentChange.Type.REMOVED -> {
-                                reciveMessage.removeAt(dc.oldIndex)
+                                val item  = dc.document.toObject(ReciveMessage::class.java)
+                                filterAndRemove(item)
                             }
                         }
                     }

@@ -18,9 +18,9 @@ data class Doc(
     @SerializedName("_id")
     val id: String?, // 5d8880877118de149c0756c7
     @SerializedName("images")
-    val images: List<Image?>?,
+    val images: MutableList<Image?>?,
     @SerializedName("likes")
-    val likes: List<Like?>?,
+    val likes: MutableList<Like?>?,
     @SerializedName("updateAt")
     val updateAt: Long?, // 2019-09-23T08:21:17.330Z
     @SerializedName("user")
@@ -28,7 +28,9 @@ data class Doc(
     @SerializedName("__v")
     val v: Int?, // 3
     @SerializedName("videos")
-    val videos: List<Video?>?,
+    val videos: MutableList<Video?>?,
     @SerializedName("views")
-    val views: List<Like?>?
+    val views: MutableList<Like?>?,
+    @SerializedName("isLikes")
+    var isLikes : Boolean? =null
 ):Parcelable

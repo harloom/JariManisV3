@@ -24,7 +24,6 @@ class ThreadsDataSource ( private val category :String,
     }
 
 
-
     override fun loadInitial(
         params: LoadInitialParams<String>,
         callback: LoadInitialCallback<String, Doc>
@@ -34,6 +33,7 @@ class ThreadsDataSource ( private val category :String,
             if(respon.isSuccessful){
                 val items = respon.body()
                 val result = items?.result !!
+//                val doc =result.docs
                 callback.onResult(result.docs!!,0,result.totalDocs!!
                     , result.prevPage, result.nextPage
                 )
@@ -43,7 +43,6 @@ class ThreadsDataSource ( private val category :String,
     }
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, Doc>) {
-
         uiScope.launch {
             val page = params.key
             Log.d(DebugKey.key,"Page : ${page}");

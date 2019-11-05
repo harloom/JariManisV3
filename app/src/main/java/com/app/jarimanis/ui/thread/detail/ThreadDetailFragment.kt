@@ -14,6 +14,7 @@ import com.app.jarimanis.data.datasource.models.thread.Doc
 import com.app.jarimanis.utils.Key.THREAD
 import com.app.jarimanis.utils.Key.THREADID
 import com.bumptech.glide.Glide
+import com.snov.timeagolibrary.PrettyTimeAgo
 import kotlinx.android.synthetic.main.thread_detail_fragment.*
 
 class ThreadDetailFragment : Fragment() {
@@ -53,9 +54,11 @@ class ThreadDetailFragment : Fragment() {
     private  fun initUI(doc: Doc?) {
         tv_title.text = doc?.title?.capitalize()
         tv_content.text = doc?.content?.capitalize()
+
         try {
             tv_user.text = doc?.user?.nameUser?.capitalize()
             Glide.with(context!!).load(doc?.user?.thumbail).into(cv_thumbail)
+            tv_time.text = PrettyTimeAgo.getTimeAgo(doc?.updateAt!!)
         }catch (e : Exception){
 
         }
