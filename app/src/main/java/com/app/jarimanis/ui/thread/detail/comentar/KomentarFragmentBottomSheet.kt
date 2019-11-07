@@ -15,14 +15,20 @@ import com.app.jarimanis.data.datasource.models.thread.Doc
 
 import com.app.jarimanis.data.repository.commentar.DiskusiModelFactory
 import com.app.jarimanis.utils.Key
+import com.app.jarimanis.utils.NetworkState
 import com.app.jarimanis.utils.afterTextChanged
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.bottom_thread_komentar_fragment.*
 import kotlinx.android.synthetic.main.detail_thread_komentar_fragment.*
+import kotlinx.android.synthetic.main.detail_thread_komentar_fragment.balasanLayout
+import kotlinx.android.synthetic.main.detail_thread_komentar_fragment.etKomentar
+import kotlinx.android.synthetic.main.detail_thread_komentar_fragment.rcv_commentar
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import org.koin.android.ext.android.get
 
-class KomentarFragment : Fragment(), ComentarAdapter.Interaction, View.OnClickListener {
+class KomentarFragmentBottomSheet : BottomSheetDialogFragment(), ComentarAdapter.Interaction, View.OnClickListener {
 
 
 
@@ -87,13 +93,13 @@ class KomentarFragment : Fragment(), ComentarAdapter.Interaction, View.OnClickLi
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.detail_thread_komentar_fragment, container, false)
+        return inflater.inflate(R.layout.bottom_thread_komentar_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-         doc = arguments?.getParcelable<Doc>(Key.THREAD)
-
+        doc = arguments?.getParcelable<Doc>(Key.THREAD)
+        startAnimation()
         doc?.let {
             initUi(it)
         }
@@ -111,13 +117,15 @@ class KomentarFragment : Fragment(), ComentarAdapter.Interaction, View.OnClickLi
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val _id  = arguments?.getString(Key.THREADID)
+
         _id?.let {
-            mAdapter = ComentarAdapter(this@KomentarFragment)
+            mAdapter = ComentarAdapter(this@KomentarFragmentBottomSheet)
             factory = DiskusiModelFactory(_id,get())
-            viewModel = ViewModelProviders.of(this@KomentarFragment,factory).get(KomentarViewModel::class.java)
+            viewModel = ViewModelProviders.of(this@KomentarFragmentBottomSheet,factory).get(KomentarViewModel::class.java)
             subcribeList()
+            println("bottomShhet : $_id")
         }
-        balasanLayout.setEndIconOnClickListener(this@KomentarFragment)
+        balasanLayout.setEndIconOnClickListener(this@KomentarFragmentBottomSheet)
         subcribeFrom()
         subcribeButtonSend()
         subcribeRespon()
@@ -125,7 +133,7 @@ class KomentarFragment : Fragment(), ComentarAdapter.Interaction, View.OnClickLi
     }
 
     private fun subcribeRespon() {
-        viewModel.respon.observe(this@KomentarFragment, Observer {
+        viewModel.respon.observe(this@KomentarFragmentBottomSheet, Observer {
             if(it !=null){
                 if(it.isSuccessful){
                     Toast.makeText(context,"Komentar Berhasil" , Toast.LENGTH_SHORT).show()
@@ -140,7 +148,7 @@ class KomentarFragment : Fragment(), ComentarAdapter.Interaction, View.OnClickLi
 
     private fun subcribeButtonSend() {
         balasanLayout.isEndIconVisible = false
-        viewModel.etKomentar.observe(this@KomentarFragment, Observer {
+        viewModel.etKomentar.observe(this@KomentarFragmentBottomSheet, Observer {
             balasanLayout.isEndIconVisible = it
         })
     }
@@ -158,19 +166,24 @@ class KomentarFragment : Fragment(), ComentarAdapter.Interaction, View.OnClickLi
             adapter = mAdapter
         }
 
-        viewModel.records.observe(this@KomentarFragment, Observer {
+        viewModel.records.observe(this@KomentarFragmentBottomSheet, Observer {
             mAdapter.submitList(it)
         })
     }
 
     private fun subcribeStatus() {
-//        viewModel.message.observe(this@ThreadListFragment, Observer {
-//            if(!it.isNullOrBlank()){
-//                Toast.makeText(context,"Pesan :  $it",Toast.LENGTH_LONG).show()
-//            }
-//        })
+        viewModel.initialLoad.observe(this@KomentarFragmentBottomSheet, Observer {
+            if (it == NetworkState.LOADING) {
+                // Show loading
 
-        viewModel.onDelete.observe(this@KomentarFragment, Observer {
+            } else {
+                stopAnimation()
+                if (it.status == NetworkState.Status.SUCCESS_EMPTY) {
+                    // Show empty state for initial load
+                }
+            }
+        })
+        viewModel.onDelete.observe(this@KomentarFragmentBottomSheet, Observer {
             if(it.onDelete!!){
                 mAdapter.notifyItemRemoved(it.adapterPosition!!)
                 viewModel.onRefress()
@@ -194,6 +207,26 @@ class KomentarFragment : Fragment(), ComentarAdapter.Interaction, View.OnClickLi
             newFragment.show(childFragmentManager, "morePost")
         }
 
+
+    }
+
+
+    private fun stopAnimation() {
+        val s = shimmer_animation
+        CoroutineScope(Main).launch {
+            s.stopShimmerAnimation()
+            s.visibility = View.GONE
+            delay(500)
+        }
+
+    }
+
+    private fun startAnimation() {
+        CoroutineScope(Main).launch {
+            shimmer_animation.visibility = View.VISIBLE
+            shimmer_animation.startShimmerAnimation()
+            delay(500)
+        }
 
     }
 }

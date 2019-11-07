@@ -13,7 +13,7 @@ data class Doc(
     @SerializedName("_read")
     val read: Boolean?, // false
     @SerializedName("_threadId")
-    val threadId: ThreadId?,
+    val threadId: com.app.jarimanis.data.datasource.models.thread.Doc?,
     @SerializedName("updateAt")
     val updateAt: Long?, // 1572591955985
     @SerializedName("_userId")

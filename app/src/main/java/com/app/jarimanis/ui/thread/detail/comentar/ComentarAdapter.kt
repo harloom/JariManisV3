@@ -10,6 +10,8 @@ import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.models.diskusi.paging.Doc
 
 import com.bumptech.glide.Glide
+import com.like.LikeButton
+import com.like.OnLikeListener
 import com.snov.timeagolibrary.PrettyTimeAgo
 import kotlinx.android.synthetic.main.item_comentar.view.*
 import java.lang.Exception
@@ -66,6 +68,28 @@ class ComentarAdapter constructor(private val interaction: ComentarAdapter.Inter
             itemView.iv_more.setOnClickListener {
                 interaction?.onItemLongSelected(adapterPosition, item)
             }
+
+            itemView.btnComentar.setOnLikeListener(object  : OnLikeListener{
+                override fun liked(likeButton: LikeButton?) {
+
+                }
+
+                override fun unLiked(likeButton: LikeButton?) {
+
+                }
+
+            })
+
+            itemView.btnLike.setOnLikeListener(object  : OnLikeListener{
+                override fun liked(likeButton: LikeButton?) {
+
+                }
+
+                override fun unLiked(likeButton: LikeButton?) {
+
+                }
+
+            })
 
 
 

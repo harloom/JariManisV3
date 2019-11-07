@@ -10,6 +10,7 @@ import com.app.jarimanis.data.datasource.models.diskusi.SaveCommentar
 import com.app.jarimanis.data.datasource.models.diskusi.paging.Doc
 import com.app.jarimanis.data.repository.commentar.DiskusiDataSource
 import com.app.jarimanis.data.repository.commentar.DiskusiRepository
+import com.app.jarimanis.utils.NetworkState
 import kotlinx.coroutines.*
 import retrofit2.Response
 
@@ -24,8 +25,10 @@ class KomentarViewModel(
     private val reloadTrigger = MutableLiveData<Boolean>()
     private val _onDelete = MutableLiveData<StatusChange>()
     val onDelete : LiveData<StatusChange> =  _onDelete
+    val initialLoad: MutableLiveData<NetworkState> = MutableLiveData()
 
     init {
+        initialLoad.postValue(NetworkState.LOADING)
         refress()
     }
     fun fromMassageChange(message : String?) {
@@ -75,11 +78,25 @@ class KomentarViewModel(
         .setPageSize(8)
         .build()
 
-    val records  : LiveData<PagedList<Doc>> =
+    var records  : LiveData<PagedList<Doc>> =
         LivePagedListBuilder<String, Doc>(
             DiskusiDataSource.Factory (categori,repo, uiScope),
             config
-        ).build()
+        ).setBoundaryCallback(object : PagedList.BoundaryCallback<Doc>(){
+            override fun onZeroItemsLoaded() {
+                super.onZeroItemsLoaded()
+                initialLoad.postValue(NetworkState.EMPTY)
+            }
+
+            override fun onItemAtEndLoaded(itemAtEnd: Doc) {
+                super.onItemAtEndLoaded(itemAtEnd)
+            }
+
+            override fun onItemAtFrontLoaded(itemAtFront: Doc) {
+                super.onItemAtFrontLoaded(itemAtFront)
+                initialLoad.postValue(NetworkState.LOADED)
+            }
+        }).build()
 
     override fun onCleared() {
         super.onCleared()

@@ -12,6 +12,7 @@ import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.data.datasource.models.thread.Doc
 import com.app.jarimanis.data.datasource.models.thread.Like
 import com.app.jarimanis.data.datasource.models.thread.UserT
+import com.app.jarimanis.utils.debounce.onClickDebounced
 import com.bumptech.glide.Glide
 import com.like.LikeButton
 import com.like.OnLikeListener
@@ -77,14 +78,18 @@ class ThreadAdapter constructor(private val interaction: ThreadAdapter.Interacti
                 interaction?.onItemLongSelected(adapterPosition,item)
             }
 
+            itemView.imageView.onClickDebounced {
+                interaction?.onBottomSheetUp(adapterPosition,item)
+            }
+
             itemView.imageView3.setOnLikeListener(object : OnLikeListener{
                 override fun liked(likeButton: LikeButton?) {
-                    itemView.imageView3?.isLiked = true
+//                    itemView.imageView3?.isLiked = true
                     interaction?.onLike(adapterPosition,item)
                 }
 
                 override fun unLiked(likeButton: LikeButton?) {
-                    itemView.imageView3?.isLiked = false
+//                    itemView.imageView3?.isLiked = false
                     interaction?.onUnlike(adapterPosition,item)
                 }
 
@@ -110,6 +115,7 @@ class ThreadAdapter constructor(private val interaction: ThreadAdapter.Interacti
         }
     }
     interface Interaction {
+        fun onBottomSheetUp(position: Int,item: Doc)
         fun onItemSelected(position: Int, item: Doc)
         fun onProfileSelected(position: Int , item: Doc)
         fun onItemLongSelected(position: Int,item: Doc)

@@ -27,12 +27,19 @@ import org.koin.android.ext.android.get
 class NotificationsFragment : Fragment(), PemberitahuanListAdapter.Interaction {
     private var jobOnclick : Job?=null
     override fun onItemSelected(position: Int, item: Doc) {
-//        jobOnclick?.cancel()
-//        jobOnclick = CoroutineScope(Main).launch {
-//            delay(200)
-//            val bundleof = bundleOf(THREADID to item.threadId!!.id)
-//            findNavController().navigate(R.id.action_navigation_notifications_to_threadDetailFragment2,bundleof)
-//        }
+        jobOnclick?.cancel()
+        jobOnclick = CoroutineScope(Main).launch {
+            delay(400)
+
+            val bundleof = bundleOf(THREADID to item.threadId?.id ,
+                THREAD to item.threadId)
+            try {
+                findNavController().navigate(R.id.action_navigation_notifications_to_threadDetailFragment2,bundleof)
+            }catch (e  : Exception){
+                println("Error : $e")
+            }
+
+        }
     }
 
     private lateinit var notificationsViewModel: PemberitahuanViewModel

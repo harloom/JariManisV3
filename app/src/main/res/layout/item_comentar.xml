@@ -67,44 +67,66 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_commentar_time">
 
-        <com.google.android.material.button.MaterialButton
+        <com.like.LikeButton
+            android:id="@+id/btnLike"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            app:liked="false"
+            android:layout_weight="1"
+            app:icon_type="thumb"
+            app:icon_size="18dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/secondaryColor"
-            android:text="Like"
-            app:elevation="0.2dp"
-            android:textAllCaps="false"
-            android:textColor="@color/hitam"
-            app:icon="@drawable/ic_thumb_up"
-            app:iconGravity="textStart"
-            app:iconSize="18dp"
-            app:iconTint="@color/colorBgGrey" />
+            android:layout_gravity="center"
+            app:dots_primary_color="@color/colorBiru"
+            app:dots_secondary_color="@color/colorHijau"
+            app:like_drawable="@drawable/ic_thumb_up"
+            app:unlike_drawable="@drawable/ic_thumb_off"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:anim_scale_factor="2"
+            />
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:backgroundTint="@color/secondaryColor"-->
+<!--            android:text="Like"-->
+<!--            app:elevation="0.2dp"-->
+<!--            android:textAllCaps="false"-->
+<!--            android:textColor="@color/hitam"-->
+<!--            app:icon="@drawable/ic_thumb_up"-->
+<!--            app:iconGravity="textStart"-->
+<!--            app:iconSize="18dp"-->
+<!--            app:iconTint="@color/colorBgGrey" />-->
 
-        <com.google.android.material.button.MaterialButton
+        <com.like.LikeButton
+            android:id="@+id/btnComentar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            app:liked="false"
+            android:layout_weight="1"
+            app:icon_type="star"
+            app:icon_size="18dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            app:elevation="0.2dp"
-            android:backgroundTint="@color/secondaryColor"
-            android:text="Commentar"
-            android:textAllCaps="false"
-            android:textColor="@color/hitam"
-            app:icon="@drawable/ic_forum"
-            app:iconGravity="textStart"
-            app:iconSize="18dp"
-            app:iconTint="@color/colorBgGrey" />
+            android:layout_gravity="center"
+            app:dots_primary_color="@color/colorBiru"
+            app:dots_secondary_color="@color/colorHijau"
+            app:like_drawable="@drawable/ic_forum_on"
+            app:unlike_drawable="@drawable/ic_forum"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:anim_scale_factor="2"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

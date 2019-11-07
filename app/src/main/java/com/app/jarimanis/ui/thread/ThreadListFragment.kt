@@ -18,6 +18,7 @@ import com.app.jarimanis.data.datasource.models.kategori.ResultKategori
 import com.app.jarimanis.data.datasource.models.thread.Doc
 import com.app.jarimanis.data.repository.thread.ThreadModelFactory
 import com.app.jarimanis.ui.dialog.DialogProfile
+import com.app.jarimanis.ui.thread.detail.comentar.KomentarFragmentBottomSheet
 import com.app.jarimanis.utils.Key
 import com.app.jarimanis.utils.Key.THREAD
 import com.app.jarimanis.utils.Key.THREADID
@@ -30,6 +31,14 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
 class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
+    override fun onBottomSheetUp(position: Int, item: Doc) {
+        val bundleof = bundleOf(THREADID to item.id ,
+            Key.THREAD to item)
+        val kb = KomentarFragmentBottomSheet()
+        kb.arguments = bundleof
+        kb.show(childFragmentManager,"KomentarSheet")
+    }
+
     override fun onLike(position: Int, item: Doc) {
         jobOnclick?.cancel()
         jobOnclick = CoroutineScope(Main).launch {
@@ -200,7 +209,7 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
 
         viewModel.onLike.observe(this@ThreadListFragment, Observer {
                 if(it.item !=null && it.position !=null){
-                    adapterT.notifyItemChanged(it.position)
+//                    adapterT.notifyItemChanged(it.position)
                 }
         })
     }

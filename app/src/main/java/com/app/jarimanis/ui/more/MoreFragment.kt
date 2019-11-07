@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.app.jarimanis.LoginActivity
 import com.app.jarimanis.R
+import com.app.jarimanis.data.datasource.local.MenuData
 import com.app.jarimanis.data.datasource.local.TokenUser
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_mores.*
@@ -49,6 +50,7 @@ class MoreFragment : Fragment(), View.OnClickListener {
     private fun logOut(){
         mAuth.signOut()
         TokenUser.jwt =null
+        MenuData.firstSetup = true
         startActivity(Intent(context,LoginActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK))
         activity?.finish()
     }
