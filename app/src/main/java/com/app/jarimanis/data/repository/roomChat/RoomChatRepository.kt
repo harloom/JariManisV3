@@ -6,6 +6,7 @@ import com.app.jarimanis.data.datasource.models.message.ReciveMessage
 import com.app.jarimanis.data.datasource.models.message.Sender
 import com.app.jarimanis.data.datasource.models.message.SentNewChannel
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import retrofit2.Response
 
@@ -16,4 +17,6 @@ interface RoomChatRepository {
     suspend fun cekChannelIsExits(sender: SentNewChannel): Response<ChannelRespon>
     suspend fun sendMessageAndCreateChannel(sender: SentNewChannel) : Response<ChannelRespon>
     fun receiveMessage(channelId: String): Query
+
+    fun reciveMessage(channelId: String,last : DocumentSnapshot): Query
 }

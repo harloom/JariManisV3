@@ -15,6 +15,7 @@ import com.app.jarimanis.data.datasource.models.message.SentNewChannel
 import com.app.jarimanis.data.repository.chat.ChatRepository
 import com.app.jarimanis.data.repository.firebase.UserRepository
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.core.OrderBy
@@ -24,6 +25,10 @@ import kotlinx.coroutines.Dispatchers.Main
 import retrofit2.Response
 
 class RoomChatRepositoryImp (private  val api : JariManisAPI ): RoomChatRepository {
+    override fun reciveMessage(channelId: String, last: DocumentSnapshot): Query {
+        return db.collection("channels/$channelId/messages/").orderBy("timestamp", Query.Direction.ASCENDING).startAfter(last)
+    }
+
     override suspend fun sendMessageAndCreateChannel(sender: SentNewChannel): Response<ChannelRespon> {
         return api.postNewChannelAndMessage(sender)
     }
