@@ -5,6 +5,8 @@ import com.app.jarimanis.data.datasource.models.SentEditThreads
 
 import com.app.jarimanis.data.datasource.models.thread.Threads
 import com.app.jarimanis.data.datasource.models.thread.UploadThread
+import com.app.jarimanis.data.datasource.models.thread.UrlUpload
+import kotlinx.coroutines.Deferred
 import retrofit2.Response
 
 interface ThreadRepository {
@@ -14,10 +16,13 @@ interface ThreadRepository {
     suspend fun getPaging(subId : String, page: String) : Response<Threads>
     suspend fun postThread(upload : UploadThread): Response<UploadThread>
 
+    suspend fun newImage(id: String,uri : UrlUpload) : Deferred<Response<*>>
+
     suspend fun deleteThread(docId: String?) : Response<*>
     suspend fun updateThread(value : SentEditThreads) : Response<*>
     suspend fun likeThread(docId: String?) : Response<*>
 
     suspend fun getThreadUserPaging(uid : String , page : String) : Response<Threads>
     fun cancelJobs()
+    suspend fun newVideo(id: String, uri: UrlUpload): Deferred<Response<*>>
 }

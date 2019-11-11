@@ -15,6 +15,8 @@ import com.app.jarimanis.data.datasource.models.message.SentNewChannel
 import com.app.jarimanis.data.datasource.models.pemberitahuan.Pemberitahuan
 import com.app.jarimanis.data.datasource.models.thread.Threads
 import com.app.jarimanis.data.datasource.models.thread.UploadThread
+import com.app.jarimanis.data.datasource.models.thread.UrlUpload
+import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -59,6 +61,21 @@ interface JariManisAPI {
     suspend fun likeThread(
         @Path("id") idDoc: String?
     ): Response<*>
+
+
+
+    @POST("thread/{id}/images")
+    suspend fun newFoto(
+        @Path("id") id : String , @Body data : UrlUpload
+    ) : Deferred<Response<*>>
+
+    @POST("thread/{id}/images")
+    suspend fun newVideo(
+        @Path("id") id : String , @Body data : UrlUpload
+    ):  Deferred<Response<*>>
+
+
+
 
     /* commentary*/
 

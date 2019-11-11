@@ -7,6 +7,7 @@ import com.app.jarimanis.data.datasource.models.SentEditThreads
 
 import com.app.jarimanis.data.datasource.models.thread.Threads
 import com.app.jarimanis.data.datasource.models.thread.UploadThread
+import com.app.jarimanis.data.datasource.models.thread.UrlUpload
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -15,6 +16,16 @@ import java.net.SocketTimeoutException
 
 
 class ThreadRepositoryImp (private  val api : JariManisAPI)  : ThreadRepository {
+    override suspend fun newImage(id: String, uri: UrlUpload): Deferred<Response<*>> {
+        return  api.newFoto(id,uri)
+    }
+
+    override suspend fun newVideo(id : String,uri: UrlUpload): Deferred<Response<*>> {
+        return  api.newVideo(id,uri)
+    }
+
+
+
     override suspend fun likeThread(docId: String?): Response<*> {
         return  api.likeThread(idDoc = docId)
     }

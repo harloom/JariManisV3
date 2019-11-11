@@ -1,6 +1,9 @@
 package com.app.jarimanis.ui.thread.detail
 
+import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
+import android.os.Handler
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +12,9 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.models.thread.Image
+import com.app.jarimanis.data.service.NewFileService
+import com.app.jarimanis.data.service.result_reciver.UploadReciver
+import com.app.jarimanis.ui.thread.detail.holder.ImageLocalHolder
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.item_image.view.*
@@ -31,20 +37,37 @@ class ImageAdapter(private val interaction: Interaction? = null) :
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        if (viewType == 0){
+            return ImageHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_image,
+                    parent,
+                    false
+                ),
+                interaction
+            )
+        }else {
+            return  ImageLocalHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_image,
+                    parent,
+                    false
+                ),
+                interaction
+            )
+        }
 
-        return ImageHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_image,
-                parent,
-                false
-            ),
-            interaction
-        )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ImageHolder -> {
+                holder.bind(differ.currentList.get(position))
+                println("imageHolder")
+            }
+
+            is ImageLocalHolder->{
+                println("ImageLocalHolder")
                 holder.bind(differ.currentList.get(position))
             }
         }
@@ -54,8 +77,19 @@ class ImageAdapter(private val interaction: Interaction? = null) :
         return differ.currentList.size
     }
 
+
     fun submitList(list: List<Image?>?) {
         differ.submitList(list)
+    }
+
+    @Suppress("UNREACHABLE_CODE")
+    override fun getItemViewType(position: Int): Int {
+        val item  = differ.currentList[position]
+        return if(item.id!!.contains("local ")){
+            1
+        }else{
+            0
+        }
     }
 
     class ImageHolder
@@ -63,6 +97,9 @@ class ImageAdapter(private val interaction: Interaction? = null) :
         itemView: View,
         private val interaction: Interaction?
     ) : RecyclerView.ViewHolder(itemView) {
+
+
+
 
         fun bind(item: Image) = with(itemView) {
 
@@ -85,6 +122,10 @@ class ImageAdapter(private val interaction: Interaction? = null) :
 
             }
         }
+
+
+
+
     }
 
     interface Interaction {

@@ -1,6 +1,7 @@
 package com.app.jarimanis.ui.auth
 
 import android.app.Activity
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
@@ -10,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -17,6 +19,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.app.jarimanis.MainActivity
 
 import com.app.jarimanis.R
+import com.app.jarimanis.utils.NotificationID
 import com.github.loadingview.LoadingDialog
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.register_fragment.*
@@ -85,6 +88,7 @@ class RegisterFragment : Fragment(), View.OnClickListener {
                 }
             }else{
                 loadingDialog.hide()
+                displayNotification(context!!.getString(R.string.pemberitahuan),context!!.getString(R.string.pendaftaranBerhasil))
                 MaterialDialog(context!!).show {
                     title(R.string.pemberitahuan)
                     message(R.string.pendaftaranBerhasil)
@@ -122,7 +126,18 @@ class RegisterFragment : Fragment(), View.OnClickListener {
     }
 
 
-
+    private fun displayNotification(task: String, desc: String) {
+        val manager =
+            context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notif = NotificationCompat.Builder(
+            context!!,
+            NotificationID.CHANNEL_IDUPLOAD
+        )
+            .setContentTitle(task)
+            .setContentText(desc)
+            .setSmallIcon(R.mipmap.ic_launcher).build()
+        manager.notify(1541, notif)
+    }
     fun onRegister(view: View) {
         vm.registerProcess(email = etEmail.text.toString(),pass = etpassword.text.toString() ,rePass =  etRepassword.text.toString())
     }
