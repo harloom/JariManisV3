@@ -2,6 +2,7 @@ package com.app.jarimanis.data.repository.thread
 
 import androidx.lifecycle.LiveData
 import com.app.jarimanis.data.datasource.models.SentEditThreads
+import com.app.jarimanis.data.datasource.models.thread.Image
 
 import com.app.jarimanis.data.datasource.models.thread.Threads
 import com.app.jarimanis.data.datasource.models.thread.UploadThread
@@ -16,7 +17,8 @@ interface ThreadRepository {
     suspend fun getPaging(subId : String, page: String) : Response<Threads>
     suspend fun postThread(upload : UploadThread): Response<UploadThread>
 
-    suspend fun newImage(id: String,uri : UrlUpload) : Deferred<Response<*>>
+    suspend fun newImage(id: String,uri : UrlUpload) : Response<*>
+    suspend fun getImageList(id: String) : Response<List<Image>>
 
     suspend fun deleteThread(docId: String?) : Response<*>
     suspend fun updateThread(value : SentEditThreads) : Response<*>
@@ -24,5 +26,5 @@ interface ThreadRepository {
 
     suspend fun getThreadUserPaging(uid : String , page : String) : Response<Threads>
     fun cancelJobs()
-    suspend fun newVideo(id: String, uri: UrlUpload): Deferred<Response<*>>
+    suspend fun newVideo(id: String, uri: UrlUpload): Response<*>
 }

@@ -1,9 +1,5 @@
 package com.app.jarimanis.ui.thread.detail
 
-import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
-import android.os.Handler
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,14 +8,12 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.models.thread.Image
-import com.app.jarimanis.data.service.NewFileService
-import com.app.jarimanis.data.service.result_reciver.UploadReciver
 import com.app.jarimanis.ui.thread.detail.holder.ImageLocalHolder
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.item_image.view.*
 
-class ImageAdapter(private val interaction: Interaction? = null) :
+class ImageAdapter(private val idThread : String,private val interaction: Interaction? = null) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Image>() {
@@ -68,7 +62,7 @@ class ImageAdapter(private val interaction: Interaction? = null) :
 
             is ImageLocalHolder->{
                 println("ImageLocalHolder")
-                holder.bind(differ.currentList.get(position))
+                holder.bind(differ.currentList.get(position),idThread)
             }
         }
     }

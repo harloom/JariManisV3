@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.app.jarimanis.data.datasource.api.JariManisAPI
 import com.app.jarimanis.data.datasource.models.SentEditThreads
+import com.app.jarimanis.data.datasource.models.thread.Image
 
 import com.app.jarimanis.data.datasource.models.thread.Threads
 import com.app.jarimanis.data.datasource.models.thread.UploadThread
@@ -16,11 +17,15 @@ import java.net.SocketTimeoutException
 
 
 class ThreadRepositoryImp (private  val api : JariManisAPI)  : ThreadRepository {
-    override suspend fun newImage(id: String, uri: UrlUpload): Deferred<Response<*>> {
+    override suspend fun getImageList(id: String): Response<List<Image>> {
+        return api.getImageList(id)
+    }
+
+    override suspend fun newImage(id: String, uri: UrlUpload): Response<*> {
         return  api.newFoto(id,uri)
     }
 
-    override suspend fun newVideo(id : String,uri: UrlUpload): Deferred<Response<*>> {
+    override suspend fun newVideo(id : String,uri: UrlUpload): Response<*> {
         return  api.newVideo(id,uri)
     }
 

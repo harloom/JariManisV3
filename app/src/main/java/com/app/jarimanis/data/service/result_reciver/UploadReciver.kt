@@ -2,7 +2,8 @@ package com.app.jarimanis.data.service.result_reciver
 
 import android.os.Bundle
 import android.os.Handler
-import android.os.ResultReceiver
+import android.support.v4.os.ResultReceiver
+
 
 class UploadReciver(handler: Handler?) : ResultReceiver(handler) {
     private  var mReceiver: UploadReciverInterface? =null

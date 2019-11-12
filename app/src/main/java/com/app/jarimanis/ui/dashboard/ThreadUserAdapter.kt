@@ -81,10 +81,11 @@ class ThreadUserAdapter constructor(private val interaction: ThreadUserAdapter.I
 
             try {
                 itemView.tv_time.text = PrettyTimeAgo.getTimeAgo(item.updateAt!!)
+                itemView.imageView3.setLiked(item.isLikes)
                 Glide.with(itemView.context).load(item.user?.thumbail)
                     .into(itemView.cv_thumbail)
             }catch (e : Exception){
-
+                println(e.message)
             }
 
 

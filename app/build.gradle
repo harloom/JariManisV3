@@ -64,6 +64,11 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.1.0"
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+
+
+    //auth
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+
     //cloud message
     implementation 'com.google.firebase:firebase-messaging:20.0.0'
 

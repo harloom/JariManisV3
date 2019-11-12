@@ -6,10 +6,14 @@ import android.os.Handler
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.app.jarimanis.data.datasource.models.thread.Image
+import com.app.jarimanis.data.datasource.models.thread.NewFile
 import com.app.jarimanis.data.datasource.models.thread.Status.Success
 import com.app.jarimanis.data.datasource.models.thread.UploadStatus
 import com.app.jarimanis.data.service.NewFileService
-import com.app.jarimanis.data.service.NewFileService.Companion.SUCCESS_RESULT
+import com.app.jarimanis.data.service.NewFileService.Companion.KEY_THREADID
+import com.app.jarimanis.data.service.NewFileService.Companion.RESULT_DATA_KEY
+import com.app.jarimanis.data.service.NewFileService.Companion.SUCCESS_RESULT_IMAGE
+import com.app.jarimanis.data.service.NewFileService.Companion.UPLOAD_IMAGE
 import com.app.jarimanis.data.service.result_reciver.UploadReciver
 import com.app.jarimanis.ui.thread.detail.ImageAdapter
 import com.bumptech.glide.Glide
@@ -21,8 +25,8 @@ class ImageLocalHolder constructor(
     private val interaction: ImageAdapter.Interaction?
 ) : RecyclerView.ViewHolder(itemView), UploadReciver.UploadReciverInterface {
     override fun onRecive(resultCode: Int, resultData: Bundle?) {
-        if (resultCode == SUCCESS_RESULT) {
-            val data = resultData?.getParcelable<UploadStatus>(NewFileService.RESULT_DATA_KEY)
+        if (resultCode == SUCCESS_RESULT_IMAGE) {
+            val data = resultData?.getParcelable<UploadStatus>(RESULT_DATA_KEY)
             loadUi(data)
         }
 
@@ -30,10 +34,11 @@ class ImageLocalHolder constructor(
 
     private lateinit var resultReceiver: UploadReciver
     private lateinit var mItem: Image
-    fun bind(item: Image) = with(itemView) {
+    fun bind(item: Image, idThread: String) = with(itemView) {
         resultReceiver = UploadReciver(Handler())
         resultReceiver.set(this@ImageLocalHolder)
-        startIntentService(item.url!!)
+        startIntentService(item , idThread)
+        itemView.image_progress.visibility = View.VISIBLE
 
     }
 
@@ -41,9 +46,10 @@ class ImageLocalHolder constructor(
         try {
             itemView.iv_clear.visibility = View.GONE
             if (data?.status == Success) {
+                itemView.image_progress.visibility = View.GONE
                 val gsReference =
                     FirebaseStorage.getInstance().getReferenceFromUrl(data.storage.toString())
-                gsReference.downloadUrl.addOnSuccessListener { uri ->
+                     gsReference.downloadUrl.addOnSuccessListener { uri ->
                     Glide.with(itemView.context).load(uri).into(itemView.iv_img)
                     itemView.setOnClickListener {
                         interaction?.onItemSelected(adapterPosition, mItem, uri.toString())
@@ -51,6 +57,9 @@ class ImageLocalHolder constructor(
                 }.addOnFailureListener {
                     print("Error Glide $it")
                 }
+            }else{
+
+                /* handle Error */
             }
 
 
@@ -59,12 +68,15 @@ class ImageLocalHolder constructor(
         }
     }
 
-    private fun startIntentService(it: String) {
+    private fun startIntentService(
+        it: Image,
+        idThread: String
+    ) {
+        val data = NewFile(idThread,UPLOAD_IMAGE,it.url!!)
         val intent = Intent(itemView.context, NewFileService::class.java).apply {
             putExtra(NewFileService.RECEIVER_NEWFILE, resultReceiver)
-//            putExtra(NewFileService.RESULT_DATA_KEY, it)
-            putExtra(NewFileService.KEY_NEWFILE,it)
-//            error disini
+            putExtra(KEY_THREADID,idThread)
+            putExtra(NewFileService.KEY_NEWFILE,data)
         }
         NewFileService().enqueueWork(itemView.context,intent)
 

@@ -10,6 +10,8 @@ import com.app.jarimanis.LoginActivity
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.local.MenuData
 import com.app.jarimanis.data.datasource.local.TokenUser
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_mores.*
 import kotlinx.coroutines.CoroutineScope
@@ -48,6 +50,12 @@ class MoreFragment : Fragment(), View.OnClickListener {
     }
 
     private fun logOut(){
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        val mGoogleSignInClient = GoogleSignIn.getClient(activity!!, gso)
+        mGoogleSignInClient.signOut()
         mAuth.signOut()
         TokenUser.jwt =null
         MenuData.firstSetup = true
