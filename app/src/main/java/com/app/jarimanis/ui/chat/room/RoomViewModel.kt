@@ -13,6 +13,7 @@ import com.app.jarimanis.utils.SendStatus.PENDING
 import com.app.jarimanis.utils.SendStatus.SENT
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -39,6 +40,7 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
         }
     }
 
+
     fun sentNewChannel(massage: Sender, to: String?) {
         try {
             CoroutineScope(IO).launch {
@@ -60,8 +62,8 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
                 val res =
                     roomChatRepository.sendMessageAndCreateChannel(
                         SentNewChannel(
-                            message = massage.message, userList = listUser, status = PENDING
-                            , image = "", video = ""
+                            message = massage.message, userList = listUser, status = SENT
+                            , image = "", video = "",_id = massage._id
                         )
                     )
                 if (res.isSuccessful) {
@@ -91,7 +93,7 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
             val FROM = User(TokenUser.idUser)
             listUser.add(TO)
             listUser.add(FROM)
-            val sender = SentNewChannel("", listUser, "", "", 0)
+            val sender = SentNewChannel("", listUser, "", "", 0,null)
             CoroutineScope(IO).launch {
                 val res = roomChatRepository.cekChannelIsExits(sender)
                 if (res.code() == 410) {
@@ -145,15 +147,7 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
 
     }
 
-    private fun fillterFindAndAdd(rcv : ReciveMessage){
-        reciveMessage.withIndex().filter {
-            it.value.id != rcv.id
-        }.forEach {r->
-            reciveMessage.add(r.value)
-            data.postValue(reciveMessage)
-        }
 
-    }
 
 
     private fun filterAndRemove(rcv : ReciveMessage){
@@ -168,18 +162,13 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
 
 
     private fun filterAndRemoveOther(item: ReciveMessage) {
-        reciveMessage.filter {
-            it.id == item.id
-        }.forEach {
-            println("remove")
-            it._message = "Pesan ini telah di hapus"
+        if(reciveMessage.contains(item)){
+            reciveMessage.remove(item)
             data.postValue(reciveMessage)
         }
     }
     private fun fillterFindAndUpdate(item: ReciveMessage) {
-        println("Fillter")
-
-
+        println("fillterFindAndUpdate")
         reciveMessage.withIndex().filter {
             it.value._id == item.id
         }.forEach {
@@ -196,102 +185,73 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
 //           }
 
     }
+    private fun fillterFindAndAdd(rcv : ReciveMessage){
+        println("fillterFindAndAdd ${rcv.id}")
+//        reciveMessage.withIndex().filter {
+//            it.value.id != rcv.id
+//        }.forEach {r->
+//            reciveMessage.add(r.value)
+//            data.postValue(reciveMessage)
+//        }
 
-
-    fun getMessageRecive(channelId: String) {
-
-        roomChatRepository.receiveMessage(channelId).get().addOnSuccessListener {
-            val doc = it.documents
-            doc.forEach {dc->
-                val item = dc.toObject(ReciveMessage::class.java)
-                if (item != null) {
-                    reciveMessage.add(item)
-                    println("item : $item")
-                }
-            }
+        if(!reciveMessage.contains(rcv)){
+            reciveMessage.add(rcv)
             data.postValue(reciveMessage)
-            if(doc.isNotEmpty()){
-                roomChatRepository.reciveMessage(channelId,doc[doc.size-1])
-                    .addSnapshotListener { snapshot, exception ->
-                        if (exception != null) {
-                            println(exception)
-                            return@addSnapshotListener
-                        }
-
-                        for (dc in snapshot!!.documentChanges) {
-                            when (dc.type) {
-                                DocumentChange.Type.ADDED -> {
-
-                                    val item = dc.document.toObject(ReciveMessage::class.java)
-                                    if (item._user == TokenUser.idUser) {
-                                        fillterFindAndUpdate(item)
-                                    } else {
-                                        fillterFindAndAdd(item)
-                                    }
-
-
-                                }
-                                DocumentChange.Type.MODIFIED -> {
-
-                                }
-                                DocumentChange.Type.REMOVED -> {
-                                    val item  = dc.document.toObject(ReciveMessage::class.java)
-                                    if (item._user == TokenUser.idUser) {
-                                        filterAndRemove(item)
-                                    } else {
-                                        filterAndRemoveOther(item)
-                                    }
-
-                                }
-                            }
-                        }
-                        data.postValue(reciveMessage)
-                    }
-            }else{
-                roomChatRepository.receiveMessage(channelId =channelId)
-                    .addSnapshotListener { snapshot, exception ->
-                        if (exception != null) {
-                            println(exception)
-                            return@addSnapshotListener
-                        }
-
-                        for (dc in snapshot!!.documentChanges) {
-                            when (dc.type) {
-                                DocumentChange.Type.ADDED -> {
-
-                                    val item = dc.document.toObject(ReciveMessage::class.java)
-                                    if (item._user == TokenUser.idUser) {
-                                        fillterFindAndUpdate(item)
-                                    } else {
-                                        fillterFindAndAdd(item)
-                                    }
-
-
-                                }
-                                DocumentChange.Type.MODIFIED -> {
-
-                                }
-                                DocumentChange.Type.REMOVED -> {
-                                    val item  = dc.document.toObject(ReciveMessage::class.java)
-                                    if (item._user == TokenUser.idUser) {
-                                        filterAndRemove(item)
-                                    } else {
-                                        filterAndRemoveOther(item)
-                                    }
-                                }
-                            }
-                        }
-                        data.postValue(reciveMessage)
-                    }
-            }
-
+        }
 
     }
 
 
+
+
+    fun getMessageRecive(channelId: String) {
+                roomChatRepository.receiveMessage(channelId)
+                    .addSnapshotListener { snapshot, exception ->
+                        if (exception != null) {
+                            println(exception)
+                            return@addSnapshotListener
+                        }
+
+                        for (dc in snapshot!!.documentChanges) {
+                            when (dc.type) {
+                                DocumentChange.Type.ADDED -> {
+                                    val item = dc.document.toObject(ReciveMessage::class.java)
+                                    if (item._user == TokenUser.idUser) {
+                                        fillterFindAndUpdate(item)
+                                    } else {
+                                        fillterFindAndAdd(item)
+                                    }
+
+
+                                }
+                                DocumentChange.Type.MODIFIED -> {
+
+                                }
+                                DocumentChange.Type.REMOVED -> {
+                                    val item  = dc.document.toObject(ReciveMessage::class.java)
+                                    if (item._user == TokenUser.idUser) {
+                                        filterAndRemove(item)
+                                    } else {
+                                        filterAndRemoveOther(item)
+                                    }
+
+                                }
+                            }
+                        }
+                        data.postValue(reciveMessage)
+                    }
+
+
+
+
+
+
 }
 
-
+    override fun onCleared() {
+        super.onCleared()
+        println("viewmodel chat cleared")
+    }
 
     private fun isEmpty(string: String): Boolean {
     return string.isNotEmpty()

@@ -15,5 +15,6 @@ data class SentNewChannel(
     val image  : String?,
     @SerializedName("video")
     val video : String?,
-    val status : Int?
+    val status : Int?,
+    val _id : String?
 ) : Parcelable

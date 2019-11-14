@@ -164,11 +164,6 @@ class KomentarFragment : Fragment(), ComentarAdapter.Interaction, View.OnClickLi
     }
 
     private fun subcribeStatus() {
-//        viewModel.message.observe(this@ThreadListFragment, Observer {
-//            if(!it.isNullOrBlank()){
-//                Toast.makeText(context,"Pesan :  $it",Toast.LENGTH_LONG).show()
-//            }
-//        })
 
         viewModel.onDelete.observe(this@KomentarFragment, Observer {
             if(it.onDelete!!){

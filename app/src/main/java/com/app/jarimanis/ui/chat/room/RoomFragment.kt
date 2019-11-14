@@ -151,9 +151,9 @@ class RoomFragment : Fragment(), Interaction {
         }
     }
     private fun subcribeMessage(channel  : ChannelID?) {
-
             channel?.let {_channel->
                 ci  =  _channel.id!!
+
                 viewModel.getMessageRecive(_channel.id!!)
                     viewModel.data.observe(this@RoomFragment, Observer {
                     messageListAdapter.submitList(it.asReversed())
@@ -223,9 +223,15 @@ class RoomFragment : Fragment(), Interaction {
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         onRoomExit()
     }
+
 
 }

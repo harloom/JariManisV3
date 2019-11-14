@@ -31,7 +31,7 @@ val NetworkModule = module {
             if(response.code() ==401 ){
                 val intent = Intent(get(),LoginActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                val activity  :  Context= get()
+                val activity  :  Context = get()
                 TokenUser.jwt = null
                 FirebaseAuth.getInstance().signOut()
                 activity.startActivity(intent)

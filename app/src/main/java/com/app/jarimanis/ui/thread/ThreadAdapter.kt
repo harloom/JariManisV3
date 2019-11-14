@@ -3,6 +3,7 @@ package com.app.jarimanis.ui.thread
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -100,6 +101,13 @@ class ThreadAdapter constructor(private val interaction: ThreadAdapter.Interacti
 
 
             try {
+                if (item.images!!.isNotEmpty()){
+                    itemView.imageview4.setImageDrawable(ContextCompat.getDrawable(itemView.context,R.drawable.ic_photo))
+                }else if(item.videos!!.isNotEmpty()){
+                    itemView.imageview4.setImageDrawable(ContextCompat.getDrawable(itemView.context,R.drawable.ic_play))
+                }else{
+                    itemView.imageview4.setImageDrawable(ContextCompat.getDrawable(itemView.context,R.drawable.ic_rss_feed))
+                }
                 itemView.tv_time.text = PrettyTimeAgo.getTimeAgo(item.updateAt!!)
                 itemView.imageView3.setLiked(item.isLikes)
                 Glide.with(itemView.context).load(item.user?.thumbail)

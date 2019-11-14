@@ -25,9 +25,9 @@ import kotlinx.coroutines.Dispatchers.Main
 import retrofit2.Response
 
 class RoomChatRepositoryImp (private  val api : JariManisAPI ): RoomChatRepository {
-    override fun reciveMessage(channelId: String, last: DocumentSnapshot): Query {
-        return db.collection("channels/$channelId/messages/").orderBy("timestamp", Query.Direction.ASCENDING).startAfter(last)
-    }
+//    override fun reciveMessage(channelId: String, last: DocumentSnapshot): Query {
+//        return db.collection("channels/$channelId/messages/").orderBy("timestamp", Query.Direction.ASCENDING).startAfter(last)
+//    }
 
     override suspend fun sendMessageAndCreateChannel(sender: SentNewChannel): Response<ChannelRespon> {
         return api.postNewChannelAndMessage(sender)

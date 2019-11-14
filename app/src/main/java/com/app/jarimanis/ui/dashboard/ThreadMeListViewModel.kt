@@ -105,6 +105,21 @@ class ThreadMeListViewModel(
         records.value!!.dataSource.invalidate()
     }
 
+    fun likeThread(item: Doc, position : Int){
+        CoroutineScope(IO).launch {
+            val respon = repo.likeThread(item.id)
+            withContext(Main){
+                if(respon.isSuccessful){
+                    val mLike = records.value?.snapshot()?.get(position)?.isLikes
+                    if(mLike !=null ){
+
+                    }
+
+                }
+            }
+        }
+    }
+
 
 
 }

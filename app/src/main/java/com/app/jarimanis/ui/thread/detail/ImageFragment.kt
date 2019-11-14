@@ -185,22 +185,32 @@ class ImageFragment : Fragment(), ImageAdapter.Interaction {
     }
 
     private fun stopAnimation() {
-        val s = shimmer_image
-        CoroutineScope(Main).launch {
-            s.stopShimmerAnimation()
-            rcv_thumbnails.visibility = View.VISIBLE
-            s.visibility = View.GONE
-            delay(500)
+        try{
+            val s = shimmer_image
+            CoroutineScope(Main).launch {
+                s.stopShimmerAnimation()
+                rcv_thumbnails.visibility = View.VISIBLE
+                s.visibility = View.GONE
+                delay(500)
+            }
+        }catch (e : Exception){
+
         }
+
 
     }
 
     private fun startAnimation() {
-        CoroutineScope(Main).launch {
-            rcv_thumbnails.visibility = View.INVISIBLE
-            shimmer_image.visibility = View.VISIBLE
-            shimmer_image.startShimmerAnimation()
-            delay(2000)
+        try {
+            CoroutineScope(Main).launch {
+                rcv_thumbnails.visibility = View.INVISIBLE
+                shimmer_image.visibility = View.VISIBLE
+                shimmer_image.startShimmerAnimation()
+                delay(2000)
+            }
+
+        }catch (e: Exception){
+
         }
 
     }

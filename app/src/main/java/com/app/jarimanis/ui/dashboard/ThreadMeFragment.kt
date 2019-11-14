@@ -33,6 +33,24 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
 class ThreadMeFragment : Fragment(), ThreadUserAdapter.Interaction {
+    override fun onLike(position: Int, item: Doc) {
+        jobOnclick?.cancel()
+        jobOnclick = CoroutineScope(Main).launch {
+            delay(500)
+            viewModel.likeThread(item,position)
+
+        }
+    }
+
+    override fun onUnlike(position: Int, item: Doc) {
+        jobOnclick?.cancel()
+        jobOnclick = CoroutineScope(Main).launch {
+            delay(500)
+            viewModel.likeThread(item,position)
+
+        }
+    }
+
     override fun onItemLongSelected(position: Int, item: Doc) {
         goToMoreThread(item)
     }

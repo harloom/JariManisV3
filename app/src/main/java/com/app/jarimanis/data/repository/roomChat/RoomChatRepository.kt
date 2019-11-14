@@ -18,5 +18,5 @@ interface RoomChatRepository {
     suspend fun sendMessageAndCreateChannel(sender: SentNewChannel) : Response<ChannelRespon>
     fun receiveMessage(channelId: String): Query
 
-    fun reciveMessage(channelId: String,last : DocumentSnapshot): Query
+//    fun reciveMessage(channelId: String,last : DocumentSnapshot): Query
 }
