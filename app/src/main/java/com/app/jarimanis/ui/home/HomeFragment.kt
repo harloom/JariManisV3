@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.models.kategori.ResultKategori
 import com.app.jarimanis.utils.Key
+import com.facebook.shimmer.ShimmerFrameLayout
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -24,14 +25,13 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
     override fun onItemSelected(position: Int, item: ResultKategori) {
-        Toast.makeText(context, item.category ,Toast.LENGTH_LONG).show()
+//        Toast.makeText(context, item.category ,Toast.LENGTH_LONG).show()
         val bundleof = bundleOf(Key.argCategory to item)
         findNavController().navigate(R.id.action_navigation_home_to_thread_navigation,bundleof)
     }
 
 
     private val subcribeKategory = Observer<List<ResultKategori?>>{
-
         categoryAdapter.submitList(it)
         stopAnimation()
         swp_records.isRefreshing = false
@@ -40,6 +40,8 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
     private lateinit var categoryAdapter : KategoriListAdapter
     private val  homeViewModel: HomeViewModel by viewModel()
     private var jobSwipe : Job? =null
+    private lateinit var mShimmer: ShimmerFrameLayout
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -50,6 +52,7 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mShimmer =view.findViewById(R.id.shimmer_category)
         activity?.title ="Home"
         swipe(view)
     }
@@ -61,7 +64,6 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
                 startAnimation()
                 CoroutineScope(Main).launch {
                     delay(3000)
-
                     homeViewModel.refress()
                 }
 
@@ -86,8 +88,8 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
     private fun stopAnimation() {
         try {
             CoroutineScope(Main).launch {
-                shimmer_category.stopShimmerAnimation()
-                shimmer_category.visibility = View.GONE
+                mShimmer.stopShimmerAnimation()
+                mShimmer.visibility = View.GONE
                 rcv_category?.visibility = View.VISIBLE
                 delay(2000)
 
@@ -102,9 +104,9 @@ class HomeFragment : Fragment(), KategoriListAdapter.Interaction {
     private fun startAnimation() {
         CoroutineScope(Main).launch {
             try {
-                shimmer_category.visibility = View.VISIBLE
+                mShimmer.visibility = View.VISIBLE
                 rcv_category?.visibility = View.GONE
-                shimmer_category.startShimmerAnimation()
+                mShimmer.startShimmerAnimation()
                 delay(2000)
 
             }catch (e :Exception){

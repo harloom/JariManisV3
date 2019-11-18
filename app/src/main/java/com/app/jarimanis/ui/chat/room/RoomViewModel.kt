@@ -169,20 +169,29 @@ class RoomViewModel(private val roomChatRepository: RoomChatRepository) : ViewMo
     }
     private fun fillterFindAndUpdate(item: ReciveMessage) {
         println("fillterFindAndUpdate")
-        reciveMessage.withIndex().filter {
-            it.value._id == item.id
-        }.forEach {
-            it.value.status = SENT
+//        reciveMessage.withIndex().filter {
+//            it.value._id == item.id
+//        }.forEach {
+//            it.value.status = SENT
+//            data.postValue(reciveMessage)
+//        }
+//
+       val list =  reciveMessage.withIndex().filter {
+            it.value._id ==item.id
+        }
+
+        if(list.isNotEmpty()){
+            list.forEach {
+                it.value.status = SENT
+                reciveMessage[it.index] = it.value
+                data.postValue(reciveMessage)
+            }
+        }else{
+            reciveMessage.add(item)
             data.postValue(reciveMessage)
         }
 
-//           reciveMessage.filter {
-//               it.id != item.id
-//           }.forEach {
-//               reciveMessage.add(it)
-//               data.postValue(reciveMessage)
-//
-//           }
+
 
     }
     private fun fillterFindAndAdd(rcv : ReciveMessage){

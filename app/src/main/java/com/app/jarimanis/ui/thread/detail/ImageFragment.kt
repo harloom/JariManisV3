@@ -1,5 +1,6 @@
 package com.app.jarimanis.ui.thread.detail
 
+import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -13,6 +14,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.data.datasource.models.thread.Doc
@@ -28,6 +30,7 @@ import com.app.jarimanis.utils.Key
 import com.app.jarimanis.utils.RequestCode
 import com.app.jarimanis.utils.RequestCode.REQUEST_CODE_IMAGE
 import com.app.jarimanis.utils.debounce.onClickDebounced
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.firebase.Timestamp
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
@@ -39,12 +42,21 @@ import kotlinx.android.synthetic.main.thread_list_fragment.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import net.alhazmy13.gota.Gota
+import net.alhazmy13.gota.GotaResponse
 import org.koin.android.ext.android.inject
 import java.net.URI
 import java.util.*
 import kotlin.system.measureTimeMillis
 
-class ImageFragment : Fragment(), ImageAdapter.Interaction {
+class ImageFragment : Fragment(), ImageAdapter.Interaction, Gota.OnRequestPermissionsBack {
+    override fun onRequestBack(requestId: Int, gotaResponse: GotaResponse) {
+        if(gotaResponse.isAllGranted) {
+            btn_newFoto.onClickDebounced {
+                loadImageFromGallery()
+            }
+        }
+    }
 
 
     override fun onItemSelected(position: Int, item: Image, uri: String) {
@@ -66,7 +78,8 @@ class ImageFragment : Fragment(), ImageAdapter.Interaction {
     private  var mutableList: MutableList<Image?>? = mutableListOf()
     private  var doc : Doc? =null
 
-
+    private lateinit var mShimmer : ShimmerFrameLayout
+    private lateinit var rcvImage  : RecyclerView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -78,6 +91,8 @@ class ImageFragment : Fragment(), ImageAdapter.Interaction {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val _id  = arguments?.getString(Key.THREADID)
+        mShimmer = view.findViewById(R.id.shimmer_image)
+        rcvImage = view.findViewById(R.id.rcv_thumbnails)
         startAnimation()
         doc = arguments?.getParcelable<Doc>(Key.THREAD)
 
@@ -124,7 +139,7 @@ class ImageFragment : Fragment(), ImageAdapter.Interaction {
             imageListAdapter = ImageAdapter(dc.id!!,this@ImageFragment)
             mutableList = images?.toMutableList()
             imageListAdapter.submitList(mutableList)
-            rcv_thumbnails.apply {
+            rcvImage.apply {
                 adapter = imageListAdapter
 
             }
@@ -134,13 +149,14 @@ class ImageFragment : Fragment(), ImageAdapter.Interaction {
 
 
     private fun cekPremission(item : Doc){
+        Gota.Builder(activity).withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA).setListener(this).check()
         if(item.user?.id != TokenUser.idUser){
             btn_newFoto.visibility = View.GONE
-        }else{
-            btn_newFoto.onClickDebounced {
-                loadImageFromGallery()
-            }
         }
+
+
     }
 
     private fun loadImageFromGallery() {
@@ -186,11 +202,10 @@ class ImageFragment : Fragment(), ImageAdapter.Interaction {
 
     private fun stopAnimation() {
         try{
-            val s = shimmer_image
             CoroutineScope(Main).launch {
-                s.stopShimmerAnimation()
-                rcv_thumbnails.visibility = View.VISIBLE
-                s.visibility = View.GONE
+                mShimmer.stopShimmerAnimation()
+                rcvImage.visibility = View.VISIBLE
+                mShimmer.visibility = View.GONE
                 delay(500)
             }
         }catch (e : Exception){
@@ -203,9 +218,9 @@ class ImageFragment : Fragment(), ImageAdapter.Interaction {
     private fun startAnimation() {
         try {
             CoroutineScope(Main).launch {
-                rcv_thumbnails.visibility = View.INVISIBLE
-                shimmer_image.visibility = View.VISIBLE
-                shimmer_image.startShimmerAnimation()
+                rcvImage.visibility = View.INVISIBLE
+                mShimmer.visibility = View.VISIBLE
+                mShimmer.startShimmerAnimation()
                 delay(2000)
             }
 

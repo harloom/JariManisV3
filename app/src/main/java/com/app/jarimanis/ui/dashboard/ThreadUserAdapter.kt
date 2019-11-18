@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.models.thread.Doc
+import com.app.jarimanis.utils.debounce.onClickDebounced
 import com.bumptech.glide.Glide
 import com.like.LikeButton
 import com.like.OnLikeListener
@@ -74,6 +75,10 @@ class ThreadUserAdapter constructor(private val interaction: ThreadUserAdapter.I
                 true
             }
 
+            itemView.imageView.onClickDebounced {
+                interaction?.onBottomSheetUp(adapterPosition,item)
+            }
+
             itemView.iv_more.setOnClickListener {
                 interaction?.onItemLongSelected(adapterPosition,item)
             }
@@ -116,6 +121,7 @@ class ThreadUserAdapter constructor(private val interaction: ThreadUserAdapter.I
         }
     }
     interface Interaction {
+        fun onBottomSheetUp(position: Int,item: Doc)
         fun onItemSelected(position: Int, item: Doc)
         fun onItemLongSelected(position: Int,item: Doc)
         fun onLike(position: Int,item: Doc)

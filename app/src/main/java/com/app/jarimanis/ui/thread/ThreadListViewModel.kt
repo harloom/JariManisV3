@@ -10,6 +10,7 @@ import com.app.jarimanis.data.datasource.models.SentEditThreads
 import com.app.jarimanis.data.datasource.models.thread.Doc
 import com.app.jarimanis.data.repository.thread.ThreadRepository
 import com.app.jarimanis.data.repository.thread.ThreadsDataSource
+import com.app.jarimanis.utils.NetworkState
 import com.squareup.okhttp.Dispatcher
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
@@ -23,12 +24,17 @@ class ThreadListViewModel(
     private val _category : MutableLiveData<String>  = MutableLiveData()
     private val _onDelete = MutableLiveData<Boolean>()
     private val _onLike = MutableLiveData<OnLike>()
-
+    private val reloadTrigger = MutableLiveData<Boolean>()
+    val initialLoad: MutableLiveData<NetworkState> = MutableLiveData()
     data class OnLike (
          val item: Doc? =null,
          val position: Int? =null
     )
 
+    init {
+        initialLoad.postValue(NetworkState.LOADING)
+        refress()
+    }
 
     val onLike : LiveData<OnLike> = _onLike
     val onDelete : LiveData<Boolean> =  _onDelete
@@ -65,7 +71,21 @@ class ThreadListViewModel(
         LivePagedListBuilder<String, Doc>(
             ThreadsDataSource.Factory (categori,repo, uiScope),
             config
-        ).build()
+        ).setBoundaryCallback(object : PagedList.BoundaryCallback<Doc>(){
+            override fun onZeroItemsLoaded() {
+                super.onZeroItemsLoaded()
+                initialLoad.postValue(NetworkState.EMPTY)
+            }
+
+            override fun onItemAtEndLoaded(itemAtEnd: Doc) {
+                super.onItemAtEndLoaded(itemAtEnd)
+            }
+
+            override fun onItemAtFrontLoaded(itemAtFront: Doc) {
+                super.onItemAtFrontLoaded(itemAtFront)
+                initialLoad.postValue(NetworkState.LOADED)
+            }
+        }).build()
 
     override fun onCleared() {
         super.onCleared()
@@ -118,5 +138,7 @@ class ThreadListViewModel(
         }
     }
 
-
+    fun refress() {
+        reloadTrigger.value = true
+    }
 }

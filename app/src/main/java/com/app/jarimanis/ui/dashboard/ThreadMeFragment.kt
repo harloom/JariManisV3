@@ -19,10 +19,12 @@ import com.app.jarimanis.data.repository.thread.users.ThreaduserModelFactory
 import com.app.jarimanis.ui.thread.InteractionEditClick
 import com.app.jarimanis.ui.thread.ThreadAdapter
 import com.app.jarimanis.ui.thread.ThreadInfo
+import com.app.jarimanis.ui.thread.detail.comentar.KomentarFragmentBottomSheet
 import com.app.jarimanis.utils.Key
 import com.app.jarimanis.utils.Key.THREAD
 import com.app.jarimanis.utils.Key.THREADID
 import com.app.jarimanis.utils.NetworkState
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.thread_me_list_fragment.*
 import kotlinx.coroutines.CoroutineScope
@@ -33,6 +35,14 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
 class ThreadMeFragment : Fragment(), ThreadUserAdapter.Interaction {
+    override fun onBottomSheetUp(position: Int, item: Doc) {
+        val bundleof = bundleOf(THREADID to item.id ,
+            Key.THREAD to item)
+        val kb = KomentarFragmentBottomSheet()
+        kb.arguments = bundleof
+        kb.show(childFragmentManager,"KomentarSheet")
+    }
+
     override fun onLike(position: Int, item: Doc) {
         jobOnclick?.cancel()
         jobOnclick = CoroutineScope(Main).launch {
@@ -98,6 +108,8 @@ class ThreadMeFragment : Fragment(), ThreadUserAdapter.Interaction {
     private lateinit var factory: ThreaduserModelFactory
     private lateinit var adapterT: ThreadUserAdapter
 
+    private lateinit var mShimmer : ShimmerFrameLayout
+
 
 
 
@@ -110,6 +122,7 @@ class ThreadMeFragment : Fragment(), ThreadUserAdapter.Interaction {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mShimmer = view.findViewById(R.id.shimmer_animation)
         startAnimation()
     }
 
@@ -148,8 +161,6 @@ class ThreadMeFragment : Fragment(), ThreadUserAdapter.Interaction {
 
     private fun subcribeList() {
 
-
-
         rcv_thread.apply {
             adapter = adapterT
         }
@@ -170,10 +181,10 @@ class ThreadMeFragment : Fragment(), ThreadUserAdapter.Interaction {
     }
 
     private fun stopAnimation() {
-        val s = shimmer_animation
+
         CoroutineScope(Main).launch {
-            s.stopShimmerAnimation()
-            s.visibility = View.GONE
+            mShimmer.stopShimmerAnimation()
+            mShimmer.visibility = View.GONE
             delay(500)
         }
 
@@ -181,8 +192,8 @@ class ThreadMeFragment : Fragment(), ThreadUserAdapter.Interaction {
 
     private fun startAnimation() {
         CoroutineScope(Main).launch {
-            shimmer_animation.visibility = View.VISIBLE
-            shimmer_animation.startShimmerAnimation()
+            mShimmer.visibility = View.VISIBLE
+            mShimmer.startShimmerAnimation()
             delay(500)
         }
 

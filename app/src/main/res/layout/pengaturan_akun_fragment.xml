@@ -17,7 +17,7 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-        android:padding="8dp"
+         android:padding="8dp"
             android:layout_gravity="center_horizontal">
             <ProgressBar
                 android:visibility="gone"
@@ -27,20 +27,18 @@
                 android:layout_height="wrap_content"
                 android:elevation="10dp"
                 android:layout_gravity="center" />
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/chooseImage"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="end|bottom"
-                android:background="@drawable/circle_background"
                 android:clickable="true"
                 android:elevation="20dp"
                 android:translationY="-20dp"
                 android:translationX="-10dp"
                 android:focusable="true"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_photo_camera_black_48dp"
-                android:tint="@color/primaryDarkColor" />
+                android:src="@drawable/ic_foto"
+                android:tint="@color/colorPutih" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/ivProfPict"
@@ -193,6 +191,7 @@
 
 
             <ImageView
+                android:id="@+id/action_setBirday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"

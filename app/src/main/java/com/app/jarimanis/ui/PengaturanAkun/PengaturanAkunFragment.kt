@@ -1,6 +1,7 @@
 package com.app.jarimanis.ui.PengaturanAkun
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -10,8 +11,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.datetime.datePicker
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.data.datasource.models.profile.Result
@@ -27,6 +32,7 @@ import com.app.jarimanis.utils.Key.TYPE_USERNAME
 import com.app.jarimanis.utils.Key.USERSETTING
 import com.app.jarimanis.utils.RequestCode.REQUEST_CODE_IMAGE
 import com.app.jarimanis.utils.TimeFormater
+import com.app.jarimanis.utils.debounce.onClickDebounced
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
 import com.zhihu.matisse.Matisse
@@ -38,11 +44,13 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import net.alhazmy13.gota.Gota
 import net.alhazmy13.gota.GotaResponse
 import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.File
+import java.text.SimpleDateFormat
 
 
 class PengaturanAkunFragment : Fragment(), CallbackSuccessListener, Gota.OnRequestPermissionsBack {
@@ -65,6 +73,9 @@ class PengaturanAkunFragment : Fragment(), CallbackSuccessListener, Gota.OnReque
 
     private val  vm: DashboardViewModel by viewModel()
     private var userDataNow : Result? =null
+    private lateinit var mTvDate : TextView
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,6 +86,7 @@ class PengaturanAkunFragment : Fragment(), CallbackSuccessListener, Gota.OnReque
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.title ="Pengaturan Akun"
+        mTvDate = view.findViewById(R.id.tv_displayBirthDay)
     }
 
 
@@ -97,6 +109,7 @@ class PengaturanAkunFragment : Fragment(), CallbackSuccessListener, Gota.OnReque
     }
 
 
+    @SuppressLint("SimpleDateFormat")
     private fun onclikChange(){
         btn_ubahName.setOnClickListener {
             val bts = UbahSheet(this@PengaturanAkunFragment)
@@ -114,6 +127,37 @@ class PengaturanAkunFragment : Fragment(), CallbackSuccessListener, Gota.OnReque
            permission()
         }
 
+        action_setBirday.onClickDebounced {
+            MaterialDialog(context!!).show {
+                datePicker { _, date ->
+                    val miliDateNow = date.timeInMillis
+                    sentServer(miliDateNow)
+                    val mDateFormat = SimpleDateFormat("dd/MM/yyyy")
+                    val dateString = mDateFormat.format(date.time)
+                    mTvDate.setText(dateString)
+                }
+
+            }
+        }
+
+
+    }
+
+    private fun sentServer(miliDateNow: Long) {
+        CoroutineScope(IO).launch {
+           val job = withTimeoutOrNull(3000L) {
+               val respon = repoProfileImp.ubahDate(miliDateNow)
+               if(respon.isSuccessful){
+                    withContext(Main){
+                        Toast.makeText(context,"OK",Toast.LENGTH_SHORT).show()
+                    }
+               }
+
+           }
+            if(job == null){
+                Toast.makeText(context,"Request time out",Toast.LENGTH_SHORT).show()
+            }
+        }
 
     }
 

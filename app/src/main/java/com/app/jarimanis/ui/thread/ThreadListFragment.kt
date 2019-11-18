@@ -22,6 +22,8 @@ import com.app.jarimanis.ui.thread.detail.comentar.KomentarFragmentBottomSheet
 import com.app.jarimanis.utils.Key
 import com.app.jarimanis.utils.Key.THREAD
 import com.app.jarimanis.utils.Key.THREADID
+import com.app.jarimanis.utils.NetworkState
+import com.facebook.shimmer.ShimmerFrameLayout
 import kotlinx.android.synthetic.main.thread_list_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
@@ -105,6 +107,7 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
     private lateinit var viewModel: ThreadListViewModel
     private lateinit var factory: ThreadModelFactory
     private lateinit var adapterT: ThreadAdapter
+    private lateinit var mShimmer : ShimmerFrameLayout
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -114,33 +117,14 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val result  = arguments?.getParcelable<ResultKategori>(Key.argCategory)
-        activity!!.title = result?.category
-        btn_create.setOnClickListener {
-            jobOnclick?.cancel()
-            jobOnclick = CoroutineScope(Main).launch {
-                delay(300)
-                val bundled = bundleOf(Key.argCategory to result)
-                findNavController().navigate(R.id.action_threadListFragment_to_createThreadFragment,bundled)
-            }
-        }
+        mShimmer = view.findViewById(R.id.shimmer_animation)
+        startAnimation()
 
-
-        result?.id?.let {_id->
-            adapterT = ThreadAdapter(this@ThreadListFragment)
-            factory = ThreadModelFactory(_id,get())
-            viewModel = ViewModelProviders.of(this@ThreadListFragment,factory).get(ThreadListViewModel::class.java)
-            subcribeList()
-            subcribeStatus()
-        }
-
-
-        onRefress()
     }
 
 
     private var jobRefress : Job? =null
-    private fun onRefress() {
+    private fun functionOnRefress() {
         refress.setOnRefreshListener {
             jobRefress?.cancel()
             jobRefress = CoroutineScope(Main).launch{
@@ -163,6 +147,28 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val result  = arguments?.getParcelable<ResultKategori>(Key.argCategory)
+        activity!!.title = result?.category
+        btn_create.setOnClickListener {
+            jobOnclick?.cancel()
+            jobOnclick = CoroutineScope(Main).launch {
+                delay(300)
+                val bundled = bundleOf(Key.argCategory to result)
+                findNavController().navigate(R.id.action_threadListFragment_to_createThreadFragment,bundled)
+            }
+        }
+
+
+        result?.id?.let {_id->
+            adapterT = ThreadAdapter(this@ThreadListFragment)
+            factory = ThreadModelFactory(_id,get())
+            viewModel = ViewModelProviders.of(this@ThreadListFragment,factory).get(ThreadListViewModel::class.java)
+            subcribeList()
+            subcribeStatus()
+        }
+
+
+        functionOnRefress()
 
     }
     private fun goToMoreThread(item : Doc){
@@ -195,6 +201,19 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
 
 
     private fun subcribeStatus() {
+        viewModel.initialLoad.observe(this@ThreadListFragment, Observer {
+            if (it == NetworkState.LOADING) {
+                // Show loading
+
+            } else {
+                stopAnimation()
+                if (it.status == NetworkState.Status.SUCCESS_EMPTY) {
+                    // Show empty state for initial load
+                }
+            }
+        })
+
+
         viewModel.message.observe(this@ThreadListFragment, Observer {
             if(!it.isNullOrBlank()){
                 Toast.makeText(context,"Pesan :  $it",Toast.LENGTH_LONG).show()
@@ -212,6 +231,25 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
 //                    adapterT.notifyItemChanged(it.position)
                 }
         })
+    }
+
+    private fun stopAnimation() {
+
+        CoroutineScope(Main).launch {
+           mShimmer.stopShimmerAnimation()
+            mShimmer.visibility = View.GONE
+            delay(500)
+        }
+
+    }
+
+    private fun startAnimation() {
+        CoroutineScope(Main).launch {
+            mShimmer.visibility = View.VISIBLE
+            mShimmer.startShimmerAnimation()
+            delay(500)
+        }
+
     }
 
 }

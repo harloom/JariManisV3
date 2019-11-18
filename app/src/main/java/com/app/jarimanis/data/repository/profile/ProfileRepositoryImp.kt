@@ -17,6 +17,10 @@ import kotlinx.coroutines.Dispatchers.Main
 import retrofit2.Response
 
 class ProfileRepositoryImp (private val api: UserAPI) : ProfileRepository {
+    override suspend fun ubahDate(value: Long): Response<*> {
+        return api.updateProfile(TYPE_UPDATE_DATE, Sent_change(date = value))
+    }
+
     override suspend fun ubahFoto(value: String): Response<*> {
         return  api.updateProfile(TYPE_UPDATE_IMG, Sent_change(thumbail = value))
     }
@@ -27,6 +31,7 @@ class ProfileRepositoryImp (private val api: UserAPI) : ProfileRepository {
     val TYPE_UPDATE_IMG = "img"
     val TYPE_UPDATE_NAME = "name"
     val TYPE_UPDATE_NUMBERPHONE = "numberPhone"
+    val TYPE_UPDATE_DATE = "date"
     override suspend fun ubahNama(value: String): Response<*> {
         return api.updateProfile(TYPE_UPDATE_NAME, Sent_change(nameUser = value))
     }

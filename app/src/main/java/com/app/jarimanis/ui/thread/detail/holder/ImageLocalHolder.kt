@@ -44,8 +44,10 @@ class ImageLocalHolder constructor(
 
     private fun loadUi(data: UploadStatus?) {
         try {
+
             itemView.iv_clear.visibility = View.GONE
             if (data?.status == Success) {
+                mItem = Image("example",System.currentTimeMillis().toString(),"example",data.storage.toString() )
                 itemView.image_progress.visibility = View.GONE
                 val gsReference =
                     FirebaseStorage.getInstance().getReferenceFromUrl(data.storage.toString())

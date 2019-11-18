@@ -9,5 +9,6 @@ interface ProfileRepository {
    suspend fun ubahNama(value: String): Response<*>
     suspend  fun ubahNumberPhone(value: String) : Response<*>
     suspend fun ubahFoto(value: String) : Response<*>
+    suspend fun ubahDate(value: Long) : Response<*>
     fun getProfile(id: String): LiveData<Result>
 }

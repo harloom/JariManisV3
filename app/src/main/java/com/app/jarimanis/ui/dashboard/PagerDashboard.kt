@@ -27,7 +27,7 @@ class PagerDashboard  ( fm : FragmentManager): FragmentStatePagerAdapter(fm,BEHA
 
     override fun getPageTitle(position: Int): CharSequence? {
         return when(position){
-            0 -> "Thread Saya"
+            0 -> "Thread saya"
             else -> "Undefined"
         }
     }
