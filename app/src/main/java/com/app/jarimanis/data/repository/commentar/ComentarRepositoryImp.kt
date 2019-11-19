@@ -18,6 +18,10 @@ import java.net.SocketTimeoutException
 
 
 class ComentarRepositoryImp (private  val api : JariManisAPI)  : DiskusiRepository {
+    override suspend fun likeDiskusi(docId: String?): Response<*> {
+        return  api.likeDiskusi(docId)
+    }
+
     override suspend fun postDiskusi(
         id: String,
         commentar: SaveCommentar

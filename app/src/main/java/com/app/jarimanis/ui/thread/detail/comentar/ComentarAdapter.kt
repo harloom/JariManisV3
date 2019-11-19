@@ -82,11 +82,11 @@ class ComentarAdapter constructor(private val interaction: ComentarAdapter.Inter
 
             itemView.btnLike.setOnLikeListener(object  : OnLikeListener{
                 override fun liked(likeButton: LikeButton?) {
-
+                    interaction?.onBtnLikeClick(adapterPosition,item)
                 }
 
                 override fun unLiked(likeButton: LikeButton?) {
-
+                    interaction?.onBtnLikeClick(adapterPosition,item)
                 }
 
             })
@@ -97,6 +97,7 @@ class ComentarAdapter constructor(private val interaction: ComentarAdapter.Inter
             itemView.text_commentar_body.text = item.content?.capitalize()
 //
             try {
+                itemView.btnLike.isLiked = item.isLikes!!
                 itemView.text_commentar_time.text = PrettyTimeAgo.getTimeAgo(item.updateAt!!)
                 Glide.with(itemView.context).load(item.user?.thumbail)
                     .into(image_commentar_profile)
@@ -113,6 +114,7 @@ class ComentarAdapter constructor(private val interaction: ComentarAdapter.Inter
     interface Interaction {
         fun onItemSelected(position: Int, item: Doc)
         fun onItemLongSelected(position: Int , item: Doc)
+        fun onBtnLikeClick(position: Int,item: Doc)
 
     }
 }

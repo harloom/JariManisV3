@@ -32,5 +32,7 @@ data class Doc(
     @SerializedName("views")
     val views: MutableList<Like?>?,
     @SerializedName("isLikes")
-    var isLikes : Boolean? =null
+    var isLikes : Boolean? =null,
+    @SerializedName("diskusiCount")
+    var diskusiCount : Int = 0
 ):Parcelable

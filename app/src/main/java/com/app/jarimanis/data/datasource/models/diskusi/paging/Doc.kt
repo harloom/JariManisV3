@@ -21,6 +21,8 @@ data class Doc(
     val updateAt: Long?, // 1571382998282
     @SerializedName("_userId")
     val user: UserT?, // 5d838e3c4ccf792a449828fa
+    @SerializedName("isLikes")
+    var isLikes : Boolean? =false,
     @SerializedName("__v")
     val v: Int? // 0
 )

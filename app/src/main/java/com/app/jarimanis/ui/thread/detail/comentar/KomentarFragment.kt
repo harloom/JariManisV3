@@ -23,7 +23,17 @@ import kotlinx.coroutines.Dispatchers.Main
 import org.koin.android.ext.android.get
 
 class KomentarFragment : Fragment(), ComentarAdapter.Interaction, View.OnClickListener {
+    override fun onBtnLikeClick(
+        position: Int,
+        item: com.app.jarimanis.data.datasource.models.diskusi.paging.Doc
+    ) {
+        jobOnclick?.cancel()
+        jobOnclick = CoroutineScope(Main).launch {
+            delay(500)
+            viewModel.likeKomentar(item,position)
 
+        }
+    }
 
 
     private var doc: Doc? = null

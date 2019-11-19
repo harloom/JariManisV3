@@ -104,6 +104,10 @@ interface JariManisAPI {
     ):Response<ResponDiskusi>
 
 
+    @PUT("diskusi/like/{id}")
+    suspend fun likeDiskusi(
+        @Path("id") idDoc: String?
+    ): Response<*>
 
     /* pemberitahuan */
     @GET("pemberitahuan")

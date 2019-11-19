@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
@@ -72,6 +73,7 @@ class DialogProfile : DialogFragment(), View.OnClickListener {
         if (dialog != null) {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.MATCH_PARENT
+            dialog.window!!.setBackgroundDrawableResource(R.drawable.corner_bottom)
             dialog.window!!.setLayout(width, height)
         }
     }
@@ -83,6 +85,10 @@ class DialogProfile : DialogFragment(), View.OnClickListener {
         iv_message = view.iv_message
         tv_name  = view.tv_user
         iv_message.setOnClickListener(this@DialogProfile)
+        val mActionDismiss = view.action_dismiss
+        mActionDismiss.setOnClickListener {
+            this@DialogProfile.dismiss()
+        }
         initUI()
     }
 

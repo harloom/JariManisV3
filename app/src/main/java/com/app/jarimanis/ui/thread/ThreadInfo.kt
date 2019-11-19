@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.local.TokenUser
 import com.app.jarimanis.data.datasource.models.thread.Doc
@@ -24,7 +26,7 @@ class ThreadInfo (private val item  :Doc , private val callback  : InteractionEd
     private val TAG = "DialogProfile"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.Theme_MaterialComponents_Light_BottomSheetDialog)
+
     }
 
 
@@ -38,6 +40,7 @@ class ThreadInfo (private val item  :Doc , private val callback  : InteractionEd
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
+
         dialog.setCancelable(true)
         return dialog
     }
@@ -64,6 +67,14 @@ class ThreadInfo (private val item  :Doc , private val callback  : InteractionEd
 
 
             dialog.show()
+        }
+
+        val mDiskusi  = view.findViewById<TextView>(R.id.tv_count_diskusi)
+        val mLike = view.findViewById<TextView>(R.id.tv_count_like)
+
+        mDiskusi.setText(item.diskusiCount.toString())
+        if(item.likes!!.isNotEmpty()){
+            mLike.setText(item.likes.size.toString())
         }
 
         if (item.user?.id != TokenUser.idUser) {

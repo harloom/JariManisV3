@@ -6,10 +6,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.afollestad.materialdialogs.DialogBehavior
+import com.afollestad.materialdialogs.LayoutMode
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.ModalDialog
+import com.afollestad.materialdialogs.bottomsheets.BottomSheet
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
+import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 
 import com.app.jarimanis.R
 import com.app.jarimanis.data.datasource.local.TokenUser
@@ -63,6 +72,8 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
     override fun onItemLongSelected(position: Int, item: Doc) {
         if(item.user?.id == TokenUser.idUser){
             goToMoreThread(item)
+        }else{
+            showBottomSheetListCommentar(BottomSheet(LayoutMode.WRAP_CONTENT), item)
         }
 
 
@@ -182,6 +193,25 @@ class ThreadListFragment : Fragment(), ThreadAdapter.Interaction  {
 
     }
 
+    private fun showBottomSheetListCommentar(dialogBehavior: DialogBehavior = ModalDialog, item: Doc){
+        val dialog = MaterialDialog(context!!, dialogBehavior).show {
+            cornerRadius(16f)
+            customView(R.layout.bottom_sheet_count, scrollable = true, horizontalPadding = true)
+            lifecycleOwner(this@ThreadListFragment)
+
+        }
+        val view = dialog.getCustomView()
+        val mDiskusi  = view.findViewById<TextView>(R.id.tv_count_diskusi)
+        val mLike = view.findViewById<TextView>(R.id.tv_count_like)
+
+        mDiskusi.setText(item.diskusiCount.toString())
+        if(item.likes!!.isNotEmpty()){
+            mLike.setText(item.likes.size.toString())
+        }
+
+
+
+    }
 
     private val onThreadCallback: InteractionEditClick = object  : InteractionEditClick {
         override fun onDeleteListener(item: Doc) {

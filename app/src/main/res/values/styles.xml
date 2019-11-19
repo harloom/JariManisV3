@@ -12,6 +12,7 @@
         <item name="boxBackgroundColor">@color/secondaryColor</item>
         <item name="enableMenuIconColor">@color/primaryDarkColor</item>
         <item name="disableMenuIconColor">@color/colorBgGrey</item>
+        <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
         <item name="android:textSize">12sp</item>
     </style>
 
@@ -34,17 +35,24 @@
         <item name="android:windowNoTitle">true</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorPrimary">@color/primaryColor</item>
-
-        <!-- Set this to true if you want Full Screen without status bar -->
         <item name="android:windowFullscreen">false</item>
-
         <item name="android:windowIsFloating">false</item>
-
-        <!-- This is important! Don't forget to set window background -->
         <item name="android:windowBackground">@color/colorPutih</item>
+    </style>
 
-        <!-- Additionally if you want animations when dialog opening -->
-        <!--        <item name="android:windowEnterAnimation">@anim/slide_up</item>-->
-        <!--        <item name="android:windowExitAnimation">@anim/slide_down</item>-->
+
+    <style name="CustomBottomSheetDialog" parent="@style/Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+    </style>
+    <style name="CustomBottomSheet" parent="Widget.MaterialComponents.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/CustomShapeAppearanceBottomSheetDialog</item>
+    </style>
+
+    <style name="CustomShapeAppearanceBottomSheetDialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 </resources>

@@ -12,6 +12,8 @@ import com.app.jarimanis.data.repository.commentar.DiskusiDataSource
 import com.app.jarimanis.data.repository.commentar.DiskusiRepository
 import com.app.jarimanis.utils.NetworkState
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import retrofit2.Response
 
 class KomentarViewModel(
@@ -98,11 +100,33 @@ class KomentarViewModel(
             }
         }).build()
 
+
+    fun likeKomentar(
+        item: Doc,
+        position: Int
+    ) {
+        CoroutineScope(IO).launch {
+            val respon = repo.likeDiskusi(item.id)
+            withContext(Main){
+                if(respon.isSuccessful){
+                    val mLike = records.value?.snapshot()?.get(position)?.isLikes
+                    if(mLike !=null ){
+//                        records.value?.snapshot()?.get(position)?.isLikes = !mLike
+//                        _onLike.value = OnLike(item,position)
+                    }
+
+                }
+            }
+        }
+    }
+
+
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
 
     }
+
 
 
     fun refress() {
